@@ -11,7 +11,7 @@ function Header() {
                 <h3>Désireux de vous entraîner,<br />mais perdu dans le processus ?</h3>
                 <h3 className='header_move_subtitle'>Bienvenue, vous avez découvert <br />le carrefour de l&#39;entrainement personnalisé !</h3>
             </div>
-            <Image style={{backgroundColor: "red"}} src={image1} alt="" width={330} />
+            <Image src={image1} alt="" />
         </div>
     </div>
   )
