@@ -4,28 +4,36 @@ import './page.scss'
 import Headers from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
 
+type ExamType = {
+    role: string,
+    content: string
+}
+
 export default function Home() {
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [exam, setExam] = useState("");
-  const [waitAnswer, setWaitAnswer] = useState(false);
+  const [exam, setExam] = useState<ExamType | string>("");
+  const [waitAnswer, setWaitAnswer] = useState(true);
   const [chooseDifficulty, setChooseDifficulty] = useState("normal");
+  const [lessonText, setLessonText] = useState("");
+  const [allQuestions, setAllQuestions] = useState();
 
   const createExam = async () => {
     try {
-      // const body = selectedFile + `The difficulty i want to choose is ${chooseDifficulty}`
       const formData = new FormData();
 
-      console.log(selectedFile)
+      formData.append('role', 'user');
+      formData.append("difficulty", chooseDifficulty);
 
       if(selectedFile) {
-        formData.append("file", selectedFile);
-        formData.append('role', 'user');
+        formData.append("lesson", selectedFile);
+      } else if(lessonText) {
+        formData.append("lesson", lessonText);
       }
 
       const response = await fetch("/api/chatGpt", {
         method: "POST",
-        body: JSON.stringify({hello: "world"})
+        body: formData
       });
 
       if(!response.ok) {
@@ -33,14 +41,15 @@ export default function Home() {
       };
 
       const data = await response.json()
-      setExam(data)
+      setExam(data.message.message)
+      console.log(data.message.message)
+      setAllQuestions(data.message.message.content.split("endOfQuestion"))
     } catch(error:any) {
       console.error(error.message)
     } 
   };
-  
-  console.log(selectedFile, "hello")
-  console.log("israil")
+
+  console.log(allQuestions)
 
   return (
     <>
@@ -48,7 +57,19 @@ export default function Home() {
     <main className='main_container'>
       <p className='main_explication_text'>Pour pouvoir créer votre examen vous pouvez mettre la leçon que vous souhaitez dans le champ 
         ci-dessous manuellement ou par pdf qui ce trouve juste en dessous du champ.</p>
-      <textarea  style={{resize: "none", caretColor: "auto"}} className='main_field' placeholder='Ecrivez ici votre texte...'/>
+      <textarea  style={{resize: "none", caretColor: "auto"}} 
+      value={lessonText}
+      className='main_field' 
+      placeholder='Ecrivez ici votre texte...'
+      onChange={(event: {target: {value: string}}) => {
+        setLessonText(event.target.value)
+        if(lessonText.length > 50) {
+          setWaitAnswer(false)
+        } else {
+          setWaitAnswer(true)
+        }
+      }}
+      />
       <hr className='main_split_trait' />
       <label htmlFor="file-upload" className="main_pdf-upload">
         Choisir PDF
@@ -58,11 +79,14 @@ export default function Home() {
         <option>normal</option>
         <option>dificile</option>
       </select>
-      <input type="file" id="file-upload" accept="application/pdf" onChange={(event:any) => setSelectedFile(event.target.files[0])} style={{display: 'none'}}/>
+      <input type="file" id="file-upload" accept="application/pdf" 
+        onChange={(event:any) => {
+          setSelectedFile(event.target.files[0])
+          setWaitAnswer(false)
+      }} 
+      style={{display: 'none'}}/>
       {/* <a href="/chemin/vers/votre/fichier.pdf" download>Télécharger le PDF</a> */}
-      <button className='main_button_create' onClick={createExam}>Créer</button>
-
-      {/* {waitAnswer ? <p>{exam}</p> : <h2>Loading...</h2>} */}
+      <button className='main_button_create' onClick={createExam} disabled={waitAnswer}>Créer</button>
     </main>
     <Footer />
     </>

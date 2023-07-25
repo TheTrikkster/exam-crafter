@@ -1,16 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
-// import multer from "multer"
-// const pdfParse = require('pdf-parse');
-import { promises as fs } from 'fs';
-import formidable, { Files, Fields, File } from 'formidable';
 import pdfParse from 'pdf-parse';
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
@@ -29,9 +19,10 @@ const response = async ( bodys: any ) => {
           With the lesson provided to you, you need to create the most relevant and useful axem for the student.
           There will be a level that will be given to you and you will have to adapt the exam to match the level, the possible levels are: easy, normal and difficult.
           If what you are given is not a lesson, reply "what you provided is not a lesson, so I cannot give you an exam".
+          After each question write "endOfQuestion"
           `
       },
-      ...bodys,
+      bodys,
     ]
     });
     return wResponse.data.choices[0];
@@ -39,12 +30,30 @@ const response = async ( bodys: any ) => {
 
 export async function POST(request: NextRequest) {
     const formData = await request.formData();
-    const body = Object.fromEntries(formData);
+    const body:any = Object.fromEntries(formData);
     
-    console.log(request)
-    console.log(formData)
-    console.log(body)
-    // const message:any = await response(body)
+    if (!body.lesson) {
+      return NextResponse.json(
+        { error: "Lesson text is required." },
+        { status: 400 }
+      );
+    }
+
+    let text;
+
+    if(typeof body.lesson == "object") {
+      const buffer = Buffer.from(await body.lesson.arrayBuffer());
+      text = await pdfParse(buffer);
+    } else {
+      text = body.lesson
+    }
+
+    const lesson = text + `\nThe difficulty i want to choose is ${body.difficulty}`
+
+    console.log(lesson)
+
+
+    const message = await response({role: body.role, content: lesson})
     // return new Response("message")
-    return NextResponse.json({ hello: "world" });
+    return NextResponse.json({ message });
   }
