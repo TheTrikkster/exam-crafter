@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './page.scss'
 import Headers from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
+import { useGlobalContext } from './context/store';
 
 type ExamType = {
     role: string,
@@ -10,19 +11,18 @@ type ExamType = {
 }
 
 export default function Home() {
-
+  const {setText} = useGlobalContext();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [exam, setExam] = useState<ExamType | string>("");
+  const [exam, setExam] = useState<ExamType | null>(null);
   const [waitAnswer, setWaitAnswer] = useState(true);
   const [chooseDifficulty, setChooseDifficulty] = useState("normal");
   const [lessonText, setLessonText] = useState("");
-  const [allQuestions, setAllQuestions] = useState();
+  const [allQuestions, setAllQuestions] = useState([]);
 
   const createExam = async () => {
     try {
       const formData = new FormData();
 
-      formData.append('role', 'user');
       formData.append("difficulty", chooseDifficulty);
 
       if(selectedFile) {
@@ -40,12 +40,15 @@ export default function Home() {
         return;
       };
 
-      const data = await response.json()
-      setExam(data.message.message)
-      console.log(data.message.message)
-      setAllQuestions(data.message.message.content.split("endOfQuestion"))
+      const data = await response.json();
+      const questions = data.message.message.content.split("endOfQuestion");
+      questions.pop();
+      setExam(data.message.message);
+      setText(questions)
+      setAllQuestions(questions);
+      window.localStorage.setItem("questions", JSON.stringify([questions, 0]));
     } catch(error:any) {
-      console.error(error.message)
+      console.error(error.message);
     } 
   };
 
@@ -64,9 +67,9 @@ export default function Home() {
       onChange={(event: {target: {value: string}}) => {
         setLessonText(event.target.value)
         if(lessonText.length > 50) {
-          setWaitAnswer(false)
+          setWaitAnswer(false);
         } else {
-          setWaitAnswer(true)
+          setWaitAnswer(true);
         }
       }}
       />
@@ -85,6 +88,14 @@ export default function Home() {
           setWaitAnswer(false)
       }} 
       style={{display: 'none'}}/>
+
+      {allQuestions ? allQuestions.map((question: string, index: number) => {
+        return (
+          <div key={index}>
+            <p>{question}</p>
+          </div>
+        )
+      }) : null}
       {/* <a href="/chemin/vers/votre/fichier.pdf" download>Télécharger le PDF</a> */}
       <button className='main_button_create' onClick={createExam} disabled={waitAnswer}>Créer</button>
     </main>
