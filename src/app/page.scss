@@ -6,34 +6,53 @@
   margin: 50px 0;
 }
 
-p {
-  color: black;
-}
-
 .main_explication_text {
   width: 80%;
   margin-bottom: 30px;
+  color: black;
 }
 
 .main_field {
-  width: 60%;
+  width: 80%;
   padding: 15px;
   min-height: 300px;
 }
 
 .main_split_trait {
-  width: 300px;
+  width: 500px;
   margin: 30px;
 }
 
+.main_pdf_upload {
+  padding: 3px 10px;
+  background-color: #F1C40F;
+  color: white;
+  cursor: pointer;
+}
+
+.main_pdf_uploaded {
+  padding: 3px 10px;
+  background-color: #2ECC71;
+  color: white;
+  cursor: pointer;
+}
+
+.main_choose_difficulty_container {
+  margin: 150px 0 20px 0;
+}
+
 .main_button_create {
-  margin-top: 150px;
   padding: 3px 10px;
 }
 
-.main_pdf-upload {
-  padding: 3px 10px;
-  background-color: grey;
-  color: white;
-  cursor: pointer;
-} 
+.main_lesson_error {
+  color: red;
+}
+
+.main_loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
