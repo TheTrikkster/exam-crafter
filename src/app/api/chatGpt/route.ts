@@ -26,15 +26,20 @@ const response = async ( body: bodyType, choosedPrompt?: string ) => {
             The question must be only answerable with text.
             Start directly with the questions.
             After each question, write "endOfQuestion".
+            Exem must be created with language of the lesson.
+            Each question must start like "Question 1: ...", "Question 2: ...", etc...
+            You must crate at leasts 10 questions.
           `
   } else {
     prompt = `
             You are an API who embodies all teachers, you will receive the exam made by someone and your goal is to evaluate it.
             You will receive the exam result with the questions and you will have to correct the answer to each question if there is an error.
-            Start directly with the corrections.
-            Before and after each question, write "endAndStartOfQuestion".
             You should give a general comment at the end and give a grade to the exam result.
+            Start directly with the corrections without starting the correction as "Correction 1" or something else, same with general comment.
+            After each question, write "endAndStartOfQuestion".
             Before the general comment write "startOfComment".
+            Remember that you must also provide a general comment and grade at the end.
+            Before the grade to the exam result write "gradeOfExam".
           `
   }
 
@@ -75,7 +80,7 @@ export async function POST(request: any) {
 
       const responses = await request.json();
 
-      const message = await response({role: "user", content: `Result: ${responses}`})
+      const message = await response({role: "user", content: `Result: ${responses}`});
 
       return NextResponse.json({ message });
     } else {

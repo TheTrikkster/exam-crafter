@@ -1,0 +1,63 @@
+.result_container {
+  margin: 20px
+}
+
+.result_header {
+  display: flex;
+  align-items: center;
+}
+
+.result_title {
+  flex: 2;
+  text-align: center;
+  margin-right: 54.89px;
+}
+
+.result_each_result_container {
+    margin: 100px 50px;
+}
+
+.result_question {
+    margin-bottom: 20px;
+}
+
+.result_response {
+    margin-bottom: 30px;
+    color: black;
+}
+
+.result_correction {
+    color: #28B463;
+}
+
+.result_comment {
+    color: orange;
+}
+
+.result_not_show { 
+    color: black;
+}
+
+.result_grade {
+    color: red;
+    margin-top: 30px;
+    font-size: 30px;
+}
+
+.result_comment_grade_container {
+    margin: 30px 50px 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .result_each_result_container {
+        margin: 80px 0;
+    }
+
+    .result_response {
+        margin-bottom: 20px;
+    }
+
+    .result_comment_grade_container {
+        margin: 30px 0;
+    }
+}

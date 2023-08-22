@@ -19,7 +19,7 @@
 }
 
 .main_split_trait {
-  width: 500px;
+  width: 40%;
   margin: 30px;
 }
 
@@ -50,9 +50,19 @@
 }
 
 .main_loading {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+}
+
+.main_loading_text {
+  color: black;
+}
+
+@media screen and (max-width: 768px) {
+  .main_choose_difficulty_container {
+    margin: 50px 20px;
+  }
 }
