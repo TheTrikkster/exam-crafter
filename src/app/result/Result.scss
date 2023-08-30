@@ -34,13 +34,24 @@
     color: orange;
 }
 
-.result_not_show { 
-    color: black;
+.result_not_show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.result_not_show_text {
+    color: grey;
+    font-size: 25px;
+    margin-top: 50px;
 }
 
 .result_grade {
     color: red;
-    margin-top: 30px;
+    text-align: center;
+    margin-top: 50px;
     font-size: 30px;
 }
 

@@ -4,6 +4,7 @@ import './page.scss'
 import Headers from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
 import { useRouter } from 'next/navigation';
+import { SyncLoader } from 'react-spinners';
 
 export default function Home() {
   const router = useRouter();
@@ -38,12 +39,13 @@ export default function Home() {
       };
 
       const data = await response.json();
+      // console.log(data.message.message.content)
 
-      if(data.message.message.content == "Ce que vous avez fourni n'est pas une leçon, donc je ne peux pas vous donner d'examen.") {
+      if(data.message.message.content == "Ce que vous avez fourni n'est pas un cours, je ne peux donc pas vous faire passer un examen.") {
         setLoading(false)
         setLessonError(true)
       } else {
-        const questions = data.message.message.content.split("endOfQuestion");
+        const questions = data.message.message.content.split("startEndOfQuestion");
         questions.pop();
         window.localStorage.setItem("questions", JSON.stringify(questions));
         window.localStorage.setItem("responses", JSON.stringify({}));
@@ -59,14 +61,18 @@ export default function Home() {
   if(loading) {
     return(
       <div className='main_loading'>
-        <p className='main_loading_text'>Création en cours...</p>
+        <SyncLoader color="#34495E" size={18} />
+        <p className='main_loading_text'>Création...</p>
       </div>
     )
   }
 
   return (
       <>
-        <Headers />
+        <Headers 
+          description="Créez un examen personnalisé à partir d'une leçon fournir. L'IA génère un examen basé sur la leçon pour aider les étudiants à s'entraîner et à s'améliorer." 
+          keywords="IA, examen personnalisé, entraînement étudiant, amélioration des compétences" 
+        />
         <main className='main_container'>
 
           <p className='main_explication_text'>
@@ -113,7 +119,7 @@ export default function Home() {
           {/* <a href="/chemin/vers/votre/fichier.pdf" download>Télécharger le PDF</a> */}
           <button className='main_button_create' onClick={createExam} disabled={waitAnswer}>Créer Exam</button>
 
-          {lessonError ? <p className='main_lesson_error'>Ce que vous avez fourni n&#39;est pas une leçon, donc je ne peux pas vous donner d&#39;examen.</p> : null}
+          {lessonError ? <p className='main_lesson_error'>Ce que vous avez fourni n&#39;est pas un cours, je ne peux donc pas vous faire passer un examen.</p> : null}
         </main>
         <Footer />
       </>

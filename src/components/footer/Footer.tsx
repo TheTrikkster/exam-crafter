@@ -2,10 +2,10 @@ import "./Footer.scss"
 
 function Footer() {
   return (
-    <div className="footer_container">
+    <footer className="footer_container">
       <p>israilst67@gmail.com</p>
       <p>linkedin</p>
-    </div>
+    </footer>
   )
 }
 

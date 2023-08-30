@@ -80,36 +80,3 @@ describe("Home Component", () => {
         });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 'Question 1: Quelle est la définition du théorème de Pythagore ?\n' +
-// 'endOfQuestion\n' +
-// 'Question 2: Quelles sont les deux autres catégories auxquelles Pythagore est associé ?\n' +
-// 'endOfQuestion\n' +
-// 'Question 3: Que représente la lettre "c" dans le théorème de Pythagore ?\n' +
-// 'endOfQuestion\n' +
-// "Question 4: Expliquez avec vos propres mots comment utiliser le théorème de Pythagore pour trouver la longueur de l'hypoténuse d'un triangle rectangle.\n" +
-// 'endOfQuestion\n' +
-// "Question 5: Pouvez-vous donner un exemple d'application du théorème de Pythagore ?\n" +
-// 'endOfQuestion\n' +
-// "Question 6: Combien mesure l'hypoténuse d'un triangle rectangle dont les côtés mesurent 6 unités et 8 unités ?\n" +
-// 'endOfQuestion\n' +
-// 'Question 7: Pouvez-vous donner une preuve du théorème de Pythagore ?\n' +
-// 'endOfQuestion\n' +
-// 'Question 8: Quels sont les trois éléments nécessaires pour appliquer le théorème de Pythagore ?\n' +
-// 'endOfQuestion\n' +
-// "Question 9: Quelle est l'utilité du théorème de Pythagore dans la géométrie euclidienne ?\n" +
-// 'endOfQuestion\n' +
-// 'Question 10: Est-ce que le théorème de Pythagore a été découvert par Pythagore lui-même ?\n' +
-// 'endOfQuestion'

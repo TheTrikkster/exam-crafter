@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import "./Question.scss"
+import { SyncLoader } from 'react-spinners';
 
 type QuestionPageType = {
   params: {id: string}
@@ -14,7 +15,6 @@ function QuestionPage({params}: QuestionPageType) {
   const [allResponses, setAllResponses] = useState<string[]>([]);
   const [questions, setQuestions] = useState([]);
   const [sendResponse, setSendResponse] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [correction, setCorrection] = useState(false);
 
   useEffect(() => {
@@ -38,32 +38,62 @@ function QuestionPage({params}: QuestionPageType) {
 
 
   const fetchData = async () => {
-    try {
-      setLoading(true);
+    const allCorrections = await Promise.all(questions.map(async (question: string, index: number) => {
+      try {
+        const waitResponse = await fetch("/api/chatGpt", {
+          method: "POST",
+          body: JSON.stringify({data: [question, allResponses[index+1]], choosedPrompt: "response"})
+        });
 
-      const waitResponse = await fetch("/api/chatGpt", {
+        if (!waitResponse.ok) {
+          throw new Error("Erreur dans la réponse");
+        }
+
+        const dataFromWaitResponse = await waitResponse.json();
+
+        const waitGrade = await fetch("/api/chatGpt", {
+          method: "POST",
+          body: JSON.stringify({data: [question, allResponses[index+1]], choosedPrompt: "grade"})
+        });
+
+        if (!waitGrade.ok) {
+          throw new Error("Erreur dans la réponse");
+        }
+
+        const dataFromWaitGrade = await waitGrade.json();
+
+        return {correction: dataFromWaitResponse.message.message.content, grade: dataFromWaitGrade.message.message.content}
+      } catch (error) {
+        console.error(error)
+      }
+    }))
+
+    try {
+      const waitComment = await fetch("/api/chatGpt", {
         method: "POST",
-        body: JSON.stringify([...questions, ...Object.values(allResponses)])
+        body: JSON.stringify({data: [...questions, ...Object.values(allResponses)], choosedPrompt: "comment"})
       });
 
-      if (!waitResponse.ok) {
+      if (!waitComment.ok) {
         throw new Error("Erreur dans la réponse");
       }
 
-      const data = await waitResponse.json();
-      const [corrections, commentAndGrade] = data.message.message.content.split("startOfComment");
-      const [comment, grade] = commentAndGrade.split("gradeOfExam");
+      const dataFromWaitComment = await waitComment.json();
 
-      window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
-      window.localStorage.setItem("corrections", JSON.stringify(corrections.split("endAndStartOfQuestion")));
-      window.localStorage.setItem("grade", JSON.stringify(grade.trim()));
+      // console.log(data.message.message.content)
+      // const [corrections, commentAndGrade] = data.message.message.content.split("startEndOfComment");
+      // const [comment, grade] = commentAndGrade.split("startEndOfGrade");
+
+      // window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
+      window.localStorage.setItem("comment", JSON.stringify(dataFromWaitComment.message.message.content.trim()));
+      // window.localStorage.setItem("corrections", JSON.stringify(corrections.split("startEndOfCorrection")));
+      window.localStorage.setItem("corrections", JSON.stringify(allCorrections));
+      // window.localStorage.setItem("grade", JSON.stringify(grade.trim()));
 
       router.push(`/result`);
     } catch (err: any) {
       console.error(err.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   }
 
   const removeEleFromLocStorage = () => {
@@ -79,35 +109,30 @@ function QuestionPage({params}: QuestionPageType) {
 
   if (id < 1 || id > questions.length) {
     return (
-      <div>
-        <p>404 page not found</p>
+      <div className='question_loading_or_do_not_exist'>
+        <p className='question_loading_text_or_do_not_exist'>Cette page n&#39;existe pas</p>
       </div>
     )
   }
 
   if (correction) {
     return (
-      <div className='question_loading'>
-        <p className='question_loading_text'>correction en cours...</p>
+      <div className='question_loading_or_do_not_exist'>
+        <SyncLoader color="#34495E" size={18} />
+        <p className='question_loading_text_or_do_not_exist'>Correction...</p>
       </div>
     ) 
   }
-
-  if (loading) {
-    return (
-      <div className='question_loading'>
-        <p className='question_loading_text'>Loading...</p>
-      </div>
-    ) 
-  }
-
 
   return (
       <div className='question_container'>
-        {questions.length > 0 ? <h3 className='question_the_question'>{questions[id - 1]}</h3> : null}
-        <textarea style={{resize: "none", caretColor: "auto"}} className='question_response_field' value={response}
-          placeholder='Vous devez écrire votre ici' 
-          onChange={(event: {target: {value: string}}) => setResponse(event.target.value)}/>
+        <header>
+          {questions.length > 0 ? <h3 className='question_the_question'>{questions[id - 1]}</h3> : null}
+        </header>
+        <main className='question_main'>
+          <textarea style={{resize: "none", caretColor: "auto"}} className='question_response_field' value={response}
+            placeholder='Vous devez écrire votre ici' 
+            onChange={(event: {target: {value: string}}) => setResponse(event.target.value)}/>
           <div className='question_button_container'>
             <button className='question_button' 
               onClick={() => {
@@ -116,7 +141,6 @@ function QuestionPage({params}: QuestionPageType) {
                     setCorrection(true);
                     fetchData();
                   } else {
-                    setLoading(true);
                     handleAnswer(id+1);
                   }
                 }}
@@ -124,8 +148,9 @@ function QuestionPage({params}: QuestionPageType) {
             >
               prochaine question
             </button>
-            <a href="/" className='question_boutton_quittez' onClick={removeEleFromLocStorage}>quittez</a>
+            <a href="/" className='question_boutton_quittez' title="Quitter le quiz et retourner à la page d'accueil" onClick={removeEleFromLocStorage}>quittez</a>
           </div>
+        </main>
       </div>
     )
 }
