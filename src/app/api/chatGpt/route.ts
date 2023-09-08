@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
 import pdfParse from 'pdf-parse';
 
@@ -22,8 +22,9 @@ const response = async ( body: bodyType, choosedPrompt?: string ) => {
       Tu es un professeur qui doit créer un examen de 10 questions pour tes élèves.
       Afin de créer ce test tu devras te basé sur le dernier cours que tu as donner à tes élèves.
       Il y aura un niveau qui te sera donné et tu devras adapter l'examen en fonction du niveau, les niveaux possibles sont : facile, normal et difficile.
-      Seul la leçon peut être accepté et si ce qu'on vous donne n'est pas une leçon, répondez "Ce que vous avez fourni n'est pas un cours, je ne peux donc pas vous faire passer un examen".
+      Seul la leçon peut être accepté et si ce qu'on vous donne n'est pas une leçon, répondez "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.".
       La question doit être formulée de telle manière que seule une réponse textuelle soit appropriée.
+      Les questions doivent évaluer la compréhension générale du sujet sans se référer ni dépendre d'un élément, exemple ou cas particulier de la leçon. Les questions doivent pouvoir être répondue en se basant uniquement sur l'ensemble du contenu général et non sur des détails spécifiques.
       Commencez directement par les questions.
       Chacune de tes 10 questions doit commencé par « Question nombre: » avec le bon nombre.
       Avant et après chaque question écris « startEndOfQuestion ».
@@ -50,9 +51,6 @@ const response = async ( body: bodyType, choosedPrompt?: string ) => {
       La correction ne devras pas être beaucoup trop long.
     `
   }
-
-  // Avant et après le commentaire écris « startEndOfComment ».
-
 
   // Tu devras attribué une note à la réponse de l’élève, l’évaluation se fera ainsi: 1 point pour une réponse juste, 0,5 pour une réponse partiellement juste, et 0 pour une réponse fausse.
   // Si la réponse n'est pas conforme à la question, indiquez la bonne réponse dans la correction et attribuez 0 point.
@@ -88,8 +86,6 @@ export async function POST(request: any) {
       const lesson =  `Voici le cours sur lequel tu dois te basé: \n${text} \nLa difficulté choisie est ${body.difficulty}.`;
 
       const message = await response({role: "user", content: lesson}, "lesson");
-
-      // console.log(message)
 
       // return new Response("message")
       return NextResponse.json({ message });

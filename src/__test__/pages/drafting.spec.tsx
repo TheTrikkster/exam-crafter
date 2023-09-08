@@ -1,6 +1,6 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import Home from "../../app/page";
+import Drafting from "../../app/drafting/page"
 import { useRouter } from 'next/navigation';
 
 
@@ -10,10 +10,10 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe("Home Component", () => {
+describe("Drafting Component", () => {
 
     const fillTextAreaWithA = () => {
-        render(<Home />);
+        render(<Drafting />);
 
         const textarea = screen.getByPlaceholderText('Ecrivez ici votre texte...')as HTMLTextAreaElement;
         for (let i = 0; i <= 51; i++) {
@@ -36,9 +36,8 @@ describe("Home Component", () => {
     }
 
     it("renders without crashing", () => {
-      render(<Home />);
+      render(<Drafting />);
       expect(screen.getByText("Créer Exam")).toBeInTheDocument();
-      expect(screen.getByText("Choisir PDF")).toBeInTheDocument();
     });
 
     it("redirects user upon successful exam creation", async () => {
@@ -60,12 +59,12 @@ describe("Home Component", () => {
 
     it("shows error when the lesson isn't valid", async () => {
 
-        requeteResponse("Ce que vous avez fourni n'est pas une leçon, donc je ne peux pas vous donner d'examen.");
+        requeteResponse("Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.");
       
         fillTextAreaWithA();
       
         await waitFor(() => {
-          expect(screen.getByText("Ce que vous avez fourni n'est pas une leçon, donc je ne peux pas vous donner d'examen.")).toBeInTheDocument();
+          expect(screen.getByText("Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen")).toBeInTheDocument();
         });
     });
 

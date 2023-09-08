@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import "./Result.scss";
 import Footer from '@/components/footer/Footer';
-
+import Menu from '@/components/menu/Menu';
 
 function Result() {
   const [responses, setResponses] = useState<string[]>([]);
@@ -19,7 +19,6 @@ function Result() {
       const allResponses = JSON.parse(window.localStorage.getItem("responses") || '{}');
       const theComment = JSON.parse(window.localStorage.getItem("comment") || '""');
       const allCorrections = JSON.parse(window.localStorage.getItem("corrections") || '[]');
-      // const theGrade = JSON.parse(window.localStorage.getItem("grade") || '"');
 
       setNoQuestion(allQuestions.length === 0);
       setExamUnfinished(allCorrections.length < 10);
@@ -29,7 +28,6 @@ function Result() {
         setResponses(allResponses);
         setComment(theComment);
         setCorrections(allCorrections);
-        // setGrade(theGrade);
         const totalGrade = allCorrections.reduce((sum:number, current: {correction: string, grade: string}) => sum + Number(current.grade), 0);
         setGrade(totalGrade);
       }
@@ -56,13 +54,13 @@ function Result() {
 
   return ( 
     <>
+    <Menu />
       <div className='result_container'>
-        <header className='result_header'>
-          <a href="/" title="Retourner à l'accueil">Accueil</a>
+        <header>
           <h1 className='result_title'>Correction</h1>
         </header>
         <main>
-          <section>
+          <section className='result_corrections_container'>
             {questions.map((question: string, index: number) => {
               const reponse = responses[index+1].slice(12);
 
@@ -76,9 +74,10 @@ function Result() {
             })}
           </section>
 
-          <hr />
+          <hr className='result_separate_correction_and_comment' />
 
           <section className='result_comment_grade_container'>
+            <h2 className='result_comment_title'>Commentaire:</h2>
             <p className='result_comment'>{comment}</p>
             <p className='result_grade'>Note: {grade}/10</p>
           </section>

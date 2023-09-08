@@ -17,22 +17,22 @@ jest.mock('next/navigation', () => ({
 
 describe('QuestionPage Component', () => {
     beforeEach(() => {
-        window.localStorage.setItem('questions', JSON.stringify(["Sample Question 1", "Sample Question 2"]));
+        window.localStorage.setItem('questions', JSON.stringify(["Simple Question 1", "Simple Question 2"]));
     });
 
     it('renders correctly for a valid question id', async () => {
         render(<Question params={{id: "1"}} />);
         
-        const questionElement = screen.getByText(/Sample Question 1/);
+        const questionElement = screen.getByText(/Simple Question 1/);
         expect(questionElement).toBeInTheDocument();
     
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre ici/)as HTMLTextAreaElement;
+        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/)as HTMLTextAreaElement;
         expect(textAreaElement).toBeInTheDocument();
     
         const buttonElement = screen.getByText(/prochaine question/);
         expect(buttonElement).toBeDisabled();
     
-        fireEvent.change(textAreaElement, { target: { value: 'Sample answer' } });
+        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
         fireEvent.click(buttonElement);
     
         expect(buttonElement).not.toBeDisabled();
@@ -40,17 +40,19 @@ describe('QuestionPage Component', () => {
   
     it('shows 404 for an invalid question id', () => {
         render(<Question params={{id: "5"}} />);
-        const notFoundElement = screen.getByText(/404 page not found/);
+        const notFoundElement = screen.getByText(/Cette page n'existe pas/);
         expect(notFoundElement).toBeInTheDocument();
     });
 
     it("change page", async () => {
+        window.localStorage.setItem('responses', JSON.stringify({}));
+
         render(<Question params={{id: "1"}} />);
 
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre ici/)as HTMLTextAreaElement;
+        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/)as HTMLTextAreaElement;
         const buttonElement = screen.getByText(/prochaine question/);
 
-        fireEvent.change(textAreaElement, { target: { value: 'Sample answer' } });
+        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
         fireEvent.click(buttonElement);
 
         await waitFor(() => {
@@ -85,14 +87,14 @@ describe('QuestionPage Component', () => {
     
         render(<Question params={{id: "2"}} />);
     
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre ici/) as HTMLTextAreaElement;
+        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/) as HTMLTextAreaElement;
         const buttonElement = screen.getByText(/prochaine question/);
     
-        fireEvent.change(textAreaElement, { target: { value: 'Sample answer' } });
+        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
         fireEvent.click(buttonElement);
 
         await waitFor(() => {
-            expect(screen.getByText("correction en cours...")).toBeInTheDocument();
+            expect(screen.getByText("Correction...")).toBeInTheDocument();
         })
         await waitFor(() => {
             expect(mockPush).toHaveBeenCalledWith('/result');
