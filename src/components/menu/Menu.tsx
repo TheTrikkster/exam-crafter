@@ -5,7 +5,11 @@ import MenuIcon from "../../../public/menu.png";
 import CloseIcon from "../../../public/effacer.png";
 import Image from 'next/image';
 
-function Menu({scrollToFooter}: any) {
+type MenyType = {
+  scrollToFooter: () => void
+}
+
+function Menu({scrollToFooter}: MenyType) {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [closingMenu, setClosingMenu] = useState(false);
 
@@ -22,7 +26,7 @@ function Menu({scrollToFooter}: any) {
         setMobileMenu(false);
         setClosingMenu(false);
     }, 300);
-}
+  }
 
   return (
     <>

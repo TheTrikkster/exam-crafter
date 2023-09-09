@@ -3,21 +3,29 @@ import { useRef } from 'react';
 import './page.scss'
 import Headers from '@/components/header/Header'
 import Footer from '@/components/footer/Footer'
+import Head from 'next/head';
 
 export default function Home() {
-  const footerRef = useRef<null | any>(null);
+  const footerRef = useRef<HTMLDivElement | null>(null);
 
   function scrollToFooter() {
-    footerRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (footerRef.current) {
+      footerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }  
   }
 
   return (
       <>
-        <Headers 
-          description="Créez un examen personnalisé à partir d'une leçon fournir. L'IA génère un examen basé sur la leçon pour aider les étudiants à s'entraîner et à s'améliorer." 
-          keywords="IA, examen personnalisé, entraînement étudiant, amélioration des compétences"
-          scrollToFooter={scrollToFooter}
-        />
+        <Head>
+          <meta name="description" content="Créez un examen personnalisé à partir d'une leçon fournir. L'IA génère un examen basé sur la leçon pour aider les étudiants à s'entraîner et à s'améliorer." />
+          <meta name="keywords" content="IA, examen personnalisé, entraînement étudiant, amélioration des compétences"/>
+          <meta property="og:title" content="Exeam Crafter" />
+          <meta property="og:description" content="Créez un examen personnalisé à partir d'une leçon fournir. L'IA génère un examen basé sur la leçon pour aider les étudiants à s'entraîner et à s'améliorer." />
+          <meta property="og:image" content="URL_DE_VOTRE_IMAGE" /> {/* Si vous avez une image représentative pour votre site */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="URL_COMPLET_DE_LA_PAGE" /> {/* Mettre l'url de la page d'accueil */}
+        </Head>
+        <Headers scrollToFooter={scrollToFooter} />
         <main className='main_container'>
           <div className='main_explication_container'>
             <h2>Tout ce que vous devez savoir</h2>

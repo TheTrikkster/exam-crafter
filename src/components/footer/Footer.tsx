@@ -4,7 +4,11 @@ import Linkedin from "../../../public/icons8-linkedin-50 (1).png"
 import Github from "../../../public/icons8-github-64.png"
 import Email from "../../../public/icons8-email-50.png"
 
-function Footer({footerRef}: any) {
+type FooterType = {
+  footerRef: React.Ref<HTMLDivElement>;
+}
+
+function Footer({footerRef}: FooterType) {
   return (
     <footer className="footer_container">
       <div ref={footerRef} className="footer_text_container">

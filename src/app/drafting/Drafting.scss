@@ -146,12 +146,10 @@ main {
 
 .drafting_pdf_upload:hover {
     background-color: #ECF0F1;
-    // color: #FFFFFF;
   }
 
 .drafting_pdf_uploaded {
     background-color: #4CAF50;
-    // color: #FFFFFF;
     border-color: #388E3C;
   }
 
@@ -169,12 +167,8 @@ main {
     display: none;
   }
 
-// .drafting_choose_difficulty_container {
-//     margin-bottom: 30px;
-//   }
 
 .drafting_button_create_close {
-    // padding: 3px 10px;
     width: 110px;
     padding: 10px 10px;
     margin-top: 30px;
@@ -204,7 +198,7 @@ main {
 @media screen and (max-width: 600px) {
 
     .drafting_container {
-        padding: 50px 30px;
+        padding: 50px 20px;
     }
 
     .drafting_choose_difficulty_container {

@@ -1,8 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import "./Result.scss";
 import Footer from '@/components/footer/Footer';
 import Menu from '@/components/menu/Menu';
+import Head from 'next/head';
 
 function Result() {
   const [responses, setResponses] = useState<string[]>([]);
@@ -12,6 +13,13 @@ function Result() {
   const [examUnfinished, setExamUnfinished] = useState<boolean>(false);
   const [noQuestion, setNoQuestion] = useState<boolean>(false);
   const [grade, setGrade] = useState<number>(0);
+  const footerRef = useRef<HTMLDivElement | null>(null);
+
+  function scrollToFooter() {
+    if (footerRef.current) {
+      footerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }  
+  }
 
   useEffect(() => {
     try {
@@ -52,9 +60,19 @@ function Result() {
     )
   };
 
-  return ( 
+  return comment ? ( 
     <>
-    <Menu />
+    <Head>
+      <meta name="description" content="Consultez le résultat de votre examen, y compris les corrections, les commentaires et la note finale." />      
+      <meta name="keywords" content="résultat, examen, correction, commentaire, note"/>
+      <meta property="og:title" content="Exeam Crafter" />
+      <meta property="og:description" content="Consultez le résultat de votre examen, y compris les corrections, les commentaires et la note finale." />
+      <meta property="og:image" content="URL_DE_VOTRE_IMAGE" /> {/* Si vous avez une image représentative pour votre site */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="URL_COMPLET_DE_LA_PAGE" /> {/* Mettre l'url de la page d'accueil */}
+    </Head>
+
+    <Menu scrollToFooter={scrollToFooter} />
       <div className='result_container'>
         <header>
           <h1 className='result_title'>Correction</h1>
@@ -83,9 +101,9 @@ function Result() {
           </section>
         </main>
       </div>
-      <Footer/>
+      <Footer footerRef={footerRef} />
     </> 
-  )
+  ) : null
 }
 
 export default Result;

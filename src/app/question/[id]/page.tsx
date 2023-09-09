@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import "./Question.scss"
 import { SyncLoader } from 'react-spinners';
+import Head from 'next/head';
 
 type QuestionPageType = {
   params: {id: string}
@@ -13,10 +14,10 @@ function QuestionPage({params}: QuestionPageType) {
   const router = useRouter();
   const [response, setResponse] = useState<string>("");
   const [allResponses, setAllResponses] = useState<{ [key: string]: string }>({});
-  const [questions, setQuestions] = useState([]);
-  const [sendResponse, setSendResponse] = useState(false);
-  const [correction, setCorrection] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [sendResponse, setSendResponse] = useState<boolean>(false);
+  const [correction, setCorrection] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -37,59 +38,43 @@ function QuestionPage({params}: QuestionPageType) {
     }
   }, [sendResponse]);
 
+  const request = async (question: string, index: number, choosedPrompt: string) => {
+    try{
+      const waitResponse = await fetch("/api/chatGpt", {
+        method: "POST",
+        body: choosedPrompt == "comment" ? JSON.stringify({data: [...questions, ...Object.values(allResponses)], choosedPrompt: "comment"}) : JSON.stringify({data: [question, allResponses[index+1]], choosedPrompt: choosedPrompt})
+      });
+
+      if (!waitResponse.ok) {
+        throw new Error("Erreur dans la réponse");
+      }
+
+      const data = await waitResponse.json();
+
+      return data.message.message.content
+    } catch(err) {
+      console.error(err)
+    }
+  }
 
   const fetchData = async () => {
     const allCorrections = await Promise.all(questions.map(async (question: string, index: number) => {
       try {
-        const waitResponse = await fetch("/api/chatGpt", {
-          method: "POST",
-          body: JSON.stringify({data: [question, allResponses[index+1]], choosedPrompt: "response"})
-        });
+        const correction = await request(question, index, "response")
+        const grade = await request(question, index, "grade")
 
-        if (!waitResponse.ok) {
-          throw new Error("Erreur dans la réponse");
-        }
-
-        const dataFromWaitResponse = await waitResponse.json();
-
-        const waitGrade = await fetch("/api/chatGpt", {
-          method: "POST",
-          body: JSON.stringify({data: [question, allResponses[index+1]], choosedPrompt: "grade"})
-        });
-
-        if (!waitGrade.ok) {
-          throw new Error("Erreur dans la réponse");
-        }
-
-        const dataFromWaitGrade = await waitGrade.json();
-
-        return {correction: dataFromWaitResponse.message.message.content, grade: dataFromWaitGrade.message.message.content}
+        return {correction: correction, grade: grade}
       } catch (error) {
         console.error(error)
       }
     }))
 
-    try {
-      const waitComment = await fetch("/api/chatGpt", {
-        method: "POST",
-        body: JSON.stringify({data: [...questions, ...Object.values(allResponses)], choosedPrompt: "comment"})
-      });
+    const comment = await request("", 0, "comment")
+    window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
+    window.localStorage.setItem("corrections", JSON.stringify(allCorrections));
 
-      if (!waitComment.ok) {
-        throw new Error("Erreur dans la réponse");
-      }
-
-      const dataFromWaitComment = await waitComment.json();
-
-      window.localStorage.setItem("comment", JSON.stringify(dataFromWaitComment.message.message.content.trim()));
-      window.localStorage.setItem("corrections", JSON.stringify(allCorrections));
-
-      router.push(`/result`);
-    } catch (err: any) {
-      console.error(err.message);
-    } 
+    router.push(`/result`);
   }
-
 
   const confirmOptionChange = () => {
     setShowModal(false);
@@ -104,8 +89,7 @@ function QuestionPage({params}: QuestionPageType) {
     setShowModal(false);
   };
 
-
-  const handleAnswer = (nextQuestionId:any) => {
+  const handleAnswer = (nextQuestionId: number) => {
     router.push(`/question/${nextQuestionId}`);
   };
 
@@ -136,6 +120,15 @@ function QuestionPage({params}: QuestionPageType) {
 
   return (
       <div className='question_container'>
+        <Head>
+          <meta name="description" content="Répondez à la question pour progresser dans l'examen. Chaque réponse est importante pour votre évaluation finale." />      
+          <meta name="keywords" content="examen, question, IA, examen personnalisé"/>
+          <meta property="og:title" content="Exeam Crafter" />
+          <meta property="og:description" content="Répondez à la question pour progresser dans l'examen. Chaque réponse est importante pour votre évaluation finale." />
+          <meta property="og:image" content="URL_DE_VOTRE_IMAGE" /> {/* Si vous avez une image représentative pour votre site */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="URL_COMPLET_DE_LA_PAGE" /> {/* Mettre l'url de la page d'accueil */}
+        </Head>
         <header>
           {questions.length > 0 ? <h3 className='question_the_question'>{questions[id - 1]}</h3> : null}
         </header>

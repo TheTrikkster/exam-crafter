@@ -1,7 +1,6 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import Question from "../../app/question/[id]/page";
-// import { useRouter } from 'next/navigation';
 
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
@@ -10,10 +9,6 @@ jest.mock('next/navigation', () => ({
     query: { id: "1" }
   }),
 }));
-
-// afterEach(() => {
-//     jest.clearAllMocks();
-// });
 
 describe('QuestionPage Component', () => {
     beforeEach(() => {

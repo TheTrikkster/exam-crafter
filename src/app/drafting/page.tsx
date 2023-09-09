@@ -7,26 +7,29 @@ import Footer from '@/components/footer/Footer';
 import Menu from '@/components/menu/Menu';
 import Pdf from "../../../public/pdf.png"
 import Image from 'next/image'
+import Head from 'next/head';
 
 function Drafting() {
     const router = useRouter();
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [waitAnswer, setWaitAnswer] = useState(true);
-    const [chooseDifficulty, setChooseDifficulty] = useState("normal");
-    const [lessonText, setLessonText] = useState("");
-    const [lessonError, setLessonError] = useState(false);
-    const [uploadFile, setUploadFile] = useState(false);
-    const [optionPdfOrText, setOptionPdfOrText] = useState("texte");
-    const [loading, setLoading] = useState(false);
-    const footerRef = useRef<null | any>(null);
-    const [showModal, setShowModal] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [waitAnswer, setWaitAnswer] = useState<boolean>(true);
+    const [chooseDifficulty, setChooseDifficulty] = useState<string>("normal");
+    const [lessonText, setLessonText] = useState<string>("");
+    const [lessonError, setLessonError] = useState<boolean>(false);
+    const [uploadFile, setUploadFile] = useState<boolean>(false);
+    const [optionPdfOrText, setOptionPdfOrText] = useState<string>("texte");
+    const [loading, setLoading] = useState<boolean>(false);
+    const footerRef = useRef<HTMLDivElement | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
     const [tempSelectedValue, setTempSelectedValue] = useState<string | null>(null);
 
     function scrollToFooter() {
-      footerRef.current.scrollIntoView({ behavior: 'smooth' });
+      if (footerRef.current) {
+        footerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }  
     }
 
-    const handleOptionChange = (event: any) => {
+    const handleOptionChange = (event: {target: {value: string}}) => {
       const selectedValue = event.target.value;
 
       if(!selectedFile && lessonText.length == 0) {
@@ -54,6 +57,27 @@ function Drafting() {
       setShowModal(false);
   };
 
+  const request = async (formData: FormData, choosedPrompt: string) => {
+    try {
+      formData.append("choosedPrompt", choosedPrompt);
+
+      const response = await fetch("/api/chatGpt", {
+        method: "POST",
+        body: formData
+      });
+
+      if(!response.ok) {
+        return;
+      };
+
+      const data = await response.json();
+
+      return data.message.message.content
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
     const createExam = async () => {
         try {
           setLoading(true)
@@ -66,23 +90,15 @@ function Drafting() {
           } else if(lessonText) {
             formData.append("lesson", lessonText);
           }
+
+          const check = await request(formData, "check")
     
-          const response = await fetch("/api/chatGpt", {
-            method: "POST",
-            body: formData
-          });
-    
-          if(!response.ok) {
-            return;
-          };
-    
-          const data = await response.json();
-    
-          if(data.message.message.content == "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.") {
+          if(check == "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.") {
             setLoading(false)
             setLessonError(true)
           } else {
-            const questions = data.message.message.content.split("startEndOfQuestion");
+            const lesson = await request(formData, "lesson")
+            const questions = lesson.split("startEndOfQuestion");
             questions.pop();
             window.localStorage.setItem("questions", JSON.stringify(questions));
             window.localStorage.setItem("responses", JSON.stringify({}));
@@ -104,9 +120,18 @@ function Drafting() {
         )
       }
     
-
   return (
     <>
+    <Head>
+      <meta name="description" content="Personnalisez votre examen avec Exeam Crafter. Fournissez une leçon et laissez l'IA créer un examen sur mesure pour une préparation optimale." />
+      <meta name="keywords" content="créer examen, examen sur mesure, IA, personnalisation, leçon, étude, préparation examen"/>
+      <meta property="og:title" content="Créez Votre Examen Personnalisé | Exeam Crafter" />
+      <meta property="og:description" content="Personnalisez votre examen avec Exeam Crafter. Fournissez une leçon et l'IA se charge de créer un examen adapté pour votre préparation." />
+      <meta property="og:image" content="URL_DE_L_IMAGE_POUR_CETTE_PAGE" /> {/* Utilisez une image qui représente bien cette fonctionnalité si possible */}
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="URL_COMPLET_DE_LA_PAGE" /> {/* Mettre l'url de la page d'accueil */}
+    </Head>
+
     <Menu scrollToFooter={scrollToFooter}/>
     {showModal && (
         <div className="drafting_modal">
@@ -122,9 +147,6 @@ function Drafting() {
     <main>
       <div className='drafting_container'>
         <h1 className='drafting_title'>Pour commencer, insérer le texte ou télécharger un PDF lié à votre sujet d&#39;examen</h1>
-        {/* <p className='drafting_container'>
-            Pour pouvoir créer votre examen vous pouvez mettre la leçon que vous souhaitez dans le champ ci-dessous manuellement ou par pdf qui ce trouve juste en dessous du champ.
-        </p> */}
         <div className='drafting_options_container'>
           <label className='drafting_first_option_title'>
             Choisissez une option: {" "}
@@ -136,7 +158,7 @@ function Drafting() {
 
           <label className='drafting_choose_difficulty_container'>
               Vous devez choisir la difficulté de l&#39;examen: {" "}
-              <select value={chooseDifficulty} onChange={(event: any) => setChooseDifficulty(event.target.value)}>
+              <select value={chooseDifficulty} onChange={(event: {target: {value: string}}) => setChooseDifficulty(event.target.value)}>
                   <option>facile</option>
                   <option>normal</option>
                   <option>difficile</option>
@@ -157,10 +179,20 @@ function Drafting() {
               id="file-upload" 
               accept="application/pdf" 
               className="drafting_file_input"
-              onChange={(event:any) => {
-                  setSelectedFile(event.target.files[0])
-                  setUploadFile(true)
-                  setWaitAnswer(false)
+              onChange={(event) => {
+                const files = event.target.files;
+        
+                if (files && files.length > 0) {
+                    const file = files[0];
+        
+                    if (file.type === "application/pdf") {
+                        setSelectedFile(file);
+                        setUploadFile(true);
+                        setWaitAnswer(false);
+                    } else {
+                        alert("Veuillez télécharger un fichier PDF valide.");
+                    }
+                }
               }}/>
           </> :
             <textarea  
