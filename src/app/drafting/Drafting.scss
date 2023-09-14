@@ -81,11 +81,7 @@ main {
 
 .drafting_title {
     width: 65%;
-}
-
-.drafting_options_container {
-    display: flex;
-    flex-direction: column;
+    text-align: center;
 }
 
 .drafting_first_option_title {
@@ -93,7 +89,7 @@ main {
     color: black;
 }
 
-.drafting_option, .drafting_choose_difficulty_container select {
+.drafting_option {
     padding: 5px 22px 5px 10px;
     border: 1px solid #34495E;
     border-radius: 3px;
@@ -108,17 +104,17 @@ main {
     margin: 5px 0 30px;
 }
 
-.drafting_option:focus, .drafting_choose_difficulty_container select:focus {
+.drafting_option:focus {
     border-color: #2C3E50;
 }
 
-.drafting_option option, .drafting_choose_difficulty_container select option {
+.drafting_option option {
     padding: 4px;
     background-color: #FAFAFA;
     font-size: 0.9rem;
 }
 
-.drafting_option option:hover, .drafting_choose_difficulty_container select option:hover {
+.drafting_option option:hover {
     background-color: #E0E0E0;
 }
  
@@ -191,7 +187,7 @@ main {
   }
 
 .drafting_lesson_error {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: red;
   }
 
@@ -199,10 +195,6 @@ main {
 
     .drafting_container {
         padding: 50px 20px;
-    }
-
-    .drafting_choose_difficulty_container {
-        margin: 20px 0;
     }
 
     .drafting_field {

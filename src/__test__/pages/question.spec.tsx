@@ -89,7 +89,7 @@ describe('QuestionPage Component', () => {
         fireEvent.click(buttonElement);
 
         await waitFor(() => {
-            expect(screen.getByText("Correction...")).toBeInTheDocument();
+            expect(screen.getByText("correction")).toBeInTheDocument();
         })
         await waitFor(() => {
             expect(mockPush).toHaveBeenCalledWith('/result');

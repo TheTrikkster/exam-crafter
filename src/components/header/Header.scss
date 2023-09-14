@@ -15,7 +15,6 @@
 
 .header_texts_and_image_container {
     width: 65%;
-    min-height: 600px;
     color: white;
     position: absolute;
     top: 50%;
@@ -24,15 +23,15 @@
 }
 
 .header_title_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 50%;
-    margin-top: 93px;
-}
-
-.line {
-    display: block;
+    height: 100%;
 }
 
 .header_subtitle {
+    width: 80%;
     margin-top: 20px;
 }
 
@@ -61,10 +60,6 @@
         width: 320px;
         height: 320px;
     }
-
-    .header_title_container {
-        margin-top: 133px;
-    }
 }
 
 @media screen and (max-width: 1050px) {
@@ -73,16 +68,8 @@
         height: 270px;
     }
 
-    .header_title_container {
-        margin-top: 158px;
-    }
-
     .header_title_container h1 {
         font-size: 1.7em;
-    }
-
-    .header_title_container h2 {
-        font-size: 1.2em;
     }
 }
 
@@ -91,25 +78,14 @@
         width: 220px;
         height: 220px;
     }
-    
-    .header_title_container {
-        margin-top: 185px;
-    }
 
     .header_title_container h1 {
         font-size: 1.4em;
     }
 
-    .header_title_container h2 {
-        font-size: 1.1em;
-    }
-    
-    h1 .line:not(:last-child)::after {
-        content: " ";
-    }
-
-    .line {
-        display: inline;
+    .header_subtitle {
+        margin-top: 10px;
+        font-size: 12px;
     }
 }
 
@@ -118,17 +94,9 @@
         width: 180px;
         height: 180px;
     }
-    
-    .header_title_container {
-        margin-top: 208px;
-    }
 
     .header_title_container h1 {
         font-size: 1.3em;
-    }
-
-    .header_title_container h2 {
-        font-size: 0.9em;
     }
 
     .header_start_button {
@@ -170,7 +138,7 @@
     .header_title_container {
         position: absolute;
         left: 5%;
-        bottom: 10%;
+        top: 25%;
         width: 80%;
         margin: 0;
     }
@@ -179,16 +147,9 @@
         font-size: 2em;
     }
 
-    .line {
-        display: block;
-    }
-
     .header_subtitle {
         margin-top: 50px;
-    }
-
-    .header_title_container h2 {
-        font-size: 1.5em;
+        font-size: 16px;
     }
 
     .header_start_button {
@@ -207,10 +168,6 @@
         font-size: 1.7em;
     }
 
-    .header_title_container h2 {
-        font-size: 1.2em;
-    }
-
     .header_subtitle {
         margin-top: 30px;
     }
@@ -222,22 +179,20 @@
 
 @media screen and (max-width: 350px) {
     .header_title_container {
-        bottom: 5%;
+        top: 25%;
     }
 
     .header_title_container h1 {
         font-size: 1.5em;
     }
 
-    .header_title_container h2 {
-        font-size: 1em;
-    }
-
-    .line {
-        display: inline;
-    }
-
     .header_subtitle {
         margin-top: 20px;
+    }
+}
+
+@media screen and (max-width: 306px) {
+    .header_container {
+        width: 306px;
     }
 }

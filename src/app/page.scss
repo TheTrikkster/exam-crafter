@@ -1,10 +1,10 @@
-.main_container {
+.home_container {
   width: 65%;
   background-color: white;
   margin: 70px auto;
 }
 
-.main_explication_container {
+.home_explication_container {
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -15,11 +15,13 @@
 
 ol {
   margin-left: 20px;
+  font-weight: 900;
 }
 
 ol li p {
   color: black;
   margin: 10px 0 30px;
+  font-weight: 500;
 }
 
 ol li:last-child p:last-child {
@@ -27,11 +29,11 @@ ol li:last-child p:last-child {
 }
 
 @media screen and (max-width: 600px) {
-  .main_container {
+  .home_container {
     width: 90%;
   }
 
-  .main_explication_container {
+  .home_explication_container {
     width: 100%;
   }
 }

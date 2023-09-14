@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
-import pdfParse from 'pdf-parse';
 
 type bodyType = {
   role: "user",
@@ -13,25 +11,29 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration)
 
-const response = async ( body: bodyType, choosedPrompt?: string ) => {
-
+export const response = async ( body: bodyType, choosedPrompt: string ) => {
   let prompt;
 
   if(choosedPrompt == "check") {
     prompt = `
-      Tu es un professeur qui doit vérifier si ce que t'est donné est une leçon pour créer un examen pour tes élèves.
-      Seul la leçon peut être accepté et si ce qu'on vous donne n'est pas une leçon, répondez "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.".
+      En tant que professeur spécialisé en pédagogie, tu as pour tâche d'analyser un texte pour déterminer s'il peut servir de base à un examen pour tes élèves. Pour cela, le texte doit présenter les caractéristiques d'une leçon structurée.
+      Une leçon authentique devrait posséder:
+        1. Une structure claire et organisée, avec éventuellement des titres ou des sous-titres.
+        2. Des informations pédagogiques pertinentes et cohérentes sur un sujet spécifique.
+        3. Une progression logique des idées permettant une compréhension aisée.
+
+      Selon ces critères, le texte qui est fournie en dessous est-il une leçon adaptée à la création d'un examen? 
+      Si non, répondez par: "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.".
     `
   } if(choosedPrompt == "lesson") {
     prompt = `
       Tu es un professeur qui doit créer un examen de 10 questions pour tes élèves.
       Afin de créer ce test tu devras te basé sur le dernier cours que tu as donner à tes élèves.
-      Il y aura un niveau qui te sera donné et tu devras adapter l'examen en fonction du niveau, les niveaux possibles sont : facile, normal et difficile.
       La question doit être formulée de telle manière que seule une réponse textuelle soit appropriée.
       Les questions doivent évaluer la compréhension générale du sujet sans se référer ni dépendre d'un élément, exemple ou cas particulier de la leçon. Les questions doivent pouvoir être répondue en se basant uniquement sur l'ensemble du contenu général et non sur des détails spécifiques.
       Commencez directement par les questions.
       Chacune de tes 10 questions doit commencé par « Question nombre: » avec le bon nombre.
-      Avant et après chaque question écris « startEndOfQuestion ».
+      Après chaque question écris « endOfQuestion ».
     `
   } if (choosedPrompt == "comment") {
     prompt = `
@@ -56,51 +58,16 @@ const response = async ( body: bodyType, choosedPrompt?: string ) => {
     `
   }
 
-const wResponse = await openai.createChatCompletion({
-  model: "gpt-3.5-turbo-16k-0613",
-  messages: [
-    {
-      role: "system",
-      content: prompt
-    },
-    body,
-  ]
-  });
+  const wResponse = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo-16k-0613",
+    messages: [
+      {
+        role: "system",
+        content: prompt
+      },
+      body,
+    ]
+    });
+
   return wResponse.data.choices[0];
-}
-
-export async function POST(request: any) {
-    if (request.headers.get('content-type').substring(0, 19) == "multipart/form-data") {
-      const formData = await request.formData();
-      const body = Object.fromEntries(formData);
-      let text;
-
-      if(typeof body.lesson == "object") {
-        const buffer = Buffer.from(await body.lesson.arrayBuffer());
-        text = await pdfParse(buffer);
-        text = text.text;
-      } else {
-        text = body.lesson
-      }
-
-      const lesson =  `Voici le cours sur lequel tu dois te basé: \n${text} \nLa difficulté choisie est ${body.difficulty}.`;
-
-      const message = await response({role: "user", content: lesson}, body.choosedPrompt);
-
-      return NextResponse.json({ message });
-    } else if (request.headers.get('content-type').substring(0, 19) == "text/plain;charset=") {
-
-      const responses = await request.json();
-
-      let message;
-
-        message = await response({role: "user", content: `Result: ${responses.data}`}, responses.choosedPrompt);
-
-      return NextResponse.json({ message });
-    } else {
-      return NextResponse.json(
-            { error: "Lesson text is required." },
-            { status: 400 }
-          );
-    }
-  }
+};

@@ -4,14 +4,15 @@ import "./Menu.scss";
 import MenuIcon from "../../../public/menu.png";
 import CloseIcon from "../../../public/effacer.png";
 import Image from 'next/image';
+import { ScrollToFooter } from '@/app/functions';
+import { useContext } from "react";
+import { ThemeContext } from "@/app/functions";
 
-type MenyType = {
-  scrollToFooter: () => void
-}
-
-function Menu({scrollToFooter}: MenyType) {
+function Menu() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [closingMenu, setClosingMenu] = useState(false);
+  const context:any = useContext(ThemeContext);
+
 
   const menuContainerClass = mobileMenu ? "menu_container_fixed" : "menu_container";
   const menuIconClass = mobileMenu ? "menu_icon_close" : "menu_icon";
@@ -41,10 +42,10 @@ function Menu({scrollToFooter}: MenyType) {
         <ul  className={menuRightElementsClass}>
             <div className={menuPositionClass}>
                 <li className="menu_element" onClick={() => {
-                    scrollToFooter()
+                    ScrollToFooter(context)
                     setMobileMenu(false)
                 }}>Pourquoi</li>
-                <li><a href="/drafting" className="menu_element">Personnaliser</a></li>
+                <li><a href="/drafting" className="menu_element">Créer Exam</a></li>
                 <li><a href="/" className="menu_element">Accueil</a></li>
             </div>
         </ul>

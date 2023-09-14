@@ -1,5 +1,6 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
+import { DraftingFunctions } from "../../app/drafting/functions"
 import Drafting from "../../app/drafting/page"
 import { useRouter } from 'next/navigation';
 
@@ -20,7 +21,7 @@ describe("Drafting Component", () => {
             fireEvent.change(textarea, { target: { value: textarea.value + 'a' } });
         }
 
-        fireEvent.click(screen.getByText('Créer Exam'));
+        fireEvent.click(screen.getByRole('button', { name: /Créer Exam/i }));
     };
 
     const requeteResponse = (text: string) => {
@@ -37,7 +38,7 @@ describe("Drafting Component", () => {
 
     it("renders without crashing", () => {
       render(<Drafting />);
-      expect(screen.getByText("Créer Exam")).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Créer Exam/i })).toBeInTheDocument();
     });
 
     it("redirects user upon successful exam creation", async () => {

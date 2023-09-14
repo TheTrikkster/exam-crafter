@@ -1,0 +1,28 @@
+import { NextResponse } from "next/server";
+import pdfParse from 'pdf-parse';
+import { response } from "../common/route";
+
+
+export async function POST(request: any) {
+    const formData = await request.formData();
+    const body = Object.fromEntries(formData);
+    let text;
+
+    if(typeof body.lesson == "object") {
+    const buffer = Buffer.from(await body.lesson.arrayBuffer());
+    text = await pdfParse(buffer);
+    text = text.text;
+    } else {
+    text = body.lesson
+    }
+
+    if(text.length < 10000) {
+      const lesson =  `Voici le cours sur lequel tu dois te basé: \n${text}`;
+
+      const message = await response({role: "user", content: lesson}, body.choosedPrompt);
+
+      return NextResponse.json({ message });
+    } else {
+      return NextResponse.json({ message: {message: {content: "Le PDF fourni est trop volumineux"}} });
+    }
+  }
