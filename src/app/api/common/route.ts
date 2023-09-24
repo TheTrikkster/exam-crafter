@@ -16,7 +16,7 @@ export const response = async ( body: bodyType, choosedPrompt: string ) => {
 
   if(choosedPrompt == "lesson") {
     prompt = `
-    Tu dois créer dix questions sur le sujet qui te sera fourni. Le sujet doit obligatoirement concerner la pédagogie.  Si le sujet ne peut pas servir pour créer dix questions ou s'il n'est pas clair, alors tu répondra par "INVALID" sinon crée les 10 question en les séparant par le mot "endOfQuestion".
+      Tu dois créer dix questions sur le sujet qui te sera fourni. Le sujet doit obligatoirement concerner la pédagogie.  Si le sujet ne peut pas servir pour créer dix questions ou s'il n'est pas clair, alors tu répondra par "INVALID" sinon crée les 10 question en commençant directement par les questions et en les séparant par le mot "endOfQuestion".
     `
   } if (choosedPrompt == "comment") {
     prompt = `

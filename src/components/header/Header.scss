@@ -105,6 +105,12 @@
     }
 }
 
+@media screen and (max-width: 650px) {
+    .header_subtitle {
+        margin-top: 5px;
+    }
+}
+
 @media screen and (max-width: 600px) {
     .header_background_image {
         display: none;

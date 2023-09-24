@@ -59,7 +59,7 @@ describe("Drafting Component", () => {
 
     it("shows error when the lesson isn't valid", async () => {
 
-        requeteResponse("Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.");
+        requeteResponse("INVALID");
       
         fillTextAreaWithA();
       

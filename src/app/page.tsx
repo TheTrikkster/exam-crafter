@@ -12,11 +12,11 @@ export default function Home() {
     },
     {
       title: "Fonctionnement", 
-      text: "Le processus est très simple. Vous allez pouvoir créer votre propre examen en fournissant une leçon. À partir de cette leçon, une intelligence artificielle créera un examen composé de dix questions. Une fois l'examen terminé, vous recevrez une correction détaillée. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, et nous vous prions de nous excuser à l'avance si cela se produit."
+      text: "Le processus est très simple. Vous allez pouvoir créer votre propre examen en fournissant une leçon ou en indiquant sur quoi vous souhaitez passer l'examen. À partir de cette leçon, une intelligence artificielle créera un examen composé de dix questions. Une fois l'examen terminé, vous recevrez une correction détaillée. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, et nous vous prions de nous excuser à l'avance si cela se produit."
     },
     {
       title: "Prérequis", 
-      text: "Pour créer votre examen, vous devez simplement fournir une leçon sous forme de pdf, ou vous avez la possibilité de l'écrire à la main. Pour commencer, il vous suffit d'appuyer sur << Commencer >>."
+      text: "Pour créer votre examen, vous devez simplement fournir une leçon sous forme de pdf, ou vous avez la possibilité de le rédiger à la main, vous avez également la possibilité d'indiquer simplement le thème de l'examen que vous souhaitez. Pour commencer, il vous suffit d'appuyer sur << Commencer >>."
     }
   ]
 

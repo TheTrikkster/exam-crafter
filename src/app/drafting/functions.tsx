@@ -175,7 +175,7 @@ export const DraftingFunctions = () => {
                         style={{resize: "none", caretColor: "auto"}} 
                         value={lessonText}
                         className='drafting_field' 
-                        placeholder={`Vous devez écrire au moins 600 caractères pour pouvoir commencer \n \nEcrivez votre texte ici...`}
+                        placeholder={`Vous devez écrire au moins 30 caractères pour pouvoir commencer \n \nEcrivez votre texte ici...`}
                         onChange={(event: {target: {value: string}}) => {
                             const currentTextValue = event.target.value;
                             setLessonText(currentTextValue);
