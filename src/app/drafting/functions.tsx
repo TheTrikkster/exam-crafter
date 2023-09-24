@@ -81,19 +81,18 @@ export const DraftingFunctions = () => {
                 formData.append("lesson", lessonText);
             }
 
-            const check = await request(formData, "check")
+            const lesson = await request(formData, "lesson")
 
-            if(check == "Le contenu fourni est trop court") {
+            if(lesson == "Le contenu fourni est trop court") {
                 setLoading(false)
                 setLessonError(prevState => ({ ...prevState, toShort: true }))
-            } else if(check == "Le contenu fourni est trop volumineux") {
+            } else if(lesson == "Le contenu fourni est trop volumineux") {
                 setLoading(false)
                 setLessonError(prevState => ({ ...prevState, toLong: true }))
-            } else if(check == "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.") {
+            } else if(lesson == "INVALID") {
                 setLoading(false)
                 setLessonError(prevState => ({ ...prevState, notLesson: true }))
             } else {
-                const lesson = await request(formData, "lesson")
                 const questions = lesson.split("endOfQuestion");
                 questions.pop();
                 window.localStorage.setItem("questions", JSON.stringify(questions));
@@ -180,7 +179,7 @@ export const DraftingFunctions = () => {
                         onChange={(event: {target: {value: string}}) => {
                             const currentTextValue = event.target.value;
                             setLessonText(currentTextValue);
-                            setWaitAnswer(currentTextValue.length <= 600);
+                            setWaitAnswer(currentTextValue.length <= 30);
                         }} />
                     }
 

@@ -14,10 +14,10 @@ export async function POST(request: any) {
     } else {
     text = body.lesson
     }
-    if(text.length < 600) {
+    if(text.length < 30) {
       return NextResponse.json({ message: {message: {content: "Le contenu fourni est trop court"}} });
     } else if(text.length < 10000) {
-      const lesson =  `Voici le cours sur lequel tu dois te basé: \n${text}`;
+      const lesson =  `Voici le sujet: \n${text}`;
 
       const message = await response({role: "user", content: lesson}, body.choosedPrompt);
 
