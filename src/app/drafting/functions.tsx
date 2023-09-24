@@ -14,7 +14,7 @@ export const DraftingFunctions = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [waitAnswer, setWaitAnswer] = useState<boolean>(true);
     const [lessonText, setLessonText] = useState<string>("");
-    const [lessonError, setLessonError] = useState<{notLesson: boolean, toLong: boolean}>({notLesson: false, toLong: false});
+    const [lessonError, setLessonError] = useState<{notLesson: boolean, toLong: boolean, toShort: boolean}>({notLesson: false, toLong: false, toShort: false});
     const [uploadFile, setUploadFile] = useState<boolean>(false);
     const [optionPdfOrText, setOptionPdfOrText] = useState<string>("texte");
     const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +41,7 @@ export const DraftingFunctions = () => {
             setLessonText("");
             setUploadFile(false);
             setWaitAnswer(true);
-            setLessonError({notLesson: false, toLong: false})
+            setLessonError({notLesson: false, toLong: false, toShort: false})
         }
     };
   
@@ -72,34 +72,36 @@ export const DraftingFunctions = () => {
   
     const createExam = async () => {
         try {
-        setLoading(true)
-        const formData = new FormData();
-        
-        if(selectedFile) {
-            formData.append("lesson", selectedFile);
-        } else if(lessonText) {
-            formData.append("lesson", lessonText);
-        }
+            setLoading(true)
+            const formData = new FormData();
+            
+            if(selectedFile) {
+                formData.append("lesson", selectedFile);
+            } else if(lessonText) {
+                formData.append("lesson", lessonText);
+            }
 
-        const check = await request(formData, "check")
+            const check = await request(formData, "check")
 
-        if(check == "Le PDF fourni est trop volumineux") {
-            setLoading(false)
-            setLessonError(prevState => ({ ...prevState, toLong: true }))
-        } else if(check == "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.") {
-            setLoading(false)
-            setLessonError(prevState => ({ ...prevState, notLesson: true }))
-        } else {
-            const lesson = await request(formData, "lesson")
-            const questions = lesson.split("endOfQuestion");
-            questions.pop();
-            window.localStorage.setItem("questions", JSON.stringify(questions));
-            window.localStorage.setItem("responses", JSON.stringify({}));
-            window.localStorage.setItem("comment", JSON.stringify(""));
-            window.localStorage.setItem("corrections", JSON.stringify([]));
-            router.push(`/question/1`);
-        }
-    
+            if(check == "Le contenu fourni est trop court") {
+                setLoading(false)
+                setLessonError(prevState => ({ ...prevState, toShort: true }))
+            } else if(check == "Le contenu fourni est trop volumineux") {
+                setLoading(false)
+                setLessonError(prevState => ({ ...prevState, toLong: true }))
+            } else if(check == "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen.") {
+                setLoading(false)
+                setLessonError(prevState => ({ ...prevState, notLesson: true }))
+            } else {
+                const lesson = await request(formData, "lesson")
+                const questions = lesson.split("endOfQuestion");
+                questions.pop();
+                window.localStorage.setItem("questions", JSON.stringify(questions));
+                window.localStorage.setItem("responses", JSON.stringify({}));
+                window.localStorage.setItem("comment", JSON.stringify(""));
+                window.localStorage.setItem("corrections", JSON.stringify([]));
+                router.push(`/question/1`);
+            }
         } catch(error) {
             console.error("Quelque chose s'est mal passé");
         }
@@ -140,7 +142,8 @@ export const DraftingFunctions = () => {
                     </label>
 
                     {lessonError.notLesson ? <p className='drafting_lesson_error'>Ce que vous avez fourni n&#39;est pas une leçon, vous ne pouvez donc pas créer un examen</p> : null}
-                    {lessonError.toLong ? <p className='drafting_lesson_error'>Le PDF fourni est trop volumineux</p> : null}
+                    {lessonError.toLong ? <p className='drafting_lesson_error'>Le contenu fourni est trop volumineux</p> : null}
+                    {lessonError.toShort ? <p className='drafting_lesson_error'>Le contenu fourni est trop court</p> : null}
 
                     {optionPdfOrText == "pdf" ? 
                     <>
@@ -173,7 +176,7 @@ export const DraftingFunctions = () => {
                         style={{resize: "none", caretColor: "auto"}} 
                         value={lessonText}
                         className='drafting_field' 
-                        placeholder='Ecrivez ici votre texte...'
+                        placeholder={`Vous devez écrire au moins 600 caractères pour pouvoir commencer \n \nEcrivez votre texte ici...`}
                         onChange={(event: {target: {value: string}}) => {
                             const currentTextValue = event.target.value;
                             setLessonText(currentTextValue);

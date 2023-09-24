@@ -60,15 +60,16 @@ export const ResultFunctions = () => {
                 <h1 className='result_title'>Correction</h1>
                 </header>
                 <main>
+                <p className={`result_grade ${grade < 4 ? 'result_grade_red' : grade >= 4 && grade < 7 ? 'result_grade_orange' : 'result_grade_green'}`}>Note: {grade}/10</p>
                 <section className='result_corrections_container'>
                     {questions.map((question: string, index: number) => {
                     const reponse = responses[index+1].slice(12);
 
                     return (
                         <div key={index} className='result_each_result_container'>
-                        <h3 className='result_question'>{question}</h3>
-                        <p className='result_response'>{reponse}</p>
-                        <p className='result_correction'>{corrections[index].correction}</p>
+                          <h3 className='result_question'>{question}</h3>
+                          <p className='result_response'>{reponse}</p>
+                          <p className='result_correction'>{corrections[index].correction}</p>
                         </div>
                     )
                     })}
@@ -79,7 +80,6 @@ export const ResultFunctions = () => {
                 <section className='result_comment_grade_container'>
                     <h2 className='result_comment_title'>Commentaire:</h2>
                     <p className='result_comment'>{comment}</p>
-                    <p className='result_grade'>Note: {grade}/10</p>
                 </section>
                 </main>
             </div>

@@ -6,7 +6,7 @@ type bodyType = {
 }
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY 
 })
 
 const openai = new OpenAIApi(configuration)
@@ -58,6 +58,7 @@ export const response = async ( body: bodyType, choosedPrompt: string ) => {
     `
   }
 
+  try {
   const wResponse = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-16k-0613",
     messages: [
@@ -70,4 +71,8 @@ export const response = async ( body: bodyType, choosedPrompt: string ) => {
     });
 
   return wResponse.data.choices[0];
+  } catch (err: any) {
+    console.error(err);
+    throw err;
+  }
 };

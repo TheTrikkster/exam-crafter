@@ -1,6 +1,5 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import { DraftingFunctions } from "../../app/drafting/functions"
 import Drafting from "../../app/drafting/page"
 import { useRouter } from 'next/navigation';
 
@@ -16,8 +15,8 @@ describe("Drafting Component", () => {
     const fillTextAreaWithA = () => {
         render(<Drafting />);
 
-        const textarea = screen.getByPlaceholderText('Ecrivez ici votre texte...')as HTMLTextAreaElement;
-        for (let i = 0; i <= 51; i++) {
+        const textarea = screen.getByPlaceholderText(/Ecrivez votre texte ici.../)as HTMLTextAreaElement;
+        for (let i = 0; i <= 601; i++) {
             fireEvent.change(textarea, { target: { value: textarea.value + 'a' } });
         }
 

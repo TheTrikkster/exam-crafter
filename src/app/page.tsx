@@ -12,7 +12,7 @@ export default function Home() {
     },
     {
       title: "Fonctionnement", 
-      text: "Le processus est très simple. Vous allez pouvoir créer votre propre examen en fournissant une leçon et en choisissant le niveau de difficulté. À partir de cette leçon, une intelligence artificielle créera un examen composé de dix questions. Une fois l'examen terminé, vous recevrez une correction détaillée. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, et nous vous prions de nous excuser à l'avance si cela se produit."
+      text: "Le processus est très simple. Vous allez pouvoir créer votre propre examen en fournissant une leçon. À partir de cette leçon, une intelligence artificielle créera un examen composé de dix questions. Une fois l'examen terminé, vous recevrez une correction détaillée. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, et nous vous prions de nous excuser à l'avance si cela se produit."
     },
     {
       title: "Prérequis", 

@@ -17,6 +17,10 @@ main {
     width: 65%;
 }
 
+section.result_corrections_container > div:first-child {
+    margin: 50px 0 0;
+}
+
 .result_each_result_container {
     margin: 100px 0;
 }
@@ -58,10 +62,20 @@ main {
 }
 
 .result_grade {
-    color: red;
-    text-align: center;
     margin-top: 50px;
-    font-size: 30px;
+    font-size: 27px;
+}
+
+.result_grade_red {
+    color: red;
+}
+
+.result_grade_orange {
+    color: orange;
+}
+
+.result_grade_green {
+    color: #28B463;
 }
 
 .result_separate_correction_and_comment {

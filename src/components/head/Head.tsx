@@ -4,7 +4,7 @@ type HeadType = {
   title: string,
   description: string,
   keywords: string
-}
+} 
 
 function Heads({title, description, keywords}: HeadType) {
   return (
