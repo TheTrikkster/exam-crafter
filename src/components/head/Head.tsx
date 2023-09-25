@@ -13,12 +13,12 @@ function Heads({title, description, keywords}: HeadType) {
         <meta charSet="UTF-8" />
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
-        <meta property="og:title" content="Exeam Crafter" />
+        <meta property="og:title" content="Exam Crafter" />
         <meta property="og:description" content={description}  />
         <meta property="og:image" content="https://tinypic.host/images/2023/09/25/Votre-texte-de-paragraphe.png" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://exam-crafter.com/" />
-        <meta name="twitter:title" content="Exeam Crafter" />
+        <meta name="twitter:title" content="Exam Crafter" />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content="https://tinypic.host/images/2023/09/25/Votre-texte-de-paragraphe.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

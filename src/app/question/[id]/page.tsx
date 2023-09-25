@@ -11,7 +11,7 @@ function Question({params}: QuestionType) {
   return (
       <div className='question_container'>
         <Head
-          title="Répondez à la question d'examen - Généré par Exeam Crafter IA"
+          title="Répondez à la question d'examen - Généré par Exam Crafter IA"
           description="Répondez à la question pour progresser dans l'examen. Chaque réponse est importante pour votre évaluation finale."
           keywords="examen, question, IA, examen personnalisé" />
         <QuestionFunctions params={params}/>

@@ -5,7 +5,7 @@ import { Analytics } from './Analytics'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Exeam Crafter'
+  title: 'Exam Crafter'
 }
 
 export default function RootLayout({

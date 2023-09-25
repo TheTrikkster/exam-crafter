@@ -23,7 +23,7 @@ export default function Home() {
   return (
       <>
         <Head
-          title="Exeam Crafter: Créez des examens personnalisés avec l'IA à partir de vos leçons"
+          title="Exam Crafter: Créez des examens personnalisés avec l'IA à partir de vos leçons"
           description="Créez un examen personnalisé à partir d'une leçon fournir. L'IA génère un examen basé sur la leçon pour aider les étudiants à s'entraîner et à s'améliorer." 
           keywords="IA, examen personnalisé, entraînement étudiant, amélioration des compétences" />
         <ThemeProvider>
