@@ -14,7 +14,7 @@ function Heads({title, description, keywords}: HeadType) {
         <meta name="keywords" content={keywords} />
         <meta property="og:title" content="Exeam Crafter" />
         <meta property="og:description" content={description}  />
-        <meta property="og:image" content="https://tinypic.host/image/POAhU" />
+        <meta property="og:image" content="https://tinypic.host/images/2023/09/25/Votre-texte-de-paragraphe.png" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://exam-crafter.com/" />
     </Head>
