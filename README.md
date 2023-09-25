@@ -18,6 +18,9 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## OpenAI Configuration
+To use the AI, you need to provide an OpenAI key. Do this by adding your key in the file `/app/api/common/route.ts`.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
