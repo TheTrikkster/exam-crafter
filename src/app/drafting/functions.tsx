@@ -8,13 +8,20 @@ import Pdf from "../../../public/pdf.png"
 import Menu from '@/components/menu/Menu';
 import Footer from '@/components/footer/Footer';
 
+type ErrorDrafting = {
+    notLesson: boolean, 
+    toLong: boolean, 
+    toShort: boolean, 
+    convertPDF: boolean, 
+    generation: boolean
+}
 
 export const DraftingFunctions = () => {
     const router = useRouter();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [waitAnswer, setWaitAnswer] = useState<boolean>(true);
     const [lessonText, setLessonText] = useState<string>("");
-    const [lessonError, setLessonError] = useState<{notLesson: boolean, toLong: boolean, toShort: boolean}>({notLesson: false, toLong: false, toShort: false});
+    const [lessonError, setLessonError] = useState<ErrorDrafting>({notLesson: false, toLong: false, toShort: false, convertPDF: false, generation: false});
     const [uploadFile, setUploadFile] = useState<boolean>(false);
     const [optionPdfOrText, setOptionPdfOrText] = useState<string>("texte");
     const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +48,7 @@ export const DraftingFunctions = () => {
             setLessonText("");
             setUploadFile(false);
             setWaitAnswer(true);
-            setLessonError({notLesson: false, toLong: false, toShort: false})
+            setLessonError({notLesson: false, toLong: false, toShort: false, convertPDF: false, generation: false})
         }
     };
   
@@ -81,18 +88,21 @@ export const DraftingFunctions = () => {
                 formData.append("lesson", lessonText);
             }
 
-            const lesson = await request(formData, "lesson")
-
-            if(lesson == "Le contenu fourni est trop court") {
-                setLoading(false)
+            const check = await request(formData, "check")
+            setLoading(false)
+            if(check == "Le contenu fourni est trop court") {
                 setLessonError(prevState => ({ ...prevState, toShort: true }))
-            } else if(lesson == "Le contenu fourni est trop volumineux") {
-                setLoading(false)
+            } else if(check == "Le contenu fourni est trop volumineux") {
                 setLessonError(prevState => ({ ...prevState, toLong: true }))
-            } else if(lesson == "INVALID") {
-                setLoading(false)
+            } else if(check == "Erreur lors de la conversion du PDF en texte.") {
+                setLessonError(prevState => ({ ...prevState, convertPDF: true }))
+            } else if(check == "Erreur lors de la génération de la réponse.") {
+                setLessonError(prevState => ({ ...prevState, generation: true }))
+            } else if(check == "INVALID") {
                 setLessonError(prevState => ({ ...prevState, notLesson: true }))
             } else {
+                setLoading(true)
+                const lesson = await request(formData, "lesson")
                 const questions = lesson.split("endOfQuestion");
                 questions.pop();
                 window.localStorage.setItem("questions", JSON.stringify(questions));
@@ -143,6 +153,7 @@ export const DraftingFunctions = () => {
                     {lessonError.notLesson ? <p className='drafting_lesson_error'>Ce que vous avez fourni n&#39;est pas une leçon, vous ne pouvez donc pas créer un examen</p> : null}
                     {lessonError.toLong ? <p className='drafting_lesson_error'>Le contenu fourni est trop volumineux</p> : null}
                     {lessonError.toShort ? <p className='drafting_lesson_error'>Le contenu fourni est trop court</p> : null}
+                    {lessonError.generation || lessonError.convertPDF ? <p className='drafting_lesson_error'>Erreur lors de la génération de l&#39;examen</p> : null}
 
                     {optionPdfOrText == "pdf" ? 
                     <>

@@ -15,10 +15,11 @@ export const ResultFunctions = () => {
   
     useEffect(() => {
       try {
-        const allQuestions = JSON.parse(window.localStorage.getItem("questions") || '[]');
-        const allResponses = JSON.parse(window.localStorage.getItem("responses") || '{}');
-        const theComment = JSON.parse(window.localStorage.getItem("comment") || '""');
-        const allCorrections = JSON.parse(window.localStorage.getItem("corrections") || '[]');
+        const isBrowser = typeof window !== 'undefined';
+        const allQuestions = isBrowser ? JSON.parse(window.localStorage.getItem("questions") || '[]'): [];
+        const allResponses = isBrowser ? JSON.parse(window.localStorage.getItem("responses") || '{}') : {};
+        const theComment = isBrowser ? JSON.parse(window.localStorage.getItem("comment") || '""') : "";
+        const allCorrections =  isBrowser ? JSON.parse(window.localStorage.getItem("corrections") || '[]') : []
   
         setNoQuestion(allQuestions.length === 0);
         setExamUnfinished(allCorrections.length < 10);

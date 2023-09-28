@@ -8,11 +8,12 @@ export const QuestionFunctions = ({params}: QuestionType) => {
   const id = Number(params.id);
   const router = useRouter();
   const [response, setResponse] = useState<string>("");
-  const [reponseError, setReponseError] = useState<boolean>(false);
+  const [reponseError, setReponseError] = useState<{toLong: boolean, generation: boolean}>({toLong: false, generation: false});
   const [correction, setCorrection] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const questions = JSON.parse(window.localStorage.getItem("questions") || '[]');
   const allResponses = JSON.parse(window.localStorage.getItem("responses") || '{}');
+  let generationError = false;
 
   const sendResponse = () => {
       allResponses[id] = `Response ${id}: ${response}`;
@@ -32,9 +33,14 @@ export const QuestionFunctions = ({params}: QuestionType) => {
 
       const data = await waitResponse.json();
 
+      if(data.message.message.content == "Erreur lors de la génération de la réponse.") {
+        generationError = true;
+      }
+
+
       return data.message.message.content
     } catch(err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -51,10 +57,17 @@ export const QuestionFunctions = ({params}: QuestionType) => {
     }))
 
     const comment = await request("", 0, "comment")
-    window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
-    window.localStorage.setItem("corrections", JSON.stringify(allCorrections));
-
-    router.push(`/result`);
+    
+    if(generationError) {
+      setCorrection(false);
+      delete allResponses[10];
+      window.localStorage.setItem("responses", JSON.stringify(allResponses));
+      setReponseError(prevState => ({...prevState, generation: true}));
+    } else {
+      window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
+      window.localStorage.setItem("corrections", JSON.stringify(allCorrections));
+      router.push(`/result`);
+    }
   }
 
   const confirmOptionChange = () => {
@@ -63,7 +76,7 @@ export const QuestionFunctions = ({params}: QuestionType) => {
     window.localStorage.setItem("responses", JSON.stringify({}));
     window.localStorage.setItem("comment", JSON.stringify(""));
     window.localStorage.setItem("corrections", JSON.stringify([]));
-    router.push(`/`);
+    router.push(`/drafting`);
   };
 
   const cancelOptionChange = () => {
@@ -116,7 +129,8 @@ export const QuestionFunctions = ({params}: QuestionType) => {
             </div>
         )}
         <main className='question_main'>
-          {reponseError ? <p className='question_reponse_to_long'>Votre réponse est beaucoup trop longue</p> : null}
+          {reponseError.toLong ? <p className='question_reponse_to_long'>Votre réponse est beaucoup trop longue</p> : null}
+          {reponseError.generation ? <p className='question_reponse_to_long'>Erreur lors de la génération de la réponse</p> : null}
           <textarea style={{resize: "none", caretColor: "auto"}} className='question_response_field' value={response}
             placeholder='Vous devez écrire votre réponse ici' 
             onChange={(event: {target: {value: string}}) => setResponse(event.target.value)}/>
@@ -132,7 +146,7 @@ export const QuestionFunctions = ({params}: QuestionType) => {
                   }
                   sendResponse()
                 } else {
-                  setReponseError(true);
+                  setReponseError(prevState => ({...prevState, toLong: true}));
                 }
                 }}
               disabled={response.length > 0 ? false : true}
