@@ -85,7 +85,7 @@ export const DraftingFunctions = () => {
             if(selectedFile) {
                 formData.append("lesson", selectedFile);
             } else if(lessonText) {
-                formData.append("lesson", lessonText);
+                formData.append("lesson", lessonText); 
             }
 
             const check = await request(formData, "check")
