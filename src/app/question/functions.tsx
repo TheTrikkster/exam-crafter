@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SyncLoader } from 'react-spinners';
 import { QuestionType } from './[id]/page';
 
@@ -11,9 +11,14 @@ export const QuestionFunctions = ({params}: QuestionType) => {
   const [reponseError, setReponseError] = useState<{toLong: boolean, generation: boolean}>({toLong: false, generation: false});
   const [correction, setCorrection] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const questions = JSON.parse(window.localStorage.getItem("questions") || '[]');
-  const allResponses = JSON.parse(window.localStorage.getItem("responses") || '{}');
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [allResponses, setAllResponses] = useState<Record<number, string>>({});
   let generationError = false;
+
+  useEffect(() => {
+    setQuestions(JSON.parse(window.localStorage.getItem("questions") || '[]'));
+    setAllResponses(JSON.parse(window.localStorage.getItem("responses") || '{}'));
+  }, []);
 
   const sendResponse = () => {
       allResponses[id] = `Response ${id}: ${response}`;
@@ -130,7 +135,7 @@ export const QuestionFunctions = ({params}: QuestionType) => {
         )}
         <main className='question_main'>
           {reponseError.toLong ? <p className='question_reponse_to_long'>Votre réponse est beaucoup trop longue</p> : null}
-          {reponseError.generation ? <p className='question_reponse_to_long'>Erreur lors de la génération de la réponse</p> : null}
+          {reponseError.generation ? <p className='question_reponse_to_long'>Erreur lors de la génération de la correction</p> : null}
           <textarea style={{resize: "none", caretColor: "auto"}} className='question_response_field' value={response}
             placeholder='Vous devez écrire votre réponse ici' 
             onChange={(event: {target: {value: string}}) => setResponse(event.target.value)}/>

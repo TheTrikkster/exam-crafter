@@ -35,8 +35,7 @@ describe('QuestionPage Component', () => {
   
     it('shows 404 for an invalid question id', () => {
         render(<Question params={{id: "5"}} />);
-        const notFoundElement = screen.getByText(/Cette page n'existe pas/);
-        expect(notFoundElement).toBeInTheDocument();
+        expect(screen.getByText(/Cette page n'existe pas/)).toBeInTheDocument();
     });
 
     it("change page", async () => {
@@ -81,7 +80,7 @@ describe('QuestionPage Component', () => {
           });
     
         render(<Question params={{id: "2"}} />);
-    
+
         const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/) as HTMLTextAreaElement;
         const buttonElement = screen.getByText(/prochaine question/);
     
