@@ -10,6 +10,8 @@ function Heads({title, description, keywords}: HeadType) {
   return (
     <Head>
         <title>{title}</title>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
         <meta charSet="UTF-8" />
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />

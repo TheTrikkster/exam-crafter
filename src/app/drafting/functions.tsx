@@ -90,26 +90,32 @@ export const DraftingFunctions = () => {
 
             const check = await request(formData, "check")
             setLoading(false)
-            if(check == "Le contenu fourni est trop court") {
-                setLessonError(prevState => ({ ...prevState, toShort: true }))
-            } else if(check == "Le contenu fourni est trop volumineux") {
-                setLessonError(prevState => ({ ...prevState, toLong: true }))
-            } else if(check == "Erreur lors de la conversion du PDF en texte.") {
-                setLessonError(prevState => ({ ...prevState, convertPDF: true }))
-            } else if(check == "Erreur lors de la génération de la réponse.") {
-                setLessonError(prevState => ({ ...prevState, generation: true }))
-            } else if(check == "INVALID") {
-                setLessonError(prevState => ({ ...prevState, notLesson: true }))
-            } else {
-                setLoading(true)
-                const lesson = await request(formData, "lesson")
-                const questions = lesson.split("endOfQuestion");
-                questions.pop();
-                window.localStorage.setItem("questions", JSON.stringify(questions));
-                window.localStorage.setItem("responses", JSON.stringify({}));
-                window.localStorage.setItem("comment", JSON.stringify(""));
-                window.localStorage.setItem("corrections", JSON.stringify([]));
-                router.push(`/question/1`);
+            switch (check) {
+                case "Le contenu fourni est trop court":
+                    setLessonError(prevState => ({ ...prevState, toShort: true }));
+                    break;
+                case "Le contenu fourni est trop volumineux":
+                    setLessonError(prevState => ({ ...prevState, toLong: true }));
+                    break;
+                case "Erreur lors de la conversion du PDF en texte.":
+                    setLessonError(prevState => ({ ...prevState, convertPDF: true }));
+                    break;
+                case "Erreur lors de la génération de la réponse.":
+                    setLessonError(prevState => ({ ...prevState, generation: true }));
+                    break;
+                case "INVALID":
+                    setLessonError(prevState => ({ ...prevState, notLesson: true }));
+                    break;
+                default:
+                    setLoading(true);
+                    const lesson = await request(formData, "lesson");
+                    const questions = lesson.split("endOfQuestion");
+                    questions.pop();
+                    window.localStorage.setItem("questions", JSON.stringify(questions));
+                    window.localStorage.setItem("responses", JSON.stringify({}));
+                    window.localStorage.setItem("comment", JSON.stringify(""));
+                    window.localStorage.setItem("corrections", JSON.stringify([]));
+                    router.push(`/question/1`);
             }
         } catch(error) {
             console.error("Quelque chose s'est mal passé");
@@ -166,6 +172,7 @@ export const DraftingFunctions = () => {
                         id="file-upload" 
                         accept="application/pdf" 
                         className="drafting_file_input"
+                        data-testid="file-upload"
                         onChange={(event) => {
                             const files = event.target.files;
                     
