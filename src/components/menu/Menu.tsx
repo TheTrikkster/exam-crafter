@@ -11,6 +11,7 @@ import { ThemeContext } from "@/app/functions";
 function Menu() {
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
   const [closingMenu, setClosingMenu] = useState<boolean>(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const context: any = useContext(ThemeContext);
 
