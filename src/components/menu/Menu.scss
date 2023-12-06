@@ -1,4 +1,4 @@
-.menu_container, .menu_container_fixed {
+.Menu_container, .Menu_container_fixed {
     width: 100%;
     display: flex;
     align-items: center;
@@ -11,7 +11,7 @@
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.20);
 }
 
-.menu_right_elements_container, .menu_right_elements_container_mobile {
+.Menu_right_elements_container, .Menu_right_elements_container_mobile {
     display: flex;
     justify-content: flex-end;
     flex-grow: 1;
@@ -25,7 +25,7 @@ nav ul li {
     cursor: pointer;
 }
 
-.menu_elements_position > .menu_element:first-child {
+.Menu_elements_position > .Menu_element:first-child {
     padding: 7px 10px;
 }
 
@@ -34,33 +34,33 @@ nav ul li a {
     border-radius: 3px;
 }
 
-.menu_element:hover {
+.Menu_element:hover {
     background-color: #D0D3D4;
     transition: 1s;
     align-items: center;
 }
 
-.menu_icon_container {
+.Menu_icon_container {
     display: none;
 }
 
-.menu_icon {
+.Menu_icon {
     width: 30px;
     height: auto;
 }
 
-.menu_if_position_fixed {
+.Menu_if_position_fixed {
     height: 0;
 }
 
 @media screen and (max-width: 1050px) {
-    .menu_container, .menu_container_fixed {
+    .Menu_container, .Menu_container_fixed {
         padding: 10px 16.4% 10px 17.5%;
     }
 }
 
 @media screen and (max-width: 850px) {
-    .menu_container, .menu_container_fixed {
+    .Menu_container, .Menu_container_fixed {
         padding: 10px 16.2% 10px 17.5%;
     }
 
@@ -70,7 +70,7 @@ nav ul li a {
 }
 
 @media screen and (max-width: 700px) {
-    .menu_container, .menu_container_fixed {
+    .Menu_container, .Menu_container_fixed {
         padding: 10px 16% 10px 17.5%;
     }
 
@@ -85,7 +85,7 @@ nav ul li a {
         padding: 0;
     }
 
-    .menu_elements_position > .menu_element:first-child {
+    .Menu_elements_position > .Menu_element:first-child {
         margin-left: 9px;
         padding: 5px 7px;
     }
@@ -97,21 +97,21 @@ nav ul li a {
 }
 
 @media screen and (max-width: 600px) {
-    .menu_container {
+    .Menu_container {
         width: 100%;
         padding: 10px 20px;
     }
 
-    .menu_container_fixed {
+    .Menu_container_fixed {
         padding: 0;
         position: fixed;
     }
 
-    .menu_container_fixed .header_fixed {
+    .Menu_container_fixed .Menu_header_fixed {
         padding: 10px 20px;
     }
     
-    .header_fixed {
+    .Menu_header_fixed {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -127,7 +127,7 @@ nav ul li a {
         font-size: 1.5em;
     }
 
-    .menu_right_elements_container {
+    .Menu_right_elements_container {
         visibility: hidden;
         position: fixed;
         flex-direction: column;
@@ -136,7 +136,7 @@ nav ul li a {
         transition: transform 0.3s ease-out, opacity 0.3s ease-out;
     }
     
-    .menu_right_elements_container_animate {
+    .Menu_right_elements_container_animate {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
@@ -150,7 +150,7 @@ nav ul li a {
         transition: transform 0.3s ease-out;
     }
 
-    .menu_right_elements_container_mobile {
+    .Menu_right_elements_container_mobile {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
@@ -167,18 +167,18 @@ nav ul li a {
         --speed: 0.3s;
     }
 
-    .menu_elements_position {
+    .Menu_elements_position {
         display: flex;
         flex-direction: column;
         justify-content: center;
         height: 80%;
     }
 
-    .menu_elements_position.closing {
+    .Menu_elements_position.closing {
         align-items: center;
     }
 
-    .menu_elements_position > .menu_element:first-child {
+    .Menu_elements_position > .Menu_element:first-child {
         width: 100px;
         margin-left: 0;
         padding: 7px 10px;
@@ -195,21 +195,21 @@ nav ul li a {
         padding: 0;
     }
 
-    .menu_element {
+    .Menu_element {
         font-size: 20px;
     }
 
-    .menu_icon_container {
+    .Menu_icon_container {
         display: flex;
         justify-content: flex-end;
         width: 100%;
     }
 
-    .menu_icon_close {
+    .Menu_icon_close {
         display: none;
     }
 
-    .menu_if_position_fixed {
+    .Menu_if_position_fixed {
         height: 50px;
     }
 }

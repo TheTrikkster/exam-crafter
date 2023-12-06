@@ -1,66 +1,74 @@
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 import Question from "../../app/question/[id]/page";
 
 const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
-    query: { id: "1" }
+    query: { id: "1" },
   }),
 }));
 
-describe('QuestionPage Component', () => {
-    beforeEach(() => {
-        window.localStorage.setItem('questions', JSON.stringify(["Simple Question 1", "Simple Question 2"]));
+describe("QuestionPage Component", () => {
+  beforeEach(() => {
+    window.localStorage.setItem(
+      "questions",
+      JSON.stringify(["Simple Question 1", "Simple Question 2"]),
+    );
+  });
+
+  it("renders correctly for a valid question id", async () => {
+    render(<Question params={{ id: "1" }} />);
+
+    const questionElement = screen.getByText(/Simple Question 1/);
+    expect(questionElement).toBeInTheDocument();
+
+    const textAreaElement = screen.getByPlaceholderText(
+      /Vous devez écrire votre réponse ici/,
+    ) as HTMLTextAreaElement;
+    expect(textAreaElement).toBeInTheDocument();
+
+    const buttonElement = screen.getByText(/prochaine question/);
+    expect(buttonElement).toBeDisabled();
+
+    fireEvent.change(textAreaElement, { target: { value: "Simple answer" } });
+    fireEvent.click(buttonElement);
+
+    expect(buttonElement).not.toBeDisabled();
+  });
+
+  it("shows 404 for an invalid question id", () => {
+    render(<Question params={{ id: "5" }} />);
+    expect(screen.getByText(/Cette page n'existe pas/)).toBeInTheDocument();
+  });
+
+  it("change page", async () => {
+    window.localStorage.setItem("responses", JSON.stringify({}));
+
+    render(<Question params={{ id: "1" }} />);
+
+    const textAreaElement = screen.getByPlaceholderText(
+      /Vous devez écrire votre réponse ici/,
+    ) as HTMLTextAreaElement;
+    const buttonElement = screen.getByText(/prochaine question/);
+
+    fireEvent.change(textAreaElement, { target: { value: "Simple answer" } });
+    fireEvent.click(buttonElement);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/question/2");
     });
+  });
 
-    it('renders correctly for a valid question id', async () => {
-        render(<Question params={{id: "1"}} />);
-        
-        const questionElement = screen.getByText(/Simple Question 1/);
-        expect(questionElement).toBeInTheDocument();
-    
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/)as HTMLTextAreaElement;
-        expect(textAreaElement).toBeInTheDocument();
-    
-        const buttonElement = screen.getByText(/prochaine question/);
-        expect(buttonElement).toBeDisabled();
-    
-        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
-        fireEvent.click(buttonElement);
-    
-        expect(buttonElement).not.toBeDisabled();
-    });
-  
-    it('shows 404 for an invalid question id', () => {
-        render(<Question params={{id: "5"}} />);
-        expect(screen.getByText(/Cette page n'existe pas/)).toBeInTheDocument();
-    });
-
-    it("change page", async () => {
-        window.localStorage.setItem('responses', JSON.stringify({}));
-
-        render(<Question params={{id: "1"}} />);
-
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/)as HTMLTextAreaElement;
-        const buttonElement = screen.getByText(/prochaine question/);
-
-        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
-        fireEvent.click(buttonElement);
-
-        await waitFor(() => {
-            expect(mockPush).toHaveBeenCalledWith('/question/2');
-        })
-    })
-
-    it("loading of result page", async () => {
-        global.fetch = jest.fn().mockResolvedValue({
-            ok: true,
-            json: jest.fn().mockResolvedValue({message: {
-                message: {
-                    role: 'assistant',
-                    content: `
+  it("loading of result page", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        message: {
+          message: {
+            role: "assistant",
+            content: `
                         'Question 1: Quelle est la définition du théorème de Pythagore ?\n' +
                         "Correction 1: Le théorème de Pythagore affirme que dans un triangle rectangle, le carré de la longueur de l'hypoténuse est égal à la somme des carrés des longueurs des deux autres côtés.\n" +
                         'endAndStartOfQuestion\n' +
@@ -74,24 +82,27 @@ describe('QuestionPage Component', () => {
                         'endOfComment\n' +
                         '\n' +
                         'gradeOfExam'
-                    `
-                  }
-              }}),
-          });
-    
-        render(<Question params={{id: "2"}} />);
+                    `,
+          },
+        },
+      }),
+    });
 
-        const textAreaElement = screen.getByPlaceholderText(/Vous devez écrire votre réponse ici/) as HTMLTextAreaElement;
-        const buttonElement = screen.getByText(/prochaine question/);
-    
-        fireEvent.change(textAreaElement, { target: { value: 'Simple answer' } });
-        fireEvent.click(buttonElement);
+    render(<Question params={{ id: "2" }} />);
 
-        await waitFor(() => {
-            expect(screen.getByText("correction")).toBeInTheDocument();
-        })
-        await waitFor(() => {
-            expect(mockPush).toHaveBeenCalledWith('/result');
-        })
-    })
+    const textAreaElement = screen.getByPlaceholderText(
+      /Vous devez écrire votre réponse ici/,
+    ) as HTMLTextAreaElement;
+    const buttonElement = screen.getByText(/prochaine question/);
+
+    fireEvent.change(textAreaElement, { target: { value: "Simple answer" } });
+    fireEvent.click(buttonElement);
+
+    await waitFor(() => {
+      expect(screen.getByText("correction")).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/result");
+    });
   });
+});

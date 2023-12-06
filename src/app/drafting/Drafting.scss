@@ -2,7 +2,7 @@ main {
     background-color: #F3F4F6;
 }
 
-.drafting_loading {
+.Drafting_loading {
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -10,13 +10,13 @@ main {
     align-items: center;
   }
   
-  .drafting_loading_text {
+  .Drafting_loading_text {
     color: grey;
     font-size: 25px;
     margin-top: 50px;
   }
 
-.drafting_modal {
+.Drafting_modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -29,7 +29,7 @@ main {
     z-index: 1000;
 }
 
-.drafting_modal_content {
+.Drafting_modal_content {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -38,17 +38,17 @@ main {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.drafting_modal_content p {
+.Drafting_modal_content p {
     color: black;
 }
 
-.drafting_modal_buttons {
+.Drafting_modal_buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
 }
 
-.drafting_modal_buttons button {
+.Drafting_modal_buttons button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -57,40 +57,40 @@ main {
     transition: background-color 0.3s;
 }
 
-.drafting_modal_buttons button:hover {
+.Drafting_modal_buttons button:hover {
     opacity: 0.9;
 }
 
-.drafting_modal_buttons button:first-child {
+.Drafting_modal_buttons button:first-child {
     background-color: #f44336;
     color: white;
     margin-right: 10px;
 }
 
-.drafting_modal_buttons button:last-child {
+.Drafting_modal_buttons button:last-child {
     background-color: #979A9A;
     color: white;
 }
 
-.drafting_container {
+.Drafting_container {
     padding: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.drafting_title {
+.Drafting_title {
     width: 65%;
     text-align: center;
     font-size: 1.9em;
 }
 
-.drafting_first_option_title {
+.Drafting_first_option_title {
     margin-top: 50px;
     color: black;
 }
 
-.drafting_option {
+.Drafting_option {
     padding: 5px 22px 5px 10px;
     border: 1px solid #34495E;
     border-radius: 3px;
@@ -106,27 +106,27 @@ main {
     color: black;
 }
 
-.drafting_option:focus {
+.Drafting_option:focus {
     border-color: #2C3E50;
 }
 
-.drafting_option option {
+.Drafting_option option {
     padding: 4px;
     background-color: #FAFAFA;
     font-size: 0.9rem;
 }
 
-.drafting_option option:hover {
+.Drafting_option option:hover {
     background-color: #E0E0E0;
 }
  
-.drafting_field {
+.Drafting_field {
     width: 55%;
     min-height: 400px;
     padding: 15px;
   }
 
-.drafting_pdf_upload, .drafting_pdf_uploaded {
+.Drafting_pdf_upload, .Drafting_pdf_uploaded {
     width: 55%;
     min-height: 400px;
     padding: 12px 24px;
@@ -142,31 +142,31 @@ main {
     justify-content: center;
   }
 
-.drafting_pdf_upload:hover {
+.Drafting_pdf_upload:hover {
     background-color: #ECF0F1;
   }
 
-.drafting_pdf_uploaded {
+.Drafting_pdf_uploaded {
     background-color: #4CAF50;
     border-color: #388E3C;
   }
 
-.drafting_pdf_uploaded:hover {
+.Drafting_pdf_uploaded:hover {
     background-color: #388E3C;
   }
 
-.drafting_pdf_icon {
+.Drafting_pdf_icon {
     width: 40px;
     height: auto;
     margin-right: 8px;
   }
 
-.drafting_file_input {
+.Drafting_file_input {
     display: none;
   }
 
 
-.drafting_button_create_close {
+.Drafting_button_create_close {
     width: 110px;
     padding: 10px 10px;
     margin-top: 30px;
@@ -177,7 +177,7 @@ main {
     opacity: 0.5;
   }
 
-.drafting_button_create {
+.Drafting_button_create {
     width: 110px;
     padding: 10px 10px;
     margin-top: 30px;
@@ -188,26 +188,26 @@ main {
     cursor: pointer;
   }
 
-.drafting_lesson_error {
+.Drafting_lesson_error {
     margin-bottom: 10px;
     color: red;
   }
 
 @media screen and (max-width: 600px) {
 
-    .drafting_container {
+    .Drafting_container {
         padding: 50px 20px;
     }
 
-    .drafting_field {
+    .Drafting_field {
         width: 100%;
     }
 
-    .drafting_pdf_upload, .drafting_pdf_uploaded {
+    .Drafting_pdf_upload, .Drafting_pdf_uploaded {
         width: 100%;
     }
 
-    .drafting_title {
+    .Drafting_title {
         width: 100%;
     }
   }

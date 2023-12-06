@@ -1,17 +1,17 @@
 import { Configuration, OpenAIApi } from "openai";
 
 type bodyType = {
-  role: "user",
-  content: string,
-}
+  role: "user";
+  content: string;
+};
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY 
-})
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-const openai = new OpenAIApi(configuration)
+const openai = new OpenAIApi(configuration);
 
-export const response = async ( body: bodyType, choosedPrompt: string ) => {
+export const response = async (body: bodyType, choosedPrompt: string) => {
   let prompt;
   switch (choosedPrompt) {
     case "check":
@@ -65,18 +65,19 @@ export const response = async ( body: bodyType, choosedPrompt: string ) => {
   }
 
   try {
-  const wResponse = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo-16k-0613",
-    messages: [
-      {
-        role: "system",
-        content: prompt
-      },
-      body,
-    ]
+    const wResponse = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo-16k-0613",
+      messages: [
+        {
+          role: "system",
+          content: prompt,
+        },
+        body,
+      ],
     });
 
-  return wResponse.data.choices[0];
+    return wResponse.data.choices[0];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error(err);
     throw err;

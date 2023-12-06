@@ -1,27 +1,34 @@
-"use client"
+"use client";
 import { useRef, createContext, useContext } from "react";
 
 export function useFooterRef() {
-    return useRef<HTMLDivElement | null>(null);
-  }
- 
-export const ThemeContext = createContext<React.RefObject<HTMLDivElement> | {} >({current: ""})
- 
+  return useRef<HTMLDivElement | null>(null);
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const ThemeContext = createContext<React.RefObject<HTMLDivElement> | {}>(
+  { current: "" },
+);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ThemeProvider({ children }: any) {
-    return <ThemeContext.Provider value={useFooterRef()}>{children}</ThemeContext.Provider>
-  }
+  return (
+    <ThemeContext.Provider value={useFooterRef()}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
 
 export function TheContext() {
-    const refFromContext = useContext(ThemeContext);
-    if ("current" in refFromContext) {
-        return <div ref={refFromContext}></div>;
-    } else {
-        return <div></div>;
-      }  
+  const refFromContext = useContext(ThemeContext);
+  if ("current" in refFromContext) {
+    return <div ref={refFromContext}></div>;
   }
+  return null;
+}
 
 export function ScrollToFooter(footerRef: React.RefObject<HTMLDivElement>) {
-    if (footerRef.current) {
-      footerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }  
+  if (footerRef.current) {
+    footerRef.current.scrollIntoView({ behavior: "smooth" });
   }
+}

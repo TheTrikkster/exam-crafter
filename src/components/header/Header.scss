@@ -1,17 +1,17 @@
-.header_container { 
+.Header_container { 
     position: relative;
 }
 
-.header_background_image {
+.Header_background_image {
     width: 100%;
     height: 100%
 }
 
-.header_background_image_mobile {
+.Header_background_image_mobile {
     display: none;
 }
 
-.header_texts_and_image_container {
+.Header_texts_and_image_container {
     width: 65%;
     color: white;
     position: absolute;
@@ -20,7 +20,7 @@
     transform: translateY(-50%);
 }
 
-.header_title_container{
+.Header_title_container{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -28,12 +28,12 @@
     height: 100%;
 }
 
-.header_subtitle {
+.Header_subtitle {
     width: 80%;
     margin-top: 20px;
 }
 
-.header_image {
+.Header_image {
     width: 400px;
     height: 400px;
     position: absolute;
@@ -42,87 +42,87 @@
     transform: translateY(-50%);
 }
 
-.header_start_button_container{
+.Header_start_button_container{
     margin-top: 30px;
 }
 
-.header_start_button {
+.Header_start_button {
     padding: 10px;
     border-radius: 5px;
     background-color: #E54C18;
 }
 
 @media screen and (max-width: 1200px) {
-    .header_image {
+    .Header_image {
         width: 320px;
         height: 320px;
     }
 }
 
 @media screen and (max-width: 1050px) {
-    .header_image {
+    .Header_image {
         width: 270px;
         height: 270px;
     }
 
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 1.7em;
     }
 }
 
 @media screen and (max-width: 850px) {
-    .header_image {
+    .Header_image {
         width: 220px;
         height: 220px;
     }
 
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 1.4em;
     }
 
-    .header_subtitle {
+    .Header_subtitle {
         margin-top: 10px;
         font-size: 12px;
     }
 }
 
 @media screen and (max-width: 700px) {
-    .header_image {
+    .Header_image {
         width: 180px;
         height: 180px;
     }
 
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 1.3em;
     }
 
-    .header_start_button_container{
+    .Header_start_button_container{
         margin-top: 10px;
     }
 
-    .header_start_button {
+    .Header_start_button {
         padding: 5px;
     }
 }
 
 @media screen and (max-width: 650px) {
-    .header_subtitle {
+    .Header_subtitle {
         margin-top: 5px;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .header_background_image {
+    .Header_background_image {
         display: none;
     }
 
-    .header_background_image_mobile {
+    .Header_background_image_mobile {
         display: block;
         width: 100%;
         height: auto;
     }
 
-    .header_texts_and_image_container {
+    .Header_texts_and_image_container {
         position: static;
         width: 100%;
         display: flex;
@@ -133,14 +133,14 @@
         min-height: 150px;
     }
 
-    .header_image {
+    .Header_image {
         position: static;
         width: 100%;
         height: auto;
         transform: translateY(0);
     }
 
-    .header_title_container {
+    .Header_title_container {
         position: absolute;
         left: 5%;
         top: 25%;
@@ -148,58 +148,58 @@
         margin: 0;
     }
     
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 2em;
     }
 
-    .header_subtitle {
+    .Header_subtitle {
         margin-top: 50px;
         font-size: 16px;
     }
 
-    .header_start_button_container{
+    .Header_start_button_container{
         margin-top: 30px;
     }
 
-    .header_start_button {
+    .Header_start_button {
         padding: 10px;
     }
 }
 
 @media screen and (max-width: 450px) {
-    .header_title_container {
+    .Header_title_container {
         bottom: 8%;
     }
 
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 1.7em;
     }
 
-    .header_subtitle {
+    .Header_subtitle {
         margin-top: 30px;
     }
 
-    .header_start_button {
+    .Header_start_button {
         margin-top: 15px;
     }
 }
 
 @media screen and (max-width: 350px) {
-    .header_title_container {
+    .Header_title_container {
         top: 25%;
     }
 
-    .header_title_container h1 {
+    .Header_title_container h1 {
         font-size: 1.5em;
     }
 
-    .header_subtitle {
+    .Header_subtitle {
         margin-top: 20px;
     }
 }
 
 @media screen and (max-width: 306px) {
-    .header_container {
+    .Header_container {
         width: 306px;
     }
 }

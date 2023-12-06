@@ -1,8 +1,8 @@
-.result_container {
+.Result_container {
   background-color: #F3F4F6;
 }
 
-.result_title {
+.Result_title {
     padding-top: 50px;
     text-align: center;
 }
@@ -13,41 +13,41 @@ main {
     align-items: center;
 }
 
-.result_corrections_container {
+.Result_corrections_container {
     width: 65%;
 }
 
-section.result_corrections_container > div:first-child {
+section.Result_corrections_container > div:first-child {
     margin: 50px 0 0;
 }
 
-.result_each_result_container {
+.Result_each_Result_container {
     margin: 100px 0;
 }
 
-.result_question {
+.Result_question {
     margin-bottom: 20px;
 }
 
-.result_response {
+.Result_response {
     margin-bottom: 20px;
     color: black;
 }
 
-.result_correction {
+.Result_correction {
     color: #28B463;
 }
 
-.result_comment_title {
+.Result_comment_title {
     color: orange;
     margin-bottom: 20px;
 }
 
-.result_comment {
+.Result_comment {
     color: orange;
 }
 
-.result_not_show {
+.Result_not_show {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,53 +55,53 @@ section.result_corrections_container > div:first-child {
     height: 100vh;
 }
 
-.result_not_show_text {
+.Result_not_show_text {
     color: grey;
     font-size: 25px;
     margin-top: 50px;
 }
 
-.result_grade {
+.Result_grade {
     margin-top: 50px;
     font-size: 27px;
 }
 
-.result_grade_red {
+.Result_grade_red {
     color: red;
 }
 
-.result_grade_orange {
+.Result_grade_orange {
     color: orange;
 }
 
-.result_grade_green {
+.Result_grade_green {
     color: #28B463;
 }
 
-.result_separate_correction_and_comment {
+.Result_separate_correction_and_comment {
     width: 70%;
 }
 
-.result_comment_grade_container {
+.Result_comment_grade_container {
     width: 65%;
     margin: 50px 0;
 }
 
 @media screen and (max-width: 600px) {
 
-    .result_corrections_container {
+    .Result_corrections_container {
         width: 90%;
     }
 
-    .result_each_result_container {
+    .Result_each_Result_container {
         margin: 80px 0;
     }
 
-    .result_response {
+    .Result_response {
         margin-bottom: 20px;
     }
 
-    .result_comment_grade_container {
+    .Result_comment_grade_container {
         width: 90%;
         margin: 30px 0;
     }
