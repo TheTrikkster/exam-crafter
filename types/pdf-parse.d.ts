@@ -1,4 +1,4 @@
-declare module 'pdf-parse' {
-    const content;
-    export = content;
-  }
+declare module "pdf-parse" {
+  const content;
+  export = content;
+}
