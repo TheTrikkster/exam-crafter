@@ -12,8 +12,7 @@ function Menu() {
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
   const [closingMenu, setClosingMenu] = useState<boolean>(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const context: any = useContext(ThemeContext);
+  const context = useContext(ThemeContext);
 
   const menuContainerClass = mobileMenu
     ? "Menu_container_fixed"

@@ -7,7 +7,7 @@ export const ResultFunctions = () => {
   const [responses, setResponses] = useState<string[]>([]);
   const [questions, setQuestions] = useState<string[]>([]);
   const [corrections, setCorrections] = useState<
-    { correction: string; grade: string }[]
+    { text: string; grade: string }[]
   >([]);
   const [comment, setComment] = useState<string>("");
   const [examUnfinished, setExamUnfinished] = useState<boolean>(false);
@@ -36,10 +36,10 @@ export const ResultFunctions = () => {
       if (allQuestions.length > 0) {
         setQuestions(allQuestions);
         setResponses(allResponses);
-        setComment(theComment);
+        setComment(theComment.comment);
         setCorrections(allCorrections);
         const totalGrade = allCorrections.reduce(
-          (sum: number, current: { correction: string; grade: string }) =>
+          (sum: number, current: { text: string; grade: string }) =>
             sum + Number(current.grade),
           0,
         );
@@ -85,15 +85,13 @@ export const ResultFunctions = () => {
           </p>
           <div className="Result_corrections_container">
             {questions.map((question: string, index: number) => {
-              const reponse = responses[index + 1].slice(12);
+              const reponse = responses[index + 1].slice(11);
 
               return (
                 <div key={index} className="Result_each_Result_container">
                   <h3 className="Result_question">{question}</h3>
                   <p className="Result_response">{reponse}</p>
-                  <p className="Result_correction">
-                    {corrections[index].correction}
-                  </p>
+                  <p className="Result_correction">{corrections[index].text}</p>
                 </div>
               );
             })}
