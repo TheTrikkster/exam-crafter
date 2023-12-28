@@ -5,10 +5,10 @@ export function useFooterRef() {
   return useRef<HTMLDivElement | null>(null);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const ThemeContext = createContext<React.RefObject<HTMLDivElement> | {}>(
-  { current: "" },
-);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ThemeContext = createContext<any>({
+  current: "",
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ThemeProvider({ children }: any) {

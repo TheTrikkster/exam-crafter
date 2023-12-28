@@ -69,6 +69,30 @@ export const DraftingFunctions = () => {
     setShowModal(false);
   };
 
+  const checkStatus: (id: string) => object | string = async (id) => {
+    const response = await fetch("/api/check", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Erreur lors de la vérification du statut");
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.status === "pending") {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return await checkStatus(id);
+    } else if (data.status === "ready") {
+      return data.data;
+    }
+  };
+
   const request = async (formData: FormData, choosedPrompt: string) => {
     try {
       formData.append("choosedPrompt", choosedPrompt);
@@ -82,9 +106,8 @@ export const DraftingFunctions = () => {
         return;
       }
 
-      const data = await response.json();
-
-      return data.message.message.content;
+      const { id } = await response.json();
+      return await checkStatus(id);
     } catch (err) {
       console.error(err);
     }
@@ -121,16 +144,15 @@ export const DraftingFunctions = () => {
           break;
         default:
           setLoading(true);
-          // eslint-disable-next-line no-case-declarations
-          const lesson = await request(formData, "lesson");
-          // eslint-disable-next-line no-case-declarations
-          const questions = lesson.split("endOfQuestion");
-          questions.pop();
-          window.localStorage.setItem("questions", JSON.stringify(questions));
-          window.localStorage.setItem("responses", JSON.stringify({}));
-          window.localStorage.setItem("comment", JSON.stringify(""));
-          window.localStorage.setItem("corrections", JSON.stringify([]));
-          router.push(`/question/1`);
+
+          if (formData) {
+            const questions = await request(formData, "lesson");
+            window.localStorage.setItem("questions", JSON.stringify(questions));
+            window.localStorage.setItem("responses", JSON.stringify({}));
+            window.localStorage.setItem("comment", JSON.stringify(""));
+            window.localStorage.setItem("corrections", JSON.stringify([]));
+            router.push(`/question/1`);
+          }
       }
     } catch (error) {
       console.error("Quelque chose s'est mal passé");

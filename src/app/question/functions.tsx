@@ -17,7 +17,6 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [questions, setQuestions] = useState<string[]>([]);
   const [allResponses, setAllResponses] = useState<Record<number, string>>({});
-  let generationError = false;
 
   useEffect(() => {
     setQuestions(JSON.parse(window.localStorage.getItem("questions") || "[]"));
@@ -27,77 +26,73 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
   }, []);
 
   const sendResponse = () => {
-    allResponses[id] = `Response ${id}: ${response}`;
+    allResponses[id] = ` Response: ${response}`;
     window.localStorage.setItem("responses", JSON.stringify(allResponses));
   };
 
-  const request = async (
-    question: string,
-    index: number,
-    choosedPrompt: string,
-  ) => {
+  const checkStatus: (id: string) => object = async (id) => {
+    const response = await fetch("/api/check", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Erreur lors de la vérification du statut");
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.status === "pending") {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return await checkStatus(id);
+    } else if (data.status === "ready") {
+      return data.data;
+    }
+  };
+
+  const request = async () => {
     try {
       const waitResponse = await fetch("/api/correct_exam", {
         method: "POST",
-        body:
-          choosedPrompt == "comment"
-            ? JSON.stringify({
-                data: [...questions, ...Object.values(allResponses)],
-                choosedPrompt: "comment",
-              })
-            : JSON.stringify({
-                data: [question, allResponses[index + 1]],
-                choosedPrompt: choosedPrompt,
-              }),
+        body: JSON.stringify({
+          questions,
+          responses: allResponses,
+          comment: [...questions, ...Object.values(allResponses)],
+        }),
       });
 
       if (!waitResponse.ok) {
         throw new Error("Erreur dans la réponse");
       }
 
-      const data = await waitResponse.json();
+      const { ids } = await waitResponse.json();
+      const checks = await Promise.all(
+        ids.map(async (id: string) => {
+          return checkStatus(id);
+        }),
+      );
 
-      if (
-        data.message.message.content ==
-        "Erreur lors de la génération de la réponse."
-      ) {
-        generationError = true;
-      }
-
-      return data.message.message.content;
+      return checks;
     } catch (err) {
       console.error(err);
     }
   };
 
   const fetchData = async () => {
-    const allCorrections = await Promise.all(
-      questions.map(async (question: string, index: number) => {
-        try {
-          const correction = await request(question, index, "response");
-          const grade = await request(question, index, "grade");
-
-          return { correction: correction, grade: grade };
-        } catch (error) {
-          console.error(error);
-        }
-      }),
-    );
-
-    const comment = await request("", 0, "comment");
-
-    if (generationError) {
-      setCorrection(false);
-      delete allResponses[10];
-      window.localStorage.setItem("responses", JSON.stringify(allResponses));
-      setReponseError((prevState) => ({ ...prevState, generation: true }));
-    } else {
-      window.localStorage.setItem("comment", JSON.stringify(comment.trim()));
-      window.localStorage.setItem(
-        "corrections",
-        JSON.stringify(allCorrections),
-      );
-      router.push(`/result`);
+    try {
+      const corrections = await request();
+      if (corrections) {
+        const comment = corrections.pop();
+        window.localStorage.setItem("comment", JSON.stringify(comment));
+        window.localStorage.setItem("corrections", JSON.stringify(corrections));
+        router.push(`/result`);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 

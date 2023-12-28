@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import { response } from "../common/route";
+import Topic from "../models/model";
+import connectMongoDB from "../mongodb/connectdb";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function POST(request: any) {
-  const formData = await request.formData();
-  const body = Object.fromEntries(formData);
+export async function POST(request: Request) {
+  const formData: FormData = await request.formData();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: any = Object.fromEntries(formData);
   let text;
+
+  await connectMongoDB();
+  const newTopic = await Topic.create({ status: "pending", data: null });
+  const id = newTopic._id.toString();
 
   if (typeof body.lesson == "object") {
     try {
@@ -24,31 +30,55 @@ export async function POST(request: any) {
     text = body.lesson;
   }
 
-  if (text.length < 30 || text.length >= 10000) {
+  try {
+    generateQuestionsAsync(text, body.choosedPrompt, id);
+    return NextResponse.json({ id });
+  } catch (err) {
     return NextResponse.json({
       message: {
-        message: {
-          content:
-            text.length < 30
-              ? "Le contenu fourni est trop court"
-              : "Le contenu fourni est trop volumineux",
-        },
+        message: { content: "Erreur lors de la génération de la réponse." },
       },
     });
-  } else {
-    try {
-      const message = await response(
-        { role: "user", content: `Voici le sujet: \n${text}` },
-        body.choosedPrompt,
-      );
+  }
+}
 
-      return NextResponse.json({ message });
-    } catch (err) {
-      return NextResponse.json({
-        message: {
-          message: { content: "Erreur lors de la génération de la réponse." },
+async function generateQuestionsAsync(
+  text: string,
+  choosedPrompt: string,
+  id: string,
+) {
+  let prompt;
+
+  if (choosedPrompt == "check") {
+    prompt = `Je voudrais appeler la fonction de verify en lui passant un string.
+              Doit être vérifier : ${text}
+              A la fin retourne uniquement VALID ou INVALID.`;
+  } else {
+    prompt = `I would like to call the create exam function passing an array (in the array must be 10 questions) to it.
+              Lesson: ${text}
+              At the end, return the array to me with the questions.`;
+  }
+
+  try {
+    const message = await response(prompt);
+    await Topic.updateOne(
+      { _id: id },
+      {
+        $set: {
+          status: "ready",
+          data: message,
         },
-      });
-    }
+      },
+    );
+  } catch (err) {
+    await Topic.updateOne(
+      { _id: id },
+      {
+        $set: {
+          status: "error",
+          data: null,
+        },
+      },
+    );
   }
 }
