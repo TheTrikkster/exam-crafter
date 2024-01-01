@@ -51,18 +51,22 @@ describe("Drafting Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /Créer Exam/i }));
   };
 
-  const requeteResponse = (text: string) => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({
-        message: {
-          message: {
-            role: "assistant",
-            content: text,
-          },
-        },
-      }),
-    });
+  const requeteResponse = (text: string, error?: string) => {
+    if (error) {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue({
+          error,
+        }),
+      });
+    } else {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue({
+          text,
+        }),
+      });
+    }
   };
 
   it("renders without crashing", () => {
@@ -163,7 +167,7 @@ describe("Drafting Component", () => {
 
   testCases.forEach((testCase) => {
     it(`shows error when the lesson response is "${testCase.response}"`, async () => {
-      requeteResponse(testCase.response);
+      requeteResponse("", testCase.response);
       fillTextAreaWithA();
       await waitFor(() => {
         expect(screen.getByText(testCase.expectedText)).toBeInTheDocument();
@@ -178,9 +182,7 @@ describe("Drafting Component", () => {
     fillTextAreaWithA();
 
     await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith(
-        "Quelque chose s'est mal passé",
-      );
+      expect(console.error).toHaveBeenCalledWith("API call failed");
     });
   });
 });

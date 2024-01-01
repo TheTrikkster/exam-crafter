@@ -19,11 +19,18 @@ export async function POST(request: Request) {
       const buffer = Buffer.from(await body.lesson.arrayBuffer());
       text = await pdfParse(buffer);
       text = text.text;
+      if (text.length > 10000) {
+        return NextResponse.json({
+          error: "Le contenu fourni est trop volumineux",
+        });
+      } else if (text.length < 30) {
+        return NextResponse.json({
+          error: "Le contenu fourni est trop court",
+        });
+      }
     } catch (err) {
       return NextResponse.json({
-        message: {
-          message: { content: "Erreur lors de la conversion du PDF en texte." },
-        },
+        error: "Erreur lors de la conversion du PDF en texte.",
       });
     }
   } else {
@@ -35,9 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ id });
   } catch (err) {
     return NextResponse.json({
-      message: {
-        message: { content: "Erreur lors de la génération de la réponse." },
-      },
+      error: "Erreur lors de la génération de la réponse.",
     });
   }
 }

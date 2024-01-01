@@ -70,26 +70,30 @@ export const DraftingFunctions = () => {
   };
 
   const checkStatus: (id: string) => object | string = async (id) => {
-    const response = await fetch("/api/check", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch("/api/check", {
+        method: "POST",
+        body: JSON.stringify({ id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (!response.ok) {
-      console.error("Erreur lors de la vérification du statut");
-      return;
-    }
+      if (!response.ok) {
+        console.error("Erreur lors de la vérification du statut");
+        return;
+      }
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.status === "pending") {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      return await checkStatus(id);
-    } else if (data.status === "ready") {
-      return data.data;
+      if (data.status === "pending") {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        return await checkStatus(id);
+      } else if (data.status === "ready") {
+        return data.data;
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -106,8 +110,11 @@ export const DraftingFunctions = () => {
         return;
       }
 
-      const { id } = await response.json();
-      return await checkStatus(id);
+      const id = await response.json();
+      if (id.error) {
+        return id.error;
+      }
+      return await checkStatus(id.id);
     } catch (err) {
       console.error(err);
     }

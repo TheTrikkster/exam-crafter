@@ -87,7 +87,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
       const corrections = await request();
       if (corrections) {
         const comment = corrections.pop();
-        window.localStorage.setItem("comment", JSON.stringify(comment));
+        window.localStorage.setItem("comment", JSON.stringify(comment.comment));
         window.localStorage.setItem("corrections", JSON.stringify(corrections));
         router.push(`/result`);
       }
