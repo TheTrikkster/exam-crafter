@@ -37,16 +37,16 @@ describe("Analyse data", () => {
     window.localStorage.setItem(
       "corrections",
       JSON.stringify([
-        { correction: "Simple Correction 1", grade: 1 },
-        { correction: "Simple Correction 2", grade: 1 },
-        { correction: "Simple Correction 3", grade: 1 },
-        { correction: "Simple Correction 4", grade: 1 },
-        { correction: "Simple Correction 5", grade: 1 },
-        { correction: "Simple Correction 6", grade: 1 },
-        { correction: "Simple Correction 7", grade: 1 },
-        { correction: "Simple Correction 8", grade: 1 },
-        { correction: "Simple Correction 9", grade: 1 },
-        { correction: "Simple Correction 10", grade: 1 },
+        { text: "Simple Correction 1", grade: 1 },
+        { text: "Simple Correction 2", grade: 1 },
+        { text: "Simple Correction 3", grade: 1 },
+        { text: "Simple Correction 4", grade: 1 },
+        { text: "Simple Correction 5", grade: 1 },
+        { text: "Simple Correction 6", grade: 1 },
+        { text: "Simple Correction 7", grade: 1 },
+        { text: "Simple Correction 8", grade: 1 },
+        { text: "Simple Correction 9", grade: 1 },
+        { text: "Simple Correction 10", grade: 1 },
       ]),
     );
     window.localStorage.setItem("comment", JSON.stringify("Simple Comment"));
@@ -56,7 +56,7 @@ describe("Analyse data", () => {
     render(<Result />);
 
     expect(screen.getByText("Simple Question 1")).toBeInTheDocument();
-    expect(screen.getByText("nse 1")).toBeInTheDocument();
+    expect(screen.getByText("onse 1")).toBeInTheDocument();
     expect(screen.getByText("Simple Correction 1")).toBeInTheDocument();
     expect(screen.getByText("Simple Comment")).toBeInTheDocument();
     expect(screen.getByText("Note: 10/10")).toBeInTheDocument();

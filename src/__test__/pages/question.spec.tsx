@@ -62,30 +62,39 @@ describe("QuestionPage Component", () => {
   });
 
   it("loading of result page", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({
-        message: {
-          message: {
-            role: "assistant",
-            content: `
-                        'Question 1: Quelle est la définition du théorème de Pythagore ?\n' +
-                        "Correction 1: Le théorème de Pythagore affirme que dans un triangle rectangle, le carré de la longueur de l'hypoténuse est égal à la somme des carrés des longueurs des deux autres côtés.\n" +
-                        'endAndStartOfQuestion\n' +
-                        '\n' +
-                        'Question 2: Quels sont les éléments nécessaires pour appliquer le théorème de Pythagore dans un triangle rectangle ?\n' +
-                        'Correction 2: Pour appliquer le théorème de Pythagore dans un triangle rectangle, il faut connaître les longueurs des deux côtés perpendiculaires (catétés).\n' +
-                        'endAndStartOfQuestion\n' +
-                        '\n' +
-                        'startOfComment\n' +
-                        'Overall, you have demonstrated good understanding of the Pythagorean theorem and its applications. Your answers are mostly correct and provide the necessary explanations. However, please be careful with the spelling and grammar mistakes in your responses. It is important to present your answers clearly and accurately. Keep up the good work!\n' +
-                        'endOfComment\n' +
-                        '\n' +
-                        'gradeOfExam'
-                    `,
-          },
-        },
-      }),
+    global.fetch = jest.fn((url) => {
+      if (url === "/api/correct_exam") {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              ids: ["1", "12"],
+            }),
+        }) as Promise<Response>;
+      } else if (url === "/api/check") {
+        for (let i = 0; i < 11; i++) {
+          if (i === 10) {
+            return Promise.resolve({
+              ok: true,
+              json: () =>
+                Promise.resolve({
+                  status: "ready",
+                  data: { comment: "hello" },
+                }),
+            }) as Promise<Response>;
+          } else {
+            return Promise.resolve({
+              ok: true,
+              json: () =>
+                Promise.resolve({
+                  status: "ready",
+                  data: { text: "hello", grade: "1" },
+                }),
+            }) as Promise<Response>;
+          }
+        }
+      }
+      return Promise.resolve(new Response()) as Promise<Response>;
     });
 
     render(<Question params={{ id: "2" }} />);

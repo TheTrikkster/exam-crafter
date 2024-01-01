@@ -36,7 +36,7 @@ export const ResultFunctions = () => {
       if (allQuestions.length > 0) {
         setQuestions(allQuestions);
         setResponses(allResponses);
-        setComment(theComment.comment);
+        setComment(theComment);
         setCorrections(allCorrections);
         const totalGrade = allCorrections.reduce(
           (sum: number, current: { text: string; grade: string }) =>
