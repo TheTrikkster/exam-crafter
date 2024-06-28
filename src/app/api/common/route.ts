@@ -1,13 +1,13 @@
-import { ChatOpenAI } from "@langchain/openai";
-import { PromptTemplate } from "@langchain/core/prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
-import { RunnableSequence } from "@langchain/core/runnables";
+// import { ChatOpenAI } from "@langchain/openai";
+// import { PromptTemplate } from "@langchain/core/prompts";
+// import { StringOutputParser } from "@langchain/core/output_parsers";
+// import { RunnableSequence } from "@langchain/core/runnables";
 
-const openai = new ChatOpenAI({
-  openAIApiKey: process.env.OPENAI_API_KEY,
-  temperature: 1,
-  modelName: "gpt-3.5-turbo-0125",
-});
+// const openai = new ChatOpenAI({
+//   openAIApiKey: process.env.OPENAI_API_KEY,
+//   temperature: 1,
+//   modelName: "gpt-3.5-turbo-0125",
+// });
 
 // const differentPrompts = {
 //   verify: `Tu es un professeur spécialisé en pédagogie, tu as pour tâche d'analyser un texte pour déterminer s'il peut servir de base à un examen pour tes élèves. Pour cela, le texte doit présenter les caractéristiques d'une leçon structurée.
@@ -54,71 +54,90 @@ const openai = new ChatOpenAI({
 //   return thePrompt + " " + prompt;
 // };
 
-export const response = async () => {
-  // const chatResponse = await openai.completions.create({
-  //   model: "gpt-3.5-turbo-1106",
-  //   messages: [{ role: "user", content: choosedPrompt("verify", prompt) }],
-  // });
+// export const response = async () => {
+//   // const chatResponse = await openai.completions.create({
+//   //   model: "gpt-3.5-turbo-1106",
+//   //   messages: [{ role: "user", content: choosedPrompt("verify", prompt) }],
+//   // });
 
-  const prompt1 = PromptTemplate.fromTemplate(
-    `
-    Tu dois créer un examen personnalisé pour qu'un étudiant le passe et que ça lui soit utile et qu'il veut le refaire. Je vais te donner des détails et un contexte pour créer l'examen:
-      1. L'examen est de niveau: {classe}
-      2. La matière: {matiere}
-      3. Le chapitre: {chapitre}
-      4. Crée {numberOfQuestions} questions pertinentes
-      5. Ça doit être des questions qui peuvent être poser pendant un examen en {classe}
-      6. Ça doit être uniquement des questions répondable par l'écrit
-      7. Retourne uniquement les questions
-    `,
-  );
+//   const prompt1 = PromptTemplate.fromTemplate(
+//     `
+//     Tu dois créer un examen personnalisé pour qu'un étudiant le passe et que ça lui soit utile et qu'il veut le refaire. Je vais te donner des détails et un contexte pour créer l'examen:
+//       1. L'examen est de niveau: {classe}
+//       2. La matière: {matiere}
+//       3. Le chapitre: {chapitre}
+//       4. Crée {numberOfQuestions} questions pertinentes
+//       5. Ça doit être des questions qui peuvent être poser pendant un examen en {classe}
+//       6. Ça doit être uniquement des questions répondable par l'écrit
+//       7. Retourne uniquement les questions
+//     `,
+//   );
 
-  const prompt2 = PromptTemplate.fromTemplate(`
-    {questions}
+//   const prompt2 = PromptTemplate.fromTemplate(`
+//     {questions}
 
-    Choisie les {tenQuestions} meilleurs et pertinents questions, ça doit aussi être des questions qu'un étudiant en {classe} peut rencontrer lors d'un examen.`);
+//     Choisie les {tenQuestions} meilleurs et pertinents questions, ça doit aussi être des questions qu'un étudiant en {classe} peut rencontrer lors d'un examen.`);
 
-  const prompt3 = PromptTemplate.fromTemplate(`
-    {selectedQuestions}
+//   const prompt3 = PromptTemplate.fromTemplate(`
+//     {selectedQuestions}
 
-    Affinez ces questions pour garantir la clarté et l’alignement avec les normes de l’examen. 
-    Merci de les numéroter en ordre croissant, en commençant par 1, et de les retourner dans ce format. 
-  `);
+//     Affinez ces questions pour garantir la clarté et l’alignement avec les normes de l’examen.
+//     Merci de les numéroter en ordre croissant, en commençant par 1, et de les retourner dans ce format.
+//   `);
 
-  const prompt4 = PromptTemplate.fromTemplate(`
-    {refinedQuestions}
-    
-    Effectuer une dernière vérification pour s'assurer que toutes les questions sont appropriées, prêtes pour l'examen et que tout les prompts sont respecté.
-    La réponse doit être sous forme de array avec les questions à l'intérieur.
-  `);
+//   const prompt4 = PromptTemplate.fromTemplate(`
+//     {refinedQuestions}
 
-  const chain = prompt1.pipe(openai).pipe(new StringOutputParser());
-  const chain2 = prompt2.pipe(openai).pipe(new StringOutputParser());
-  const chain3 = prompt3.pipe(openai).pipe(new StringOutputParser());
-  const chain4 = prompt4.pipe(openai).pipe(new StringOutputParser());
+//     Effectuer une dernière vérification pour s'assurer que toutes les questions sont appropriées, prêtes pour l'examen et que tout les prompts sont respecté.
+//     La réponse doit être sous forme de array avec les questions à l'intérieur.
+//   `);
 
-  const combinedChain = RunnableSequence.from([
-    {
-      questions: chain,
-      classe: (input) => input.classe,
-      tenQuestions: (input) => input.tenQuestions,
-    },
-    {
-      selectedQuestions: chain2,
-    },
-    {
-      refinedQuestions: chain3,
-    },
-    chain4,
-  ]);
+//   const chain = prompt1.pipe(openai).pipe(new StringOutputParser());
+//   const chain2 = prompt2.pipe(openai).pipe(new StringOutputParser());
+//   const chain3 = prompt3.pipe(openai).pipe(new StringOutputParser());
+//   const chain4 = prompt4.pipe(openai).pipe(new StringOutputParser());
 
-  const result = await combinedChain.invoke({
-    classe: "Terminal STI2D",
-    matiere: "Ingénierie et Développement Durable (IDD)",
-    chapitre: "Éco-conception",
-    numberOfQuestions: "30",
-    tenQuestions: "10",
-  });
+//   const combinedChain = RunnableSequence.from([
+//     {
+//       questions: chain,
+//       classe: (input) => input.classe,
+//       tenQuestions: (input) => input.tenQuestions,
+//     },
+//     {
+//       selectedQuestions: chain2,
+//     },
+//     {
+//       refinedQuestions: chain3,
+//     },
+//     chain4,
+//   ]);
 
-  return result;
-};
+//   const result = await combinedChain.invoke({
+//     classe: "Terminal STI2D",
+//     matiere: "Ingénierie et Développement Durable (IDD)",
+//     chapitre: "Éco-conception",
+//     numberOfQuestions: "30",
+//     tenQuestions: "10",
+//   });
+
+//   return result;
+// };
+
+import { NextApiResponse } from "next";
+import { response } from "./reponse";
+
+// Fonction pour gérer les requêtes API
+export async function POST(req: Request, res: NextApiResponse) {
+  if (req.method === "POST") {
+    try {
+      const result = await response();
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  } else {
+    // Gérer les autres méthodes HTTP, par exemple GET, PUT, DELETE, etc.
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}

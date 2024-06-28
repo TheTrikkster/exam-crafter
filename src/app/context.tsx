@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import { isAbortError } from "./show_questions/functions";
 
 export type SelectedOptionsType = {
   [key: string]: string;
@@ -111,11 +112,13 @@ export function AppWrapper({ children }: { children: ReactNode }) {
       setGeneratedQuestions(questions);
 
       return questions;
-    } catch (err: any) {
-      if (err.name === "AbortError") {
+    } catch (error: unknown) {
+      if (isAbortError(error)) {
         console.error("La requête a été annulée à cause du délai d'expiration");
+      } else if (error instanceof Error) {
+        console.error(error.message);
       } else {
-        console.error(`Erreur lors de la requête: ${err.message}`);
+        console.error("Une erreur inconnue est survenue");
       }
     }
   }, [selectedOptions]);

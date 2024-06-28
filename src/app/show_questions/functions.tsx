@@ -10,6 +10,14 @@ import { useAppContext } from "@/app/context";
 import Menu from "@/components/menu/Menu";
 import Footer from "@/components/footer/Footer";
 
+interface AbortError extends Error {
+  name: "AbortError";
+}
+
+export function isAbortError(error: unknown): error is AbortError {
+  return (error as AbortError).name === "AbortError";
+}
+
 function ShowQuestionsFunction() {
   const router = useRouter();
   const [changingQuestion, setChangingQuestion] = useState<
@@ -62,13 +70,15 @@ function ShowQuestionsFunction() {
           setDisableChange(newNumberOfChange === 0);
           return newNumberOfChange;
         });
-      } catch (error: any) {
-        if (error.name === "AbortError") {
+      } catch (error: unknown) {
+        if (isAbortError(error)) {
           console.error(
             "La requête a été annulée à cause du délai d'expiration",
           );
-        } else {
+        } else if (error instanceof Error) {
           console.error(error.message);
+        } else {
+          console.error("Une erreur inconnue est survenue");
         }
         setDisableChange(false);
       } finally {
