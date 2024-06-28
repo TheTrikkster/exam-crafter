@@ -1,7 +1,3 @@
-main {
-    background-color: #F3F4F6;
-}
-
 .Drafting_loading {
     height: 100vh;
     display: flex;
@@ -10,11 +6,11 @@ main {
     align-items: center;
   }
   
-  .Drafting_loading_text {
-    color: grey;
-    font-size: 25px;
-    margin-top: 50px;
-  }
+.Drafting_loading_text {
+  color: grey;
+  font-size: 25px;
+  margin-top: 50px;
+}
 
 .Drafting_modal {
     position: fixed;
@@ -72,104 +68,8 @@ main {
     color: white;
 }
 
-.Drafting_container {
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.Drafting_title {
-    width: 65%;
-    text-align: center;
-    font-size: 1.9em;
-}
-
-.Drafting_first_option_title {
-    margin-top: 50px;
-    color: black;
-}
-
-.Drafting_option {
-    padding: 5px 22px 5px 10px;
-    border: 1px solid #34495E;
-    border-radius: 3px;
-    font-size: 0.9rem;
-    appearance: none;
-    background-color: white;
-    cursor: pointer;
-    outline: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 7"><path fill="%2334495E" d="M2 3L0 0h4"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right;
-    margin: 5px 0 30px;
-    color: black;
-}
-
-.Drafting_option:focus {
-    border-color: #2C3E50;
-}
-
-.Drafting_option option {
-    padding: 4px;
-    background-color: #FAFAFA;
-    font-size: 0.9rem;
-}
-
-.Drafting_option option:hover {
-    background-color: #E0E0E0;
-}
- 
-.Drafting_field {
-    width: 55%;
-    min-height: 400px;
-    padding: 15px;
-  }
-
-.Drafting_pdf_upload, .Drafting_pdf_uploaded {
-    width: 55%;
-    min-height: 400px;
-    padding: 12px 24px;
-    border: 1px solid;
-    border-radius: 4px;
-    background-color: #FFFFFF;
-    color: #34495E;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s, color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-.Drafting_pdf_upload:hover {
-    background-color: #ECF0F1;
-  }
-
-.Drafting_pdf_uploaded {
-    background-color: #4CAF50;
-    border-color: #388E3C;
-  }
-
-.Drafting_pdf_uploaded:hover {
-    background-color: #388E3C;
-  }
-
-.Drafting_pdf_icon {
-    width: 40px;
-    height: auto;
-    margin-right: 8px;
-  }
-
-.Drafting_file_input {
-    display: none;
-  }
-
-
 .Drafting_button_create_close {
-    width: 110px;
     padding: 10px 10px;
-    margin-top: 30px;
     border-radius: 5px;
     border: none;
     background-color: #E54C18;
@@ -178,9 +78,7 @@ main {
   }
 
 .Drafting_button_create {
-    width: 110px;
     padding: 10px 10px;
-    margin-top: 30px;
     border-radius: 5px;
     border: none;
     background-color: #E54C18;
@@ -188,26 +86,55 @@ main {
     cursor: pointer;
   }
 
-.Drafting_lesson_error {
-    margin-bottom: 10px;
-    color: red;
+.Drafting_button_create:hover {
+    background-color: rgba(229, 76, 24, 0.8);
   }
 
-@media screen and (max-width: 600px) {
+  .container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s, box-shadow 0.2s;
+  }
 
-    .Drafting_container {
-        padding: 50px 20px;
-    }
-
-    .Drafting_field {
-        width: 100%;
-    }
-
-    .Drafting_pdf_upload, .Drafting_pdf_uploaded {
-        width: 100%;
-    }
-
-    .Drafting_title {
-        width: 100%;
-    }
+  .checked {
+    background-color: #EEF2FF;
+    border: #C7D2FD solid;
+    color: #4337C9;
+  }
+  
+  .checkmark {
+    min-height: 20px;
+    min-width: 20px;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .checked .checkmark {
+    background-color: #4F45E4;
+    border: none;
+  }
+  
+  .checked .checkmark::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+  }
+  
+  .label {
+    font-size: 18px;
+    cursor: pointer;
   }

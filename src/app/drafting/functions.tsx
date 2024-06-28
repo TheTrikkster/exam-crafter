@@ -1,193 +1,216 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Pdf from "../../../public/pdf.png";
 import Menu from "@/components/menu/Menu";
 import Footer from "@/components/footer/Footer";
+import CreateExamOptions from "@/components/create_exam_options/CreateExamOptions";
+import { useAppContext } from "../context";
+import { useRouter } from "next/navigation";
 
-type ErrorDrafting = {
-  notLesson: boolean;
-  toLong: boolean;
-  toShort: boolean;
-  convertPDF: boolean;
-  generation: boolean;
+export type OptionsSettingType = {
+  bound_to: string;
+  classe: string;
+};
+
+export type ShowPartsType = {
+  [key: string]: boolean;
+};
+
+export type ChangedOptionType = {
+  champ: string;
+  value: string;
 };
 
 export const DraftingFunctions = () => {
   const router = useRouter();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [waitAnswer, setWaitAnswer] = useState<boolean>(true);
-  const [lessonText, setLessonText] = useState<string>("");
-  const [lessonError, setLessonError] = useState<ErrorDrafting>({
-    notLesson: false,
-    toLong: false,
-    toShort: false,
-    convertPDF: false,
-    generation: false,
-  });
-  const [uploadFile, setUploadFile] = useState<boolean>(false);
-  const [optionPdfOrText, setOptionPdfOrText] = useState<string>("texte");
   const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [tempSelectedValue, setTempSelectedValue] = useState<string | null>(
-    null,
-  );
+  const [showParts, setShowParts] = useState<ShowPartsType>({
+    classe: true,
+    filiere: true,
+    matiere: true,
+    chapitre: true,
+    questions: true,
+  });
+  const [changedOption, setChangedOption] = useState<ChangedOptionType>({
+    champ: "",
+    value: "",
+  });
+  const [collectedOptions, setCollectedOptions] = useState<string[][]>([]);
+  const [optionsSetting, setOptionsSetting] = useState<OptionsSettingType>({
+    bound_to: "Classe",
+    classe: "",
+  });
+  const {
+    selectedOptions,
+    setSelectedOptions,
+    setGeneratedQuestions,
+    setNumberOfChange,
+    setCanChangeAllQuestions,
+    request,
+  } = useAppContext();
 
-  const handleOptionChange = (event: { target: { value: string } }) => {
-    const selectedValue = event.target.value;
+  const differentParts = [
+    {
+      field: "classe",
+      title: "Classe",
+    },
+    {
+      field: "filiere",
+      title: "Filière",
+    },
+    {
+      field: "matiere",
+      title: "Matière",
+    },
+    {
+      field: "chapitre",
+      title: "Chapitre",
+    },
+    {
+      field: "questions",
+      title: "Le nombre de questions",
+    },
+  ];
 
-    if (!selectedFile && lessonText.length == 0) {
-      setOptionPdfOrText(selectedValue);
-    } else if (selectedValue !== optionPdfOrText) {
-      setTempSelectedValue(selectedValue);
-      setShowModal(true);
+  useEffect(() => {
+    localStorage.setItem("appState", JSON.stringify({}));
+    const options = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/options?bound_to=${optionsSetting.bound_to}&${
+            optionsSetting.classe.length > 0
+              ? `classe=${optionsSetting.classe}`
+              : ""
+          }`,
+        );
+
+        if (!response.ok) {
+          alert("La correction a échoué");
+          throw new Error("La requête a échoué");
+        }
+
+        const data = await response.json();
+
+        if (data && Array.isArray(data)) {
+          setCollectedOptions((prevState) => [
+            ...prevState,
+            data.map((option) => option.name),
+          ]);
+        } else {
+          console.error("La réponse du serveur n'est pas un tableau");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    options();
+  }, [optionsSetting]);
+
+  const confirmOptionChange = useCallback(() => {
+    if (changedOption) {
+      const showPartsKeys = Object.keys(showParts);
+      const selectedOptionsKeys = Object.keys(selectedOptions);
+
+      const BackToIndex = showPartsKeys.indexOf(changedOption.champ);
+
+      const newShowParts = showPartsKeys.reduce(
+        (acc, key, idx) => ({
+          ...acc,
+          [key]: idx >= BackToIndex,
+        }),
+        {},
+      );
+
+      const newSelectedPieces = selectedOptionsKeys.reduce(
+        (acc, key, idx) => ({
+          ...acc,
+          [key]:
+            idx > BackToIndex
+              ? ""
+              : key === changedOption.champ
+                ? changedOption.value
+                : selectedOptions[key],
+        }),
+        {},
+      );
+
+      const spliceOptions = collectedOptions.slice(0, BackToIndex + 1);
+
+      setCollectedOptions(spliceOptions);
+      setShowParts(newShowParts);
+      setSelectedOptions(newSelectedPieces);
+      setShowModal(false);
+      setChangedOption({
+        champ: "",
+        value: "",
+      });
+      setGeneratedQuestions([]);
+      setNumberOfChange(5);
+      setCanChangeAllQuestions(true);
     }
-  };
+  }, [
+    changedOption,
+    collectedOptions,
+    selectedOptions,
+    setCanChangeAllQuestions,
+    setCollectedOptions,
+    setGeneratedQuestions,
+    setNumberOfChange,
+    setSelectedOptions,
+    setShowModal,
+    showParts,
+  ]);
 
-  const confirmOptionChange = () => {
+  const cancelOptionChange = useCallback(() => {
     setShowModal(false);
+  }, []);
 
-    if (tempSelectedValue) {
-      setOptionPdfOrText(tempSelectedValue);
-      setSelectedFile(null);
-      setLessonText("");
-      setUploadFile(false);
-      setWaitAnswer(true);
-      setLessonError({
-        notLesson: false,
-        toLong: false,
-        toShort: false,
-        convertPDF: false,
-        generation: false,
-      });
-    }
-  };
-
-  const cancelOptionChange = () => {
-    setShowModal(false);
-  };
-
-  const checkStatus: (id: string) => object | string = async (id) => {
+  const createQuestions = async () => {
+    setLoading(true);
     try {
-      const response = await fetch("/api/check", {
-        method: "POST",
-        body: JSON.stringify({ id }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const questions = await request();
 
-      if (!response.ok) {
-        console.error("Erreur lors de la vérification du statut");
-        return;
+      if (questions && questions.length > 0) {
+        router.push("show_questions");
+      } else {
+        alert("Une erreur est survenue essayer à nouveau");
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      if (data.status === "pending") {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        return await checkStatus(id);
-      } else if (data.status === "ready") {
-        return data.data;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const request = async (formData: FormData, choosedPrompt: string) => {
-    try {
-      formData.append("choosedPrompt", choosedPrompt);
-
-      const response = await fetch("/api/create_exam", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      const id = await response.json();
-      if (id.error) {
-        return id.error;
-      }
-      return await checkStatus(id.id);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const createExam = async () => {
-    try {
-      setLoading(true);
-      const formData = new FormData();
-
-      if (selectedFile) {
-        formData.append("lesson", selectedFile);
-      } else if (lessonText) {
-        formData.append("lesson", lessonText);
-      }
-
-      const check = await request(formData, "check");
       setLoading(false);
-      switch (check) {
-        case "Le contenu fourni est trop court":
-          setLessonError((prevState) => ({ ...prevState, toShort: true }));
-          break;
-        case "Le contenu fourni est trop volumineux":
-          setLessonError((prevState) => ({ ...prevState, toLong: true }));
-          break;
-        case "Erreur lors de la conversion du PDF en texte.":
-          setLessonError((prevState) => ({ ...prevState, convertPDF: true }));
-          break;
-        case "Erreur lors de la génération de la réponse.":
-          setLessonError((prevState) => ({ ...prevState, generation: true }));
-          break;
-        case "INVALID":
-          setLessonError((prevState) => ({ ...prevState, notLesson: true }));
-          break;
-        default:
-          setLoading(true);
-
-          if (formData) {
-            const questions = await request(formData, "lesson");
-            window.localStorage.setItem("questions", JSON.stringify(questions));
-            window.localStorage.setItem("responses", JSON.stringify({}));
-            window.localStorage.setItem("comment", JSON.stringify(""));
-            window.localStorage.setItem("corrections", JSON.stringify([]));
-            router.push(`/question/1`);
-          }
-      }
-    } catch (error) {
-      console.error("Quelque chose s'est mal passé");
     }
   };
 
-  const handleLesson = (event: { target: { value: string } }) => {
-    const currentTextValue = event.target.value;
-    setLessonText(currentTextValue);
-    setWaitAnswer(currentTextValue.length <= 30);
-  };
+  // const checkStatus: (id: string) => object | string = async (id) => {
+  //   try {
+  //     const response = await fetch("/api/check", {
+  //       method: "POST",
+  //       body: JSON.stringify({ id }),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const selectLessonPdf = (event: any) => {
-    const files = event.target.files;
+  //     if (!response.ok) {
+  //       console.error("Erreur lors de la vérification du statut");
+  //       return;
+  //     }
 
-    if (files && files.length > 0) {
-      const file = files[0];
+  //     const data = await response.json();
 
-      if (file.type === "application/pdf") {
-        setSelectedFile(file);
-        setUploadFile(true);
-        setWaitAnswer(false);
-      } else {
-        alert("Veuillez télécharger un fichier PDF valide.");
-      }
-    }
-  };
+  //     if (data.status === "pending") {
+  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //       return await checkStatus(id);
+  //     } else if (data.status === "ready") {
+  //       return data.data;
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -201,95 +224,42 @@ export const DraftingFunctions = () => {
   return (
     <Fragment>
       <Menu />
-      {showModal && (
-        <div className="Drafting_modal">
-          <div className="Drafting_modal_content">
-            <p>
-              Êtes-vous sûr de vouloir changer d&#39;option ? <br /> Cela
-              supprimera ce que vous avez déjà fait.
-            </p>
-            <div className="Drafting_modal_buttons">
-              <button onClick={confirmOptionChange}>Confirmer</button>
-              <button onClick={cancelOptionChange}>Annuler</button>
+      <main className="flex flex-col items-center">
+        {showModal && (
+          <div className="Drafting_modal">
+            <div className="Drafting_modal_content">
+              <p>
+                Êtes-vous sûr de vouloir changer d&#39;option ? <br /> Cela
+                supprimera ce que vous avez déjà fait.
+              </p>
+              <div className="Drafting_modal_buttons">
+                <button onClick={confirmOptionChange}>Confirmer</button>
+                <button onClick={cancelOptionChange}>Annuler</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      <main>
-        <div className="Drafting_container">
-          <h1 className="Drafting_title">
-            Pour commencer, insérer le texte ou télécharger un PDF lié à votre
-            sujet d&#39;examen
-          </h1>
-          <label className="Drafting_first_option_title">
-            Choisissez une option:{" "}
-            <select
-              className="Drafting_option"
-              value={optionPdfOrText}
-              onChange={handleOptionChange}
-            >
-              <option>texte</option>
-              <option>pdf</option>
-            </select>
-          </label>
-          {lessonError.notLesson ||
-          lessonError.toLong ||
-          lessonError.toShort ||
-          lessonError.generation ||
-          lessonError.convertPDF ? (
-            <p className="Drafting_lesson_error">
-              {lessonError.notLesson
-                ? "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen"
-                : lessonError.toLong
-                  ? "Le contenu fourni est trop volumineux"
-                  : lessonError.toShort
-                    ? "Le contenu fourni est trop court"
-                    : "Erreur lors de la génération de l'examen"}
-            </p>
-          ) : null}
+        )}
+        <form
+          onSubmit={createQuestions}
+          method="post"
+          className="w-1/2 bg-[#F3F4F6] flex flex-col items-center border-2 rounded my-12 p-8"
+        >
+          <h1 className="text-2xl my-8">Créer votre examen personnalisé</h1>
 
-          {optionPdfOrText == "pdf" ? (
-            <Fragment>
-              <label
-                htmlFor="file-upload"
-                className={`${
-                  uploadFile ? "Drafting_pdf_uploaded" : "Drafting_pdf_upload"
-                }`}
-              >
-                <Image src={Pdf} alt="icon pdf" className="Drafting_pdf_icon" />
-              </label>
-
-              <input
-                type="file"
-                id="file-upload"
-                accept="application/pdf"
-                className="Drafting_file_input"
-                data-testid="file-upload"
-                onChange={selectLessonPdf}
-              />
-            </Fragment>
-          ) : (
-            <textarea
-              style={{ resize: "none", caretColor: "auto" }}
-              value={lessonText}
-              className="Drafting_field"
-              placeholder={`Vous devez écrire au moins 30 caractères pour pouvoir commencer \n \nEcrivez votre texte ici...`}
-              onChange={handleLesson}
+          {collectedOptions.map((options: string[], index: number) => (
+            <CreateExamOptions
+              key={index}
+              part={differentParts[index]}
+              options={options}
+              showParts={showParts}
+              setShowParts={setShowParts}
+              setShowModal={setShowModal}
+              setChangedOption={setChangedOption}
+              setCollectedOptions={setCollectedOptions}
+              setOptionsSetting={setOptionsSetting}
             />
-          )}
-
-          <button
-            className={`${
-              waitAnswer
-                ? "Drafting_button_create_close"
-                : "Drafting_button_create"
-            }`}
-            onClick={createExam}
-            disabled={waitAnswer}
-          >
-            Créer Exam
-          </button>
-        </div>
+          ))}
+        </form>
       </main>
       <Footer />
     </Fragment>

@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     margin: 0 auto;
-    padding: 10px 16.7% 10px 17.5%;
+    padding: 13px 5% 13px 5%;
     background-color: white;
     color: #233567;
     z-index: 1;
@@ -15,6 +15,10 @@
     display: flex;
     justify-content: flex-end;
     flex-grow: 1;
+}
+
+nav h2 {
+    font-size: 1.5em;
 }
 
 nav ul li {

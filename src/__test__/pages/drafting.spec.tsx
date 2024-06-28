@@ -1,188 +1,183 @@
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Drafting from "../../app/drafting/page";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { useAppContext } from "@/app/context";
+import Drafting from "@/app/drafting/page";
+import fetchMock from "jest-fetch-mock";
+import userEvent from "@testing-library/user-event";
 
-jest.mock("next/navigation");
+jest.mock("../../app/context", () => ({
+  useAppContext: jest.fn(),
+}));
+
+const mockContextValue = {
+  selectedOptions: {},
+  setSelectedOptions: jest.fn(),
+  setGeneratedQuestions: jest.fn(),
+  setNumberOfChange: jest.fn(),
+  setCanChangeAllQuestions: jest.fn(),
+  request: jest.fn().mockResolvedValue([]),
+};
+
+(useAppContext as jest.Mock).mockReturnValue(mockContextValue);
 
 beforeEach(() => {
-  global.fetch = jest.fn();
+  fetchMock.resetMocks();
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
 });
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Drafting Component", () => {
-  const testCases = [
-    {
-      response: "INVALID",
-      expectedText:
-        "Ce que vous avez fourni n'est pas une leçon, vous ne pouvez donc pas créer un examen",
-    },
-    {
-      response: "Le contenu fourni est trop court",
-      expectedText: "Le contenu fourni est trop court",
-    },
-    {
-      response: "Le contenu fourni est trop volumineux",
-      expectedText: "Le contenu fourni est trop volumineux",
-    },
-    {
-      response: "Erreur lors de la conversion du PDF en texte.",
-      expectedText: "Erreur lors de la génération de l'examen",
-    },
-    {
-      response: "Erreur lors de la génération de la réponse.",
-      expectedText: "Erreur lors de la génération de l'examen",
-    },
-  ];
+const fetchClasseResponse = [
+  {
+    name: "Seconde",
+    bound_to: ["Classe"],
+  },
+  {
+    name: "Première",
+    bound_to: ["Classe"],
+  },
+  {
+    name: "Terminale",
+    bound_to: ["Classe"],
+  },
+];
 
-  const fillTextAreaWithA = () => {
-    render(<Drafting />);
+const fetchFiliereResponse = [
+  {
+    name: "Professionnelle",
+    bound_to: ["Seconde"],
+  },
+  {
+    name: "Générale et Technologies",
+    bound_to: ["Seconde"],
+  },
+];
 
-    const textarea = screen.getByPlaceholderText(
-      /Ecrivez votre texte ici.../,
-    ) as HTMLTextAreaElement;
-    for (let i = 0; i <= 30; i++) {
-      fireEvent.change(textarea, { target: { value: textarea.value + "a" } });
-    }
+// const fetchMatiereResponse = [
+//   {
+//     name: "Français",
+//     bound_to: ["Professionnelle"],
+//   },
+//   {
+//     name: "Mathématiques",
+//     bound_to: ["Professionnelle"],
+//   },
+// ];
 
-    fireEvent.click(screen.getByRole("button", { name: /Créer Exam/i }));
-  };
+// const confirmeOption = async (
+//   text: string,
+//   fetch: { name: string; bound_to: string[] }[],
+//   fetchResponse?: string,
+// ) => {
+//   userEvent.click(screen.getByText(text));
 
-  const requeteResponse = (text: string, error?: string) => {
-    if (error) {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: true,
-        json: jest.fn().mockResolvedValue({
-          error,
-        }),
-      });
-    } else {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: true,
-        json: jest.fn().mockResolvedValue({
-          text,
-        }),
-      });
-    }
-  };
+//   fetchMock.mockResponseOnce(JSON.stringify(fetch));
 
-  it("renders without crashing", () => {
-    render(<Drafting />);
-    expect(
-      screen.getByRole("button", { name: /Créer Exam/i }),
-    ).toBeInTheDocument();
-  });
+//   const continuerButton = await screen.findByText("Continuer", {
+//     selector: "button:not(.hidden)",
+//   });
 
-  it("redirects user upon successful exam creation with a PDF", async () => {
-    requeteResponse("text");
+//   userEvent.click(continuerButton);
 
-    const mockPush = jest.fn();
+//   if (fetchResponse) {
+//     await waitFor(() => {
+//       expect(screen.getByText(fetchResponse)).toBeInTheDocument();
+//     });
+//   }
+// };
 
-    (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
+describe("DraftingFunctions Component", () => {
+  it('renders "Seconde" in options', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(fetchClasseResponse));
 
     render(<Drafting />);
 
-    const selectElement = screen.getByLabelText(/Choisissez une option:/i);
-    fireEvent.change(selectElement, { target: { value: "pdf" } });
-
     await waitFor(() => {
-      expect(selectElement).toHaveValue("pdf");
+      expect(screen.getByText("Seconde")).toBeInTheDocument();
     });
-
-    const fileInput = screen.getByTestId("file-upload");
-    const fakeFile = new File(["(⌐□_□)"], "example.pdf", {
-      type: "application/pdf",
-    });
-    Object.defineProperty(fileInput, "files", {
-      value: [fakeFile],
-      writable: false,
-    });
-    fireEvent.change(fileInput);
-
-    fireEvent.click(screen.getByRole("button", { name: /Créer Exam/i }));
-
-    await waitFor(
-      () => {
-        expect(mockPush).toHaveBeenCalledWith("/question/1");
-      },
-      { timeout: 1000 },
-    );
   });
 
-  it("redirects user again upon text fild after add pdf", async () => {
-    requeteResponse("text");
-
-    const mockPush = jest.fn();
-
-    (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
+  it('renders "Seconde" in options', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(fetchClasseResponse));
 
     render(<Drafting />);
 
-    const selectElement = screen.getByLabelText(/Choisissez une option:/i);
-    fireEvent.change(selectElement, { target: { value: "pdf" } });
+    await waitFor(() => {
+      expect(screen.getByText("Seconde")).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByText("Seconde"));
+
+    fetchMock.mockResponseOnce(JSON.stringify(fetchFiliereResponse));
+
+    userEvent.click(screen.getByText("Continuer"));
 
     await waitFor(() => {
-      expect(selectElement).toHaveValue("pdf");
-    });
-
-    const fileInput = screen.getByTestId("file-upload");
-    const fakeFile = new File(["(⌐□_□)"], "example.pdf", {
-      type: "application/pdf",
-    });
-    Object.defineProperty(fileInput, "files", {
-      value: [fakeFile],
-      writable: false,
-    });
-    fireEvent.change(fileInput);
-
-    fireEvent.change(selectElement, { target: { value: "text" } });
-
-    expect(
-      screen.getByRole("button", { name: /Confirmer/i }),
-    ).toBeInTheDocument();
-  });
-
-  it("redirects user upon successful exam creation", async () => {
-    requeteResponse("text");
-
-    const mockPush = jest.fn();
-
-    (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
-
-    fillTextAreaWithA();
-
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/question/1");
+      expect(screen.getByText("Professionnelle")).toBeInTheDocument();
     });
   });
 
-  testCases.forEach((testCase) => {
-    it(`shows error when the lesson response is "${testCase.response}"`, async () => {
-      requeteResponse("", testCase.response);
-      fillTextAreaWithA();
-      await waitFor(() => {
-        expect(screen.getByText(testCase.expectedText)).toBeInTheDocument();
-      });
+  // it('renders "Seconde" in options', async () => {
+  //   fetchMock.mockResponseOnce(JSON.stringify(fetchClasseResponse));
+
+  //   render(<Drafting />);
+
+  //   await waitFor(() => {
+  //     screen.getByText("Seconde");
+  //   });
+
+  //   await confirmeOption("Seconde", fetchFiliereResponse, "Professionnelle");
+
+  //   await confirmeOption("Professionnelle", fetchMatiereResponse, "Français");
+
+  //   userEvent.click(screen.getByText("Français"));
+
+  //   const continuerMatiereButton = await screen.findByText("Continuer", {
+  //     selector: "button:not(.hidden)",
+  //   });
+
+  //   userEvent.click(continuerMatiereButton);
+
+  //   await waitFor(() => {
+  //     expect(
+  //       screen.getByPlaceholderText("exemple: Première Guerre Mondiale"),
+  //     ).toBeInTheDocument();
+  //   });
+
+  //   const input = screen.getByPlaceholderText(
+  //     "exemple: Première Guerre Mondiale",
+  //   );
+
+  //   userEvent.type(input, "Première Guerre Mondiale");
+
+  //   const continuerChapitreButton = await screen.findByText("Continuer", {
+  //     selector: "button:not(.hidden)",
+  //   });
+
+  //   userEvent.click(continuerChapitreButton);
+
+  //   await waitFor(() => {
+  //     expect(screen.getByText("15")).toBeInTheDocument();
+  //   });
+
+  //   await waitFor(() => {
+  //     expect(screen.getByText("Créer Examen")).toBeInTheDocument();
+  //   });
+  // });
+
+  it('renders "Seconde" in options', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(fetchClasseResponse));
+
+    render(<Drafting />);
+
+    const continuerChapitreButton = await screen.findByText("Continuer", {
+      selector: "button:not(.hidden)",
     });
-  });
-
-  it("handles fetch errors gracefully", async () => {
-    global.fetch = jest.fn(() => Promise.reject("API call failed"));
-    console.error = jest.fn();
-
-    fillTextAreaWithA();
 
     await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith("API call failed");
+      expect(continuerChapitreButton).toBeDisabled();
     });
   });
 });

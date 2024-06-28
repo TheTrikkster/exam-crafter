@@ -1,47 +1,27 @@
 import "./Header.scss";
 import Menu from "../menu/Menu";
-import imageAccueil from "../../../public/image1.png";
-import ImageBackground from "../../../public/background.jpg";
-import ImageBackgroundMobile from "../../../public/background-mobile.jpg";
-import Image from "next/image";
+import PhotoGallery from "../responsive_image/ResponsiveImage";
 
 function Header() {
   return (
     <header>
       <Menu />
-      <div className="Header_container">
-        <Image
-          src={ImageBackground}
-          alt="un étudiant qui apprend"
-          className="Header_background_image"
-          priority
-        />
-        <div className="Header_texts_and_image_container">
-          <div className="Header_title_container">
-            <h1>Réalisez votre examen personnalisé avec l&#39;IA</h1>
-            <p className="Header_subtitle">
-              Upload ton cours, génère un examen, puis après l&#39;avoir passé,
-              reçois une correction sans aucune inscription ni limite.
-            </p>
-            <p className="Header_start_button_container">
-              <a href="/drafting" className="Header_start_button">
-                Commencer
-              </a>
-            </p>
-          </div>
-          <Image
-            src={ImageBackgroundMobile}
-            alt="un étudiant qui apprend"
-            className="Header_background_image_mobile"
-            priority
-          />
-          <Image
-            src={imageAccueil}
-            alt="un étudiant qui apprend"
-            className="Header_image"
-          />
-        </div>
+      <div className="Header_general-container flex flex-col justify-center items-center">
+        <h1 className="Header_title text-center text-5xl mt-20 font-semibold">
+          Préparez-vous aux éxamens avec <br /> l&#39;assistance de l&#39;IA
+        </h1>
+        <p className="text-center text-black mt-10">
+          Découvrer l&#39;avenir de la préparation aux examens avec notre
+          platforme alimenté par l&#39;IA. <br /> Créez des examens
+          personnalisés pour vous entraîner et maximiser votre succès.
+        </p>
+        <button className="w-52 bg-[#E54C18] rounded-3xl p-3 mt-12 mb-20">
+          <a href="/drafting" className="text-white">
+            Commencer
+          </a>
+        </button>
       </div>
+      <PhotoGallery />
     </header>
   );
 }

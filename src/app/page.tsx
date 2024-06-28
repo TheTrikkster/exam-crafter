@@ -13,11 +13,7 @@ export default function Home() {
     },
     {
       title: "Fonctionnement",
-      text: "Le processus est très simple. Vous allez pouvoir créer votre propre examen en fournissant une leçon ou en indiquant sur quoi vous souhaitez passer l'examen. À partir de cette leçon, une intelligence artificielle créera un examen composé de dix questions. Une fois l'examen terminé, vous recevrez une correction détaillée. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, et nous vous prions de nous excuser à l'avance si cela se produit.",
-    },
-    {
-      title: "Prérequis",
-      text: "Pour créer votre examen, vous devez simplement fournir une leçon sous forme de pdf, ou vous avez la possibilité de le rédiger à la main, vous avez également la possibilité d'indiquer simplement le thème de l'examen que vous souhaitez. Pour commencer, il vous suffit d'appuyer sur << Commencer >>.",
+      text: "Le processus est très simple. Suivez les étapes, une fois finis l'IA créera un examen, ensuite vous pourrait changer les questions si nécessaire. Quand l'examen terminé, vous recevrez une correction. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, nous vous prions de nous excuser à l'avance si cela se produit.",
     },
   ];
 
@@ -32,17 +28,16 @@ export default function Home() {
         <Header />
         <main className="Home_container">
           <div className="Home_explication_container">
-            <h2>Tout ce que vous devez savoir</h2>
-            <ol>
-              {textsMenu.map((title, index) => {
-                return (
-                  <li key={index}>
-                    <h4>{title.title}</h4>
-                    <p>{title.text}</p>
-                  </li>
-                );
-              })}
-            </ol>
+            {textsMenu.map((title, index) => {
+              return (
+                <div key={index}>
+                  <h4 className="text-[#202020] text-4xl mb-5">
+                    {title.title}
+                  </h4>
+                  <p className="text-[#202020] mt-5 font-thin">{title.text}</p>
+                </div>
+              );
+            })}
           </div>
         </main>
         <Footer />

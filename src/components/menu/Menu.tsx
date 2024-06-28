@@ -1,12 +1,10 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import "./Menu.scss";
 import MenuIcon from "../../../public/menu.png";
 import CloseIcon from "../../../public/effacer.png";
 import Image from "next/image";
-import { ScrollToFooter } from "@/app/functions";
-import { useContext } from "react";
-import { ThemeContext } from "@/app/functions";
+import { ScrollToFooter, ThemeContext } from "@/app/functions";
 
 function Menu() {
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);

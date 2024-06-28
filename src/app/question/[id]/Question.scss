@@ -27,11 +27,6 @@ header {
     width: 100%;
 }
 
-.Question_the_question {
-    width: 65%;
-    margin: 80px auto 50px auto;
-}
-
 .Question_modal {
     position: fixed;
     top: 0;
@@ -89,10 +84,12 @@ header {
 }
 
 .Question_main {
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .Question_reponse_to_long {
@@ -101,10 +98,12 @@ header {
 }
 
 .Question_response_field {
-    width: 55%;
+    width: 100%;
     height: 400px;
     padding: 15px;
     margin-bottom: 50px;
+    border: 1px solid gray ;
+    border-radius: 5px;
 }
 
 .Question_button_container {
@@ -112,18 +111,6 @@ header {
     justify-content: space-between;
     align-items: center;
     gap: 25px;
-}
-
-button, .Question_boutton_quittez {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.Question_boutton_quittez {
-    padding: 8px 20px;
 }
 
 .Question_button {
@@ -141,17 +128,6 @@ button, .Question_boutton_quittez {
     }
 }
 
-.Question_boutton_quittez {
-    border: 2px solid #d63031;
-    background-color: transparent;
-    color: #d63031;
-
-    &:hover {
-        background-color: #d63031;
-        color: #FFFFFF;
-    }
-}
-
 @media screen and (max-width: 600px) {
     .Question_container {
         padding: 50px 30px;
@@ -163,10 +139,5 @@ button, .Question_boutton_quittez {
 
     .Question_button_container {
         margin-bottom: 20px;
-    }
-
-    .Question_the_question {
-        width: 100%;
-        margin: 20px auto 50px auto;
     }
 }

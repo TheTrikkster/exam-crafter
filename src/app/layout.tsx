@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { AppWrapper } from "./context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className} suppressHydrationWarning={true}>
-        {children}
+        <AppWrapper>{children}</AppWrapper>
       </body>
     </html>
   );

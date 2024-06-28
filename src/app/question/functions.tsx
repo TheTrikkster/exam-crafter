@@ -1,19 +1,21 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { SyncLoader } from "react-spinners";
 import { QuestionType } from "./[id]/page";
 import "./[id]/Question.scss";
+import CloseIcon from "../../../public/effacer.png";
+import Image from "next/image";
 
 export const QuestionFunctions = ({ params }: QuestionType) => {
-  const id = Number(params.id);
+  const id = useMemo(() => Number(params.id), [params.id]);
   const router = useRouter();
   const [response, setResponse] = useState<string>("");
   const [reponseError, setReponseError] = useState<{
     toLong: boolean;
     generation: boolean;
   }>({ toLong: false, generation: false });
-  const [correction, setCorrection] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [questions, setQuestions] = useState<string[]>([]);
   const [allResponses, setAllResponses] = useState<Record<number, string>>({});
@@ -25,98 +27,70 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
     );
   }, []);
 
-  const sendResponse = () => {
-    allResponses[id] = ` Response: ${response}`;
+  const sendResponse = useCallback(() => {
+    allResponses[id] = response;
     window.localStorage.setItem("responses", JSON.stringify(allResponses));
-  };
+  }, [allResponses, id, response]);
 
-  const checkStatus: (id: string) => object = async (id) => {
-    const response = await fetch("/api/check", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      console.error("Erreur lors de la vérification du statut");
-      return;
-    }
-
-    const data = await response.json();
-
-    if (data.status === "pending") {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      return await checkStatus(id);
-    } else if (data.status === "ready") {
-      return data.data;
-    }
-  };
-
-  const request = async () => {
+  const request = useCallback(async () => {
     try {
-      const waitResponse = await fetch("/api/correct_exam", {
+      const waitResponse = await fetch("http://localhost:3001/correct-exam", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           questions,
           responses: allResponses,
-          comment: [...questions, ...Object.values(allResponses)],
         }),
       });
 
       if (!waitResponse.ok) {
-        throw new Error("Erreur dans la réponse");
+        setLoading(false);
+        alert("La correction a échoué");
+        throw new Error("La requête a échoué");
       }
 
-      const { ids } = await waitResponse.json();
-      const checks = await Promise.all(
-        ids.map(async (id: string) => {
-          return checkStatus(id);
-        }),
-      );
-
-      return checks;
+      const correctionExam = await waitResponse.json();
+      return correctionExam;
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [questions, allResponses]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const corrections = await request();
-      if (corrections) {
-        const comment = corrections.pop();
-        window.localStorage.setItem("comment", JSON.stringify(comment.comment));
-        window.localStorage.setItem("corrections", JSON.stringify(corrections));
-        router.push(`/result`);
-      }
+      window.localStorage.setItem("corrections", JSON.stringify(corrections));
+      router.push(`/result`);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [request, router]);
 
-  const confirmOptionChange = () => {
+  const confirmOptionChange = useCallback(() => {
     setShowModal(false);
     window.localStorage.setItem("questions", JSON.stringify([]));
     window.localStorage.setItem("responses", JSON.stringify({}));
-    window.localStorage.setItem("comment", JSON.stringify(""));
     window.localStorage.setItem("corrections", JSON.stringify([]));
     router.push(`/drafting`);
-  };
+  }, [router]);
 
-  const cancelOptionChange = () => {
+  const cancelOptionChange = useCallback(() => {
     setShowModal(false);
-  };
+  }, []);
 
-  const handleAnswer = (nextQuestionId: number) => {
-    router.push(`/question/${nextQuestionId}`);
-  };
+  const handleAnswer = useCallback(
+    (nextQuestionId: number) => {
+      router.push(`/question/${nextQuestionId}`);
+    },
+    [router],
+  );
 
-  const nextQuestion = () => {
+  const nextQuestion = useCallback(() => {
     if (response.length < 10000) {
-      if (questions.length == id) {
-        setCorrection(true);
+      if (questions.length === id) {
+        setLoading(true);
         fetchData();
       } else {
         handleAnswer(id + 1);
@@ -128,9 +102,9 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
         toLong: true,
       }));
     }
-  };
+  }, [response, questions.length, id, fetchData, handleAnswer, sendResponse]);
 
-  if (correction) {
+  if (loading) {
     return (
       <div className="Question_loading_or_do_not_exist">
         <SyncLoader color="#34495E" size={18} />
@@ -156,12 +130,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
   }
 
   return (
-    <Fragment>
-      <header>
-        {questions.length > 0 ? (
-          <h3 className="Question_the_question">{questions[id - 1]}</h3>
-        ) : null}
-      </header>
+    <div className="w-full">
       {showModal && (
         <div className="Question_modal">
           <div className="Question_modal_content">
@@ -177,6 +146,21 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
         </div>
       )}
       <main className="Question_main">
+        <div className="w-full flex items-center justify-between">
+          <div className="w-9/12 mt-16 mb-10">
+            <p className="text-2xl text-black font-semibold mb-5">
+              Question {id}
+            </p>
+            {questions.length > 0 && <h3>{questions[id - 1]}</h3>}
+          </div>
+          <Image
+            src={CloseIcon}
+            alt="icon pour fermer menu"
+            onClick={() => setShowModal(true)}
+            className="cursor-pointer"
+            width={30}
+          />
+        </div>
         {reponseError.toLong || reponseError.generation ? (
           <p className="Question_reponse_to_long">
             {reponseError.toLong
@@ -189,26 +173,20 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
           className="Question_response_field"
           value={response}
           placeholder="Vous devez écrire votre réponse ici"
-          onChange={(event: { target: { value: string } }) =>
-            setResponse(event.target.value)
-          }
+          onChange={(event) => setResponse(event.target.value)}
         />
         <div className="Question_button_container">
           <button
-            className="Question_button"
+            className={`${
+              response.length > 0 ? " opacity-100" : "opacity-50"
+            } w-36 bg-[#E54C18] text-white rounded-3xl p-3`}
             onClick={nextQuestion}
-            disabled={response.length > 0 ? false : true}
+            disabled={response.length === 0}
           >
-            prochaine question
-          </button>
-          <button
-            className="Question_boutton_quittez"
-            onClick={() => setShowModal(true)}
-          >
-            quittez
+            valider
           </button>
         </div>
       </main>
-    </Fragment>
+    </div>
   );
 };

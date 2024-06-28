@@ -9,52 +9,52 @@ const openai = new ChatOpenAI({
   modelName: "gpt-3.5-turbo-0125",
 });
 
-const differentPrompts = {
-  verify: `Tu es un professeur spécialisé en pédagogie, tu as pour tâche d'analyser un texte pour déterminer s'il peut servir de base à un examen pour tes élèves. Pour cela, le texte doit présenter les caractéristiques d'une leçon structurée.
-  Une leçon authentique devrait posséder:
-    1. Une structure claire et organisée, avec éventuellement des titres ou des sous-titres.
-    2. Des informations pédagogiques pertinentes et cohérentes sur un sujet spécifique.
-    3. Une progression logique des idées permettant une compréhension aisée.
-  Selon ces critères, le texte qui est fournie est-il une leçon adaptée à la création d'un examen ?
-  Si c'est un cours le string doit être égal à VALID sinon INVALID`,
+// const differentPrompts = {
+//   verify: `Tu es un professeur spécialisé en pédagogie, tu as pour tâche d'analyser un texte pour déterminer s'il peut servir de base à un examen pour tes élèves. Pour cela, le texte doit présenter les caractéristiques d'une leçon structurée.
+//   Une leçon authentique devrait posséder:
+//     1. Une structure claire et organisée, avec éventuellement des titres ou des sous-titres.
+//     2. Des informations pédagogiques pertinentes et cohérentes sur un sujet spécifique.
+//     3. Une progression logique des idées permettant une compréhension aisée.
+//   Selon ces critères, le texte qui est fournie est-il une leçon adaptée à la création d'un examen ?
+//   Si c'est un cours le string doit être égal à VALID sinon INVALID`,
 
-  createExam: `Tu es un professeur qui doit créer un examen de 10 questions pour tes élèves.
-  Afin de créer ce test tu devras te basé sur le dernier cours que tu as donner à tes élèves.
-  La question doit être formulée de telle manière que seule une réponse textuelle soit appropriée.
-  Les questions doivent évaluer la compréhension générale du sujet sans se référer ni dépendre d'un élément, exemple ou cas particulier de la leçon. Les questions doivent pouvoir être répondue en se basant uniquement sur l'ensemble du contenu général et non sur des détails spécifiques.`,
+//   createExam: `Tu es un professeur qui doit créer un examen de 10 questions pour tes élèves.
+//   Afin de créer ce test tu devras te basé sur le dernier cours que tu as donner à tes élèves.
+//   La question doit être formulée de telle manière que seule une réponse textuelle soit appropriée.
+//   Les questions doivent évaluer la compréhension générale du sujet sans se référer ni dépendre d'un élément, exemple ou cas particulier de la leçon. Les questions doivent pouvoir être répondue en se basant uniquement sur l'ensemble du contenu général et non sur des détails spécifiques.`,
 
-  correction: `Tu es un professeur qui doit corriger et attribuer une note la réponse à la question d’un élève.
-  Si la réponse est à fausse ou partiellement juste tu devras fournir la correction et uniquement la correction sans rien de plus à cette réponse.
-  La correction ne devras pas être beaucoup trop long.
-  Tu devras attribué une note à la réponse de l’élève, l’évaluation se fera ainsi: 1 point pour une réponse juste, 0,5 pour une réponse partiellement juste, et 0 pour une réponse fausse.
-  Si la réponse n'est pas conforme à la question attribuez 0 point.
-  Afiicher uniquement le nombre du resultat et rien d'autre.`,
-  comment: `Tu es un professeur qui doit commenter la copie de l'examen d'un élève.
-  Une copie d'un examen te sera fournie. Ta tâche sera d'analyser en détail chacune des questions et des réponses fournies dans cette copie. Suite à cette analyse, te devras fournir un commentaire général qui évalue l'examen dans son ensemble.
-  Le commentaire doit être pertinent et doit aider l’élève à avancer.
-  Afficher uniquement le commentaire général et rien d'autre.
-  Le commentaire ne doit pas être très long.`,
-};
+//   correction: `Tu es un professeur qui doit corriger et attribuer une note la réponse à la question d’un élève.
+//   Si la réponse est à fausse ou partiellement juste tu devras fournir la correction et uniquement la correction sans rien de plus à cette réponse.
+//   La correction ne devras pas être beaucoup trop long.
+//   Tu devras attribué une note à la réponse de l’élève, l’évaluation se fera ainsi: 1 point pour une réponse juste, 0,5 pour une réponse partiellement juste, et 0 pour une réponse fausse.
+//   Si la réponse n'est pas conforme à la question attribuez 0 point.
+//   Afiicher uniquement le nombre du resultat et rien d'autre.`,
+//   comment: `Tu es un professeur qui doit commenter la copie de l'examen d'un élève.
+//   Une copie d'un examen te sera fournie. Ta tâche sera d'analyser en détail chacune des questions et des réponses fournies dans cette copie. Suite à cette analyse, te devras fournir un commentaire général qui évalue l'examen dans son ensemble.
+//   Le commentaire doit être pertinent et doit aider l’élève à avancer.
+//   Afficher uniquement le commentaire général et rien d'autre.
+//   Le commentaire ne doit pas être très long.`,
+// };
 
-const choosedPrompt = (choosedPrompt: string, prompt: string) => {
-  let thePrompt = "";
-  switch (choosedPrompt) {
-    case "verify":
-      thePrompt = differentPrompts.verify;
-      break;
-    case "createExam":
-      thePrompt = differentPrompts.createExam;
-      break;
-    case "correction":
-      thePrompt = differentPrompts.correction;
-      break;
-    case "comment":
-      thePrompt = differentPrompts.comment;
-  }
-  return thePrompt + " " + prompt;
-};
+// const choosedPrompt = (choosedPrompt: string, prompt: string) => {
+//   let thePrompt = "";
+//   switch (choosedPrompt) {
+//     case "verify":
+//       thePrompt = differentPrompts.verify;
+//       break;
+//     case "createExam":
+//       thePrompt = differentPrompts.createExam;
+//       break;
+//     case "correction":
+//       thePrompt = differentPrompts.correction;
+//       break;
+//     case "comment":
+//       thePrompt = differentPrompts.comment;
+//   }
+//   return thePrompt + " " + prompt;
+// };
 
-export const response = async (prompt: string) => {
+export const response = async () => {
   // const chatResponse = await openai.completions.create({
   //   model: "gpt-3.5-turbo-1106",
   //   messages: [{ role: "user", content: choosedPrompt("verify", prompt) }],
