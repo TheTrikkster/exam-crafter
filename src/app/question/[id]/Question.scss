@@ -1,0 +1,143 @@
+.Question_container {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F3F4F6; 
+}
+
+.Question_loading_or_do_not_exist {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.Question_loading_text_or_do_not_exist {
+    color: grey;
+    font-size: 25px;
+    margin-top: 50px;
+}
+
+header {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.Question_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.Question_modal_content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Question_modal_content p {
+    color: black;
+}
+
+.Question_modal_buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.Question_modal_buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+.Question_modal_buttons button:hover {
+    opacity: 0.9;
+}
+
+.Question_modal_buttons button:first-child {
+    background-color: #f44336;
+    color: white;
+    margin-right: 10px;
+}
+
+.Question_modal_buttons button:last-child {
+    background-color: #979A9A;
+    color: white;
+}
+
+.Question_main {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.Question_reponse_to_long {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.Question_response_field {
+    width: 100%;
+    height: 400px;
+    padding: 15px;
+    margin-bottom: 50px;
+    border: 1px solid gray ;
+    border-radius: 5px;
+}
+
+.Question_button_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+.Question_button {
+    border: none;
+    background-color: #34495E;
+    color: #FFFFFF;
+
+    &:hover {
+        background-color: #2C3E50;
+    }
+
+    &:disabled {
+        background-color: #95a5a6;
+        cursor: not-allowed;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .Question_container {
+        padding: 50px 30px;
+    }
+
+    .Question_response_field {
+        width: 100%;
+    }
+
+    .Question_button_container {
+        margin-bottom: 20px;
+    }
+}
