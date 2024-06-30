@@ -78,9 +78,9 @@ export const DraftingFunctions = () => {
     const options = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/options?bound_to=${optionsSetting.bound_to}&${
+          `http://localhost:3001/options?bound_to=${optionsSetting.bound_to}${
             optionsSetting.classe.length > 0
-              ? `classe=${optionsSetting.classe}`
+              ? `&classe=${optionsSetting.classe}`
               : ""
           }`,
         );

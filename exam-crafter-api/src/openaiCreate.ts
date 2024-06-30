@@ -17,7 +17,6 @@ const generatedResponse = (templateString: string) => {
 };
 
 export const GeneratedExam = async (prompt, retryCount = 3) => {
-  console.log({ prompt });
   if (retryCount === 0) {
     throw new Error('Nombre maximum de tentatives atteint.');
   }
@@ -165,7 +164,6 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
       (parsedResult.length == prompt.selectedOptions?.questions ||
         prompt?.questions)
     ) {
-      console.log({ result });
       return result;
     } else {
       return GeneratedExam(prompt, retryCount - 1);
