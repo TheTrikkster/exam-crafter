@@ -1,0 +1,30 @@
+services:
+  exam-crafters-api:
+    build:
+      context: ./exam-crafter-api
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./exam-crafter-api/src:/app/src
+  exam-crafters:
+    build:
+      context: ./exam-crafter
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./exam-crafter/src:/app/src
+  db:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      MONGODB_URL: ${MONGODB_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GOOGLE_ANALYTICS_KEY: ${GOOGLE_ANALYTICS_KEY}
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
