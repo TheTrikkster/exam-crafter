@@ -78,7 +78,9 @@ export const DraftingFunctions = () => {
     const options = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/options?bound_to=${optionsSetting.bound_to}${
+          `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/options?bound_to=${
+            optionsSetting.bound_to
+          }${
             optionsSetting.classe.length > 0
               ? `&classe=${optionsSetting.classe}`
               : ""

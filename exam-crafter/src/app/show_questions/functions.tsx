@@ -47,18 +47,21 @@ function ShowQuestionsFunction() {
       setChangingQuestion((prevState) => ({ ...prevState, [index]: true }));
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedOptions,
+              selectedQuestion: question,
+              allQuestions: generatedQuestions,
+            }),
+            signal: new AbortController().signal,
           },
-          body: JSON.stringify({
-            selectedOptions,
-            selectedQuestion: question,
-            allQuestions: generatedQuestions,
-          }),
-          signal: new AbortController().signal,
-        });
+        );
 
         if (!response.ok) throw new Error("La requête a échoué");
 

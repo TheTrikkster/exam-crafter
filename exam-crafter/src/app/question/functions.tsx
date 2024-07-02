@@ -34,17 +34,19 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
 
   const request = useCallback(async () => {
     try {
-      const waitResponse = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/correct-exam`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const waitResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/correct-exam`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            questions,
+            responses: allResponses,
+          }),
         },
-        body: JSON.stringify({
-          questions,
-          responses: allResponses,
-        }),
-      });
-
+      );
       if (!waitResponse.ok) {
         setLoading(false);
         alert("La correction a échoué");
