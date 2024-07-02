@@ -7,7 +7,7 @@ import { RunnableSequence } from '@langchain/core/runnables';
 const openai = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 1,
-  modelName: 'gpt-3.5-turbo-0125',
+  modelName: 'gpt-4-turbo',
 });
 
 const generatedResponse = (templateString: string) => {

@@ -47,7 +47,7 @@ function ShowQuestionsFunction() {
       setChangingQuestion((prevState) => ({ ...prevState, [index]: true }));
 
       try {
-        const response = await fetch("http://localhost:3001/create-exam", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

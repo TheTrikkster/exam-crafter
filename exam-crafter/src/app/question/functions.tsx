@@ -34,7 +34,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
 
   const request = useCallback(async () => {
     try {
-      const waitResponse = await fetch("http://localhost:3001/correct-exam", {
+      const waitResponse = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/correct-exam`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

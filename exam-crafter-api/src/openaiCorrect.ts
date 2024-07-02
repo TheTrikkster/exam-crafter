@@ -6,7 +6,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers';
 const openai = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 1,
-  modelName: 'gpt-3.5-turbo-0125',
+  modelName: 'gpt-4-turbo',
 });
 
 const generatedResponse = async (
@@ -35,7 +35,7 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
             La question:
             {question}
 
-            La réponse:
+            La réponse de l'élève:
             {response}
 
             Si la réponse est à fausse ou partiellement juste tu devras fournir la correction adéquat et uniquement la correction sans rien de plus à cette réponse.
@@ -47,18 +47,18 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
 
         const grade = await generatedResponse(
           `
-        Tu es un professeur qui doit noter la reponse à une question fournie part un élève.
+          Tu es un professeur qui doit noter la reponse à une question fournie par un élève.
 
-        La question:
-        {question}
+          La question:
+          {question}
 
-        La réponse:
-        {response}
+          La réponse de l'élève:
+          {response}
 
-        Tu devras attribué une note à la réponse de l’élève, l’évaluation se fera ainsi: 1 point pour une réponse juste, 0,5 pour une réponse partiellement juste, et 0 pour une réponse fausse.
-        Si la réponse n'est pas conforme à la question attribuez 0 point.
-        Tu dois retourner uniquement la note (le nombre) et rien d'autre.
-      `,
+          Tu dois attribuer une note à la réponse de l'élève mais ne sois pas très strict et faites attention au sens de la réponse car il est possible qu'elle ne soit pas parfaitement précise.
+          L'évaluation se fera de la manière suivante : 1 point pour une bonne réponse, 0,5 pour une réponse partiellement correcte, et 0 pour une fausse réponse.
+          Fait très attention à cette règle, tu dois retourner uniquement la note (le nombre) et rien d'autre.
+        `,
           question,
           responses[index],
         );
