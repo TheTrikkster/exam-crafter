@@ -42,7 +42,7 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
             La correction ne doit pas être trop longue.
           `,
           question,
-          responses[index],
+          responses[++index],
         );
 
         const grade = await generatedResponse(
@@ -61,7 +61,7 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
           Retourner uniqument le nombre et rien d'autre.
         `,
           question,
-          responses[index],
+          responses[++index],
         );
 
         return { correction, grade };

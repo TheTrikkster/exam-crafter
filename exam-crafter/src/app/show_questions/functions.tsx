@@ -1,21 +1,21 @@
-"use client";
-import React, { useState, useCallback, Fragment } from "react";
-import "./ShowQuestions.scss";
-import { useRouter } from "next/navigation";
-import { ClipLoader, SyncLoader } from "react-spinners";
-import Image from "next/image";
-import Reload from "../../../public/reload.png";
-import NewQuestions from "../../../public/nouveaux-questions.png";
-import { useAppContext } from "@/app/context";
-import Menu from "@/components/menu/Menu";
-import Footer from "@/components/footer/Footer";
+'use client';
+import React, { useState, useCallback, Fragment } from 'react';
+import './ShowQuestions.scss';
+import { useRouter } from 'next/navigation';
+import { ClipLoader, SyncLoader } from 'react-spinners';
+import Image from 'next/image';
+import Reload from '../../../public/reload.png';
+import NewQuestions from '../../../public/nouveaux-questions.png';
+import { useAppContext } from '@/app/context';
+import Menu from '@/components/menu/Menu';
+import Footer from '@/components/footer/Footer';
 
 interface AbortError extends Error {
-  name: "AbortError";
+  name: 'AbortError';
 }
 
 export function isAbortError(error: unknown): error is AbortError {
-  return (error as AbortError).name === "AbortError";
+  return (error as AbortError).name === 'AbortError';
 }
 
 function ShowQuestionsFunction() {
@@ -32,10 +32,10 @@ function ShowQuestionsFunction() {
     setCanChangeAllQuestions,
     generatedQuestions,
     setGeneratedQuestions,
-    request,
+    request
   } = useAppContext();
   const [disableChange, setDisableChange] = useState<boolean>(
-    numberOfChange === 0,
+    numberOfChange === 0
   );
 
   const changeQuestion = useCallback(
@@ -44,48 +44,46 @@ function ShowQuestionsFunction() {
         return;
       }
       setDisableChange(true);
-      setChangingQuestion((prevState) => ({ ...prevState, [index]: true }));
+      setChangingQuestion(prevState => ({ ...prevState, [index]: true }));
 
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`,
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               selectedOptions,
               selectedQuestion: question,
-              allQuestions: generatedQuestions,
+              allQuestions: generatedQuestions
             }),
-            signal: new AbortController().signal,
-          },
+            signal: new AbortController().signal
+          }
         );
 
-        if (!response.ok) throw new Error("La requête a échoué");
+        if (!response.ok) throw new Error('La requête a échoué');
 
         const newQuestions = await response.json();
         setGeneratedQuestions(newQuestions);
 
-        setNumberOfChange((prevState) => {
+        setNumberOfChange(prevState => {
           const newNumberOfChange = prevState - 1;
-          setDisableChange(newNumberOfChange === 0);
           return newNumberOfChange;
         });
       } catch (error: unknown) {
         if (isAbortError(error)) {
           console.error(
-            "La requête a été annulée à cause du délai d'expiration",
+            "La requête a été annulée à cause du délai d'expiration"
           );
         } else if (error instanceof Error) {
           console.error(error.message);
         } else {
-          console.error("Une erreur inconnue est survenue");
+          console.error('Une erreur inconnue est survenue');
         }
-        setDisableChange(false);
       } finally {
-        setChangingQuestion((prevState) => ({ ...prevState, [index]: false }));
+        setChangingQuestion(prevState => ({ ...prevState, [index]: false }));
       }
     },
     [
@@ -94,34 +92,34 @@ function ShowQuestionsFunction() {
       selectedOptions,
       generatedQuestions,
       setGeneratedQuestions,
-      setNumberOfChange,
-    ],
+      setNumberOfChange
+    ]
   );
 
   const startExam = useCallback(() => {
     if (generatedQuestions.length.toString() === selectedOptions.questions) {
       localStorage.setItem(
-        "appState",
+        'appState',
         JSON.stringify({
           generatedQuestions: [],
           numberOfChange: 5,
           canChangeAllQuestions: true,
           disableChange: false,
           selectedOptions: {
-            classe: "",
-            filiere: "",
-            matiere: "",
-            chapitre: "",
-            questions: "",
-          },
-        }),
+            classe: '',
+            filiere: '',
+            matiere: '',
+            chapitre: '',
+            questions: ''
+          }
+        })
       );
       window.localStorage.setItem(
-        "questions",
-        JSON.stringify(generatedQuestions),
+        'questions',
+        JSON.stringify(generatedQuestions)
       );
-      window.localStorage.setItem("responses", JSON.stringify({}));
-      window.localStorage.setItem("corrections", JSON.stringify([]));
+      window.localStorage.setItem('responses', JSON.stringify({}));
+      window.localStorage.setItem('corrections', JSON.stringify([]));
       router.push(`/question/1`);
     }
   }, [generatedQuestions, selectedOptions, router]);
@@ -160,7 +158,7 @@ function ShowQuestionsFunction() {
       <Menu />
       <div
         className="w-3/4 bg-[#F3F4F6] flex flex-col border-2 rounded p-8 mx-auto my-16"
-        style={{ position: "relative" }}
+        style={{ position: 'relative' }}
       >
         <Image
           src={NewQuestions}
@@ -168,12 +166,12 @@ function ShowQuestionsFunction() {
           alt="ce bouton change toutes les questions"
           className={`w-7 ${
             disableChange && numberOfChange !== 0
-              ? "opacity-50"
+              ? 'opacity-50'
               : canChangeAllQuestions
-                ? "cursor-pointer"
-                : "opacity-50"
+                ? 'cursor-pointer'
+                : 'opacity-50'
           }`}
-          style={{ position: "absolute", right: "15px" }}
+          style={{ position: 'absolute', right: '15px' }}
           priority
           onClick={handleRequestNewQuestions}
         />
@@ -195,10 +193,29 @@ function ShowQuestionsFunction() {
                   title="changer la question"
                   alt="ce bouton change la question"
                   className={`w-5 ml-5 ${
-                    disableChange ? "opacity-50" : "cursor-pointer"
+                    disableChange ? 'opacity-50' : 'cursor-pointer'
                   }`}
                   priority
-                  onClick={() => changeQuestion(question, index)}
+                  onClick={async () => {
+                    if (!disableChange) {
+                      try {
+                        await changeQuestion(question, index);
+                        if (numberOfChange - 1 !== 0) {
+                          setDisableChange(false);
+                        }
+                      } catch (error) {
+                        if (isAbortError(error)) {
+                          console.error(
+                            "La requête a été annulée à cause du délai d'expiration"
+                          );
+                        } else if (error instanceof Error) {
+                          console.error(error.message);
+                        } else {
+                          console.error('Une erreur inconnue est survenue');
+                        }
+                      }
+                    }
+                  }}
                 />
               )}
             </li>
@@ -214,8 +231,8 @@ function ShowQuestionsFunction() {
           <button
             className={`${
               disableChange && numberOfChange !== 0
-                ? "ShowQuestions_button_create_close"
-                : "ShowQuestions_button_create"
+                ? 'ShowQuestions_button_create_close'
+                : 'ShowQuestions_button_create'
             } mb-5`}
             onClick={startExam}
             disabled={disableChange && numberOfChange !== 0}

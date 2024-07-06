@@ -1,11 +1,11 @@
-"use client";
-import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { SyncLoader } from "react-spinners";
-import Menu from "@/components/menu/Menu";
-import Footer from "@/components/footer/Footer";
-import CreateExamOptions from "@/components/create_exam_options/CreateExamOptions";
-import { useAppContext } from "../context";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import { SyncLoader } from 'react-spinners';
+import Menu from '@/components/menu/Menu';
+import Footer from '@/components/footer/Footer';
+import CreateExamOptions from '@/components/create_exam_options/CreateExamOptions';
+import { useAppContext } from '../context';
+import { useRouter } from 'next/navigation';
 
 export type OptionsSettingType = {
   bound_to: string;
@@ -30,16 +30,16 @@ export const DraftingFunctions = () => {
     filiere: true,
     matiere: true,
     chapitre: true,
-    questions: true,
+    questions: true
   });
   const [changedOption, setChangedOption] = useState<ChangedOptionType>({
-    champ: "",
-    value: "",
+    champ: '',
+    value: ''
   });
   const [collectedOptions, setCollectedOptions] = useState<string[][]>([]);
   const [optionsSetting, setOptionsSetting] = useState<OptionsSettingType>({
-    bound_to: "Classe",
-    classe: "",
+    bound_to: 'Classe',
+    classe: ''
   });
   const {
     selectedOptions,
@@ -47,34 +47,34 @@ export const DraftingFunctions = () => {
     setGeneratedQuestions,
     setNumberOfChange,
     setCanChangeAllQuestions,
-    request,
+    request
   } = useAppContext();
 
   const differentParts = [
     {
-      field: "classe",
-      title: "Classe",
+      field: 'classe',
+      title: 'Classe'
     },
     {
-      field: "filiere",
-      title: "Filière",
+      field: 'filiere',
+      title: 'Filière'
     },
     {
-      field: "matiere",
-      title: "Matière",
+      field: 'matiere',
+      title: 'Matière'
     },
     {
-      field: "chapitre",
-      title: "Chapitre",
+      field: 'chapitre',
+      title: 'Chapitre'
     },
     {
-      field: "questions",
-      title: "Le nombre de questions",
-    },
+      field: 'questions',
+      title: 'Le nombre de questions'
+    }
   ];
 
   useEffect(() => {
-    localStorage.setItem("appState", JSON.stringify({}));
+    localStorage.setItem('appState', JSON.stringify({}));
     const options = async () => {
       try {
         const response = await fetch(
@@ -83,21 +83,21 @@ export const DraftingFunctions = () => {
           }${
             optionsSetting.classe.length > 0
               ? `&classe=${optionsSetting.classe}`
-              : ""
-          }`,
+              : ''
+          }`
         );
 
         if (!response.ok) {
-          alert("La correction a échoué");
-          throw new Error("La requête a échoué");
+          alert('La correction a échoué');
+          throw new Error('La requête a échoué');
         }
 
         const data = await response.json();
 
         if (data && Array.isArray(data)) {
-          setCollectedOptions((prevState) => [
+          setCollectedOptions(prevState => [
             ...prevState,
-            data.map((option) => option.name),
+            data.map(option => option.name)
           ]);
         } else {
           console.error("La réponse du serveur n'est pas un tableau");
@@ -120,9 +120,9 @@ export const DraftingFunctions = () => {
       const newShowParts = showPartsKeys.reduce(
         (acc, key, idx) => ({
           ...acc,
-          [key]: idx >= BackToIndex,
+          [key]: idx >= BackToIndex
         }),
-        {},
+        {}
       );
 
       const newSelectedPieces = selectedOptionsKeys.reduce(
@@ -130,12 +130,12 @@ export const DraftingFunctions = () => {
           ...acc,
           [key]:
             idx > BackToIndex
-              ? ""
+              ? ''
               : key === changedOption.champ
                 ? changedOption.value
-                : selectedOptions[key],
+                : selectedOptions[key]
         }),
-        {},
+        {}
       );
 
       const spliceOptions = collectedOptions.slice(0, BackToIndex + 1);
@@ -145,8 +145,8 @@ export const DraftingFunctions = () => {
       setSelectedOptions(newSelectedPieces);
       setShowModal(false);
       setChangedOption({
-        champ: "",
-        value: "",
+        champ: '',
+        value: ''
       });
       setGeneratedQuestions([]);
       setNumberOfChange(5);
@@ -162,7 +162,7 @@ export const DraftingFunctions = () => {
     setNumberOfChange,
     setSelectedOptions,
     setShowModal,
-    showParts,
+    showParts
   ]);
 
   const cancelOptionChange = useCallback(() => {
@@ -175,9 +175,9 @@ export const DraftingFunctions = () => {
       const questions = await request();
 
       if (questions && questions.length > 0) {
-        router.push("show_questions");
+        router.push('show_questions');
       } else {
-        alert("Une erreur est survenue essayer à nouveau");
+        alert('Une erreur est survenue essayer à nouveau');
         setLoading(false);
       }
     } catch (err) {

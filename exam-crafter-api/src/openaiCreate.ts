@@ -39,7 +39,7 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
               2. Matière : {matiere}
               3. Chapitre : {chapitre}
               4. La question doit être uniquement répondable à l'écrit
-              
+
               response_format: "json object"
           `),
           classe: (input) => input.classe,
@@ -102,8 +102,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
         {checkOrder}
         
         Effectuez une dernière vérification pour vous assurer que toutes les questions sont appropriées et prêtes pour un examen. 
-        La réponse doit être sous forme d'un array contenant toutes les questions, surtout ne changez pas l’ordre des questions.
-        Retourner le array et rien d'autre.
+        La réponse doit être sous forme d'un array contenant des string qui sont les questions, surtout ne changez pas l’ordre des questions.
+        Retourner le array avec les string à l'intérieur (les questions) et rien d'autre.
       `),
       ];
 

@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
-import ShowQuestionsFunction from "./functions";
-import Head from "@/components/head/Head";
+import React, { Fragment } from 'react';
+import ShowQuestionsFunction from './functions';
+import Head from '@/components/head/Head';
 
 function ShowQuestions() {
   return (
