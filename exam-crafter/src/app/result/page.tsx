@@ -1,7 +1,7 @@
-import { Fragment } from "react";
-import "./Result.scss";
-import { ResultFunctions } from "./functions";
-import Head from "@/components/head/Head";
+import { Fragment } from 'react';
+import './Result.scss';
+import { ResultFunctions } from './functions';
+import Head from '@/components/head/Head';
 
 function Result() {
   return (

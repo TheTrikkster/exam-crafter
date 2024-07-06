@@ -1,7 +1,7 @@
-"use client";
-import React, { Fragment, useEffect, useState } from "react";
-import Footer from "@/components/footer/Footer";
-import Menu from "@/components/menu/Menu";
+'use client';
+import React, { Fragment, useEffect, useState } from 'react';
+import Footer from '@/components/footer/Footer';
+import Menu from '@/components/menu/Menu';
 
 export const ResultFunctions = () => {
   const [responses, setResponses] = useState<Record<number, string>>({});
@@ -15,13 +15,13 @@ export const ResultFunctions = () => {
   useEffect(() => {
     try {
       const allQuestions = JSON.parse(
-        window.localStorage.getItem("questions") || "[]",
+        window.localStorage.getItem('questions') || '[]'
       );
       const allResponses = JSON.parse(
-        window.localStorage.getItem("responses") || "{}",
+        window.localStorage.getItem('responses') || '{}'
       );
       const allCorrections = JSON.parse(
-        window.localStorage.getItem("corrections") || "[]",
+        window.localStorage.getItem('corrections') || '[]'
       );
 
       setExamUnfinished(allCorrections.length === 0);
@@ -33,12 +33,12 @@ export const ResultFunctions = () => {
         const totalGrade = allCorrections.reduce(
           (sum: number, current: { grade: string }) =>
             sum + Number(current.grade),
-          0,
+          0
         );
         setGrade(totalGrade);
       }
     } catch (error) {
-      console.error("Error parsing data from local storage:", error);
+      console.error('Error parsing data from local storage:', error);
     }
   }, []);
 
@@ -62,11 +62,11 @@ export const ResultFunctions = () => {
             <p
               className={`Result_grade ${
                 grade < 0.4 * questions.length
-                  ? "Result_grade_red"
+                  ? 'Result_grade_red'
                   : grade >= 0.4 * questions.length &&
                       grade < 0.7 * questions.length
-                    ? "Result_grade_orange"
-                    : "Result_grade_green"
+                    ? 'Result_grade_orange'
+                    : 'Result_grade_green'
               }`}
             >
               Note: {grade}/{questions.length}

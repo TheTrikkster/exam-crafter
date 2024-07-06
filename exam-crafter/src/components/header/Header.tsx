@@ -1,6 +1,6 @@
-import "./Header.scss";
-import Menu from "../menu/Menu";
-import PhotoGallery from "../responsive_image/ResponsiveImage";
+import './Header.scss';
+import Menu from '../menu/Menu';
+import PhotoGallery from '../responsive_image/ResponsiveImage';
 
 function Header() {
   return (

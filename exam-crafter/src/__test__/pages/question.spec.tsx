@@ -1,13 +1,13 @@
 // import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom';
 // import Question from "../../app/question/[id]/page";
 
 const mockPush = jest.fn();
-jest.mock("next/navigation", () => ({
+jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
-    query: { id: "1" },
-  }),
+    query: { id: '1' }
+  })
 }));
 
 // describe("QuestionPage Component", () => {

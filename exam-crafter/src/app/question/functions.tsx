@@ -1,16 +1,16 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { SyncLoader } from "react-spinners";
-import { QuestionType } from "./[id]/page";
-import "./[id]/Question.scss";
-import CloseIcon from "../../../public/effacer.png";
-import Image from "next/image";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { SyncLoader } from 'react-spinners';
+import { QuestionType } from './[id]/page';
+import './[id]/Question.scss';
+import CloseIcon from '../../../public/effacer.png';
+import Image from 'next/image';
 
 export const QuestionFunctions = ({ params }: QuestionType) => {
   const id = useMemo(() => Number(params.id), [params.id]);
   const router = useRouter();
-  const [response, setResponse] = useState<string>("");
+  const [response, setResponse] = useState<string>('');
   const [reponseError, setReponseError] = useState<{
     toLong: boolean;
     generation: boolean;
@@ -21,15 +21,15 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
   const [allResponses, setAllResponses] = useState<Record<number, string>>({});
 
   useEffect(() => {
-    setQuestions(JSON.parse(window.localStorage.getItem("questions") || "[]"));
+    setQuestions(JSON.parse(window.localStorage.getItem('questions') || '[]'));
     setAllResponses(
-      JSON.parse(window.localStorage.getItem("responses") || "{}"),
+      JSON.parse(window.localStorage.getItem('responses') || '{}')
     );
   }, []);
 
   const sendResponse = useCallback(() => {
     allResponses[id] = response;
-    window.localStorage.setItem("responses", JSON.stringify(allResponses));
+    window.localStorage.setItem('responses', JSON.stringify(allResponses));
   }, [allResponses, id, response]);
 
   const request = useCallback(async () => {
@@ -37,20 +37,20 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
       const waitResponse = await fetch(
         `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/correct-exam`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             questions,
-            responses: allResponses,
-          }),
-        },
+            responses: allResponses
+          })
+        }
       );
       if (!waitResponse.ok) {
         setLoading(false);
-        alert("La correction a échoué");
-        throw new Error("La requête a échoué");
+        alert('La correction a échoué');
+        throw new Error('La requête a échoué');
       }
 
       const correctionExam = await waitResponse.json();
@@ -63,7 +63,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
   const fetchData = useCallback(async () => {
     try {
       const corrections = await request();
-      window.localStorage.setItem("corrections", JSON.stringify(corrections));
+      window.localStorage.setItem('corrections', JSON.stringify(corrections));
       router.push(`/result`);
     } catch (err) {
       console.error(err);
@@ -72,9 +72,9 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
 
   const confirmOptionChange = useCallback(() => {
     setShowModal(false);
-    window.localStorage.setItem("questions", JSON.stringify([]));
-    window.localStorage.setItem("responses", JSON.stringify({}));
-    window.localStorage.setItem("corrections", JSON.stringify([]));
+    window.localStorage.setItem('questions', JSON.stringify([]));
+    window.localStorage.setItem('responses', JSON.stringify({}));
+    window.localStorage.setItem('corrections', JSON.stringify([]));
     router.push(`/drafting`);
   }, [router]);
 
@@ -86,7 +86,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
     (nextQuestionId: number) => {
       router.push(`/question/${nextQuestionId}`);
     },
-    [router],
+    [router]
   );
 
   const nextQuestion = useCallback(() => {
@@ -99,9 +99,9 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
       }
       sendResponse();
     } else {
-      setReponseError((prevState) => ({
+      setReponseError(prevState => ({
         ...prevState,
-        toLong: true,
+        toLong: true
       }));
     }
   }, [response, questions.length, id, fetchData, handleAnswer, sendResponse]);
@@ -166,21 +166,21 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
         {reponseError.toLong || reponseError.generation ? (
           <p className="Question_reponse_to_long">
             {reponseError.toLong
-              ? "Votre réponse est beaucoup trop longue"
-              : "Erreur lors de la génération de la correction"}
+              ? 'Votre réponse est beaucoup trop longue'
+              : 'Erreur lors de la génération de la correction'}
           </p>
         ) : null}
         <textarea
-          style={{ resize: "none", caretColor: "auto" }}
+          style={{ resize: 'none', caretColor: 'auto' }}
           className="Question_response_field"
           value={response}
           placeholder="Vous devez écrire votre réponse ici"
-          onChange={(event) => setResponse(event.target.value)}
+          onChange={event => setResponse(event.target.value)}
         />
         <div className="Question_button_container">
           <button
             className={`${
-              response.length > 0 ? " opacity-100" : "opacity-50"
+              response.length > 0 ? ' opacity-100' : 'opacity-50'
             } w-36 bg-[#E54C18] text-white rounded-3xl p-3`}
             onClick={nextQuestion}
             disabled={response.length === 0}

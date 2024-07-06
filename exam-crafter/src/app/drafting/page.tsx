@@ -1,7 +1,7 @@
-import "./Drafting.scss";
-import Head from "@/components/head/Head";
-import { DraftingFunctions } from "./functions";
-import { Fragment } from "react";
+import './Drafting.scss';
+import Head from '@/components/head/Head';
+import { DraftingFunctions } from './functions';
+import { Fragment } from 'react';
 
 function Drafting() {
   return (

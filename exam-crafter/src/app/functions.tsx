@@ -1,5 +1,5 @@
-"use client";
-import { useRef, createContext, useContext } from "react";
+'use client';
+import { useRef, createContext, useContext } from 'react';
 
 export function useFooterRef() {
   return useRef<HTMLDivElement | null>(null);
@@ -7,7 +7,7 @@ export function useFooterRef() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ThemeContext = createContext<any>({
-  current: "",
+  current: ''
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: any) {
 
 export function TheContext() {
   const refFromContext = useContext(ThemeContext);
-  if ("current" in refFromContext) {
+  if ('current' in refFromContext) {
     return <div ref={refFromContext}></div>;
   }
   return null;
@@ -29,6 +29,6 @@ export function TheContext() {
 
 export function ScrollToFooter(footerRef: React.RefObject<HTMLDivElement>) {
   if (footerRef.current) {
-    footerRef.current.scrollIntoView({ behavior: "smooth" });
+    footerRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 }

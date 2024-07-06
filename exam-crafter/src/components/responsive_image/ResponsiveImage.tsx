@@ -1,14 +1,14 @@
-"use client";
-import Image from "next/image";
-import "./ResponsiveImage.scss";
-import useWindowSize from "../window_size/useWindowSize";
-import HeaderImage5 from "../../../public/home5.png";
-import HeaderImage1 from "../../../public/home1.png";
-import HeaderImage2 from "../../../public/home2.png";
-import HeaderImage3 from "../../../public/home3.png";
-import HeaderImage4 from "../../../public/home4.png";
-import Mobile1 from "../../../public/Mobile1.png";
-import Mobile2 from "../../../public/Mobile2.png";
+'use client';
+import Image from 'next/image';
+import './ResponsiveImage.scss';
+import useWindowSize from '../window_size/useWindowSize';
+import HeaderImage5 from '../../../public/home5.png';
+import HeaderImage1 from '../../../public/home1.png';
+import HeaderImage2 from '../../../public/home2.png';
+import HeaderImage3 from '../../../public/home3.png';
+import HeaderImage4 from '../../../public/home4.png';
+import Mobile1 from '../../../public/Mobile1.png';
+import Mobile2 from '../../../public/Mobile2.png';
 
 // type ImageProps = {
 //   blurDataURL: string;
@@ -37,13 +37,13 @@ const PhotoGallery = () => {
     HeaderImage1,
     HeaderImage2,
     HeaderImage3,
-    HeaderImage4,
+    HeaderImage4
   ];
 
   const photosMobile = [
-    { src: Mobile1, class: "ResponsiveImage_small" },
-    { src: HeaderImage2, class: "ResponsiveImage_big" },
-    { src: Mobile2, class: "ResponsiveImage_small" },
+    { src: Mobile1, class: 'ResponsiveImage_small' },
+    { src: HeaderImage2, class: 'ResponsiveImage_big' },
+    { src: Mobile2, class: 'ResponsiveImage_small' }
   ];
 
   if (width === null) {
@@ -56,7 +56,7 @@ const PhotoGallery = () => {
   return (
     <div className="w-full flex gap-x-3">
       {photosToShow.map((photo, index: number) => {
-        if ("class" in photo) {
+        if ('class' in photo) {
           return (
             <Image
               key={index}

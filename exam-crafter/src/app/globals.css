@@ -19,9 +19,12 @@ a {
 
 p {
   font-size: 17px;
-  font-family: "Helvetica";
+  font-family: 'Helvetica';
 }
 
-h1, h2, h3, h4 {
-  font-family: "Helvetica Neue";
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Helvetica Neue';
 }

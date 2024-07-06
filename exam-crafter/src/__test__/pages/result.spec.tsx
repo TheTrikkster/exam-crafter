@@ -1,5 +1,5 @@
 // import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom';
 // import Result from "../../app/result/page";
 
 // describe("Analyse data", () => {

@@ -1,12 +1,12 @@
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import { useAppContext } from "@/app/context";
-import Drafting from "@/app/drafting/page";
-import fetchMock from "jest-fetch-mock";
-import userEvent from "@testing-library/user-event";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { useAppContext } from '@/app/context';
+import Drafting from '@/app/drafting/page';
+import fetchMock from 'jest-fetch-mock';
+import userEvent from '@testing-library/user-event';
 
-jest.mock("../../app/context", () => ({
-  useAppContext: jest.fn(),
+jest.mock('../../app/context', () => ({
+  useAppContext: jest.fn()
 }));
 
 const mockContextValue = {
@@ -15,7 +15,7 @@ const mockContextValue = {
   setGeneratedQuestions: jest.fn(),
   setNumberOfChange: jest.fn(),
   setCanChangeAllQuestions: jest.fn(),
-  request: jest.fn().mockResolvedValue([]),
+  request: jest.fn().mockResolvedValue([])
 };
 
 (useAppContext as jest.Mock).mockReturnValue(mockContextValue);
@@ -31,28 +31,28 @@ afterEach(() => {
 
 const fetchClasseResponse = [
   {
-    name: "Seconde",
-    bound_to: ["Classe"],
+    name: 'Seconde',
+    bound_to: ['Classe']
   },
   {
-    name: "Première",
-    bound_to: ["Classe"],
+    name: 'Première',
+    bound_to: ['Classe']
   },
   {
-    name: "Terminale",
-    bound_to: ["Classe"],
-  },
+    name: 'Terminale',
+    bound_to: ['Classe']
+  }
 ];
 
 const fetchFiliereResponse = [
   {
-    name: "Professionnelle",
-    bound_to: ["Seconde"],
+    name: 'Professionnelle',
+    bound_to: ['Seconde']
   },
   {
-    name: "Générale et Technologies",
-    bound_to: ["Seconde"],
-  },
+    name: 'Générale et Technologies',
+    bound_to: ['Seconde']
+  }
 ];
 
 // const fetchMatiereResponse = [
@@ -88,14 +88,14 @@ const fetchFiliereResponse = [
 //   }
 // };
 
-describe("DraftingFunctions Component", () => {
+describe('DraftingFunctions Component', () => {
   it('renders "Seconde" in options', async () => {
     fetchMock.mockResponseOnce(JSON.stringify(fetchClasseResponse));
 
     render(<Drafting />);
 
     await waitFor(() => {
-      expect(screen.getByText("Seconde")).toBeInTheDocument();
+      expect(screen.getByText('Seconde')).toBeInTheDocument();
     });
   });
 
@@ -105,17 +105,17 @@ describe("DraftingFunctions Component", () => {
     render(<Drafting />);
 
     await waitFor(() => {
-      expect(screen.getByText("Seconde")).toBeInTheDocument();
+      expect(screen.getByText('Seconde')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByText("Seconde"));
+    userEvent.click(screen.getByText('Seconde'));
 
     fetchMock.mockResponseOnce(JSON.stringify(fetchFiliereResponse));
 
-    userEvent.click(screen.getByText("Continuer"));
+    userEvent.click(screen.getByText('Continuer'));
 
     await waitFor(() => {
-      expect(screen.getByText("Professionnelle")).toBeInTheDocument();
+      expect(screen.getByText('Professionnelle')).toBeInTheDocument();
     });
   });
 
@@ -172,8 +172,8 @@ describe("DraftingFunctions Component", () => {
 
     render(<Drafting />);
 
-    const continuerChapitreButton = await screen.findByText("Continuer", {
-      selector: "button:not(.hidden)",
+    const continuerChapitreButton = await screen.findByText('Continuer', {
+      selector: 'button:not(.hidden)'
     });
 
     await waitFor(() => {

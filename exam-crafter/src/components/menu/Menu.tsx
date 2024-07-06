@@ -1,10 +1,10 @@
-"use client";
-import React, { Fragment, useState, useContext } from "react";
-import "./Menu.scss";
-import MenuIcon from "../../../public/menu.png";
-import CloseIcon from "../../../public/effacer.png";
-import Image from "next/image";
-import { ScrollToFooter, ThemeContext } from "@/app/functions";
+'use client';
+import React, { Fragment, useState, useContext } from 'react';
+import './Menu.scss';
+import MenuIcon from '../../../public/menu.png';
+import CloseIcon from '../../../public/effacer.png';
+import Image from 'next/image';
+import { ScrollToFooter, ThemeContext } from '@/app/functions';
 
 function Menu() {
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -13,17 +13,17 @@ function Menu() {
   const context = useContext(ThemeContext);
 
   const menuContainerClass = mobileMenu
-    ? "Menu_container_fixed"
-    : "Menu_container";
-  const menuIconClass = mobileMenu ? "Menu_icon_close" : "Menu_icon";
-  const closeIconClass = mobileMenu ? "Menu_icon" : "Menu_icon_close";
+    ? 'Menu_container_fixed'
+    : 'Menu_container';
+  const menuIconClass = mobileMenu ? 'Menu_icon_close' : 'Menu_icon';
+  const closeIconClass = mobileMenu ? 'Menu_icon' : 'Menu_icon_close';
   const menuRightElementsClass = mobileMenu
     ? closingMenu
-      ? "Menu_right_elements_container_animate"
-      : "Menu_right_elements_container_mobile"
-    : "Menu_right_elements_container";
+      ? 'Menu_right_elements_container_animate'
+      : 'Menu_right_elements_container_mobile'
+    : 'Menu_right_elements_container';
   const menuPositionClass = `Menu_elements_position  ${
-    closingMenu ? "closing" : ""
+    closingMenu ? 'closing' : ''
   }`;
 
   const handleCloseMenu = () => {
@@ -80,7 +80,7 @@ function Menu() {
           </div>
         </ul>
       </nav>
-      <div className={mobileMenu ? "Menu_if_position_fixed" : ""}></div>
+      <div className={mobileMenu ? 'Menu_if_position_fixed' : ''}></div>
     </Fragment>
   );
 }

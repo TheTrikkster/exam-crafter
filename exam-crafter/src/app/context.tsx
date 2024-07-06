@@ -1,13 +1,13 @@
-"use client";
+'use client';
 import React, {
   createContext,
   useContext,
   useState,
   ReactNode,
   useEffect,
-  useCallback,
-} from "react";
-import { isAbortError } from "./show_questions/functions";
+  useCallback
+} from 'react';
+import { isAbortError } from './show_questions/functions';
 
 export type SelectedOptionsType = {
   [key: string]: string;
@@ -18,21 +18,21 @@ export type AppContextType = {
   setSelectedOptions: (
     value:
       | SelectedOptionsType
-      | ((prevState: SelectedOptionsType) => SelectedOptionsType),
+      | ((prevState: SelectedOptionsType) => SelectedOptionsType)
   ) => void;
   generatedQuestions: string[];
   setGeneratedQuestions: (
-    value: string[] | ((prevState: string[]) => string[]),
+    value: string[] | ((prevState: string[]) => string[])
   ) => void;
   numberOfChange: number;
   setNumberOfChange: (value: number | ((prevState: number) => number)) => void;
   canChangeAllQuestions: boolean;
   setCanChangeAllQuestions: (
-    value: boolean | ((prevState: boolean) => boolean),
+    value: boolean | ((prevState: boolean) => boolean)
   ) => void;
   disableChange: boolean;
   setDisableChange: (
-    value: boolean | ((prevState: boolean) => boolean),
+    value: boolean | ((prevState: boolean) => boolean)
   ) => void;
   request: () => Promise<string[] | undefined>;
 };
@@ -41,11 +41,11 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export function AppWrapper({ children }: { children: ReactNode }) {
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptionsType>({
-    classe: "",
-    filiere: "",
-    matiere: "",
-    chapitre: "",
-    questions: "",
+    classe: '',
+    filiere: '',
+    matiere: '',
+    chapitre: '',
+    questions: ''
   });
   const [generatedQuestions, setGeneratedQuestions] = useState<string[]>([]);
   const [numberOfChange, setNumberOfChange] = useState<number>(5);
@@ -54,7 +54,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
   const [disableChange, setDisableChange] = useState<boolean>(false);
 
   useEffect(() => {
-    const savedState = JSON.parse(localStorage.getItem("appState") || "{}");
+    const savedState = JSON.parse(localStorage.getItem('appState') || '{}');
     if (Object.keys(savedState).length > 0) {
       setGeneratedQuestions(savedState.generatedQuestions || []);
       setNumberOfChange(savedState.numberOfChange ?? 5);
@@ -62,12 +62,12 @@ export function AppWrapper({ children }: { children: ReactNode }) {
       setDisableChange(savedState.disableChange ?? false);
       setSelectedOptions(
         savedState.selectedOptions || {
-          classe: "",
-          filiere: "",
-          matiere: "",
-          chapitre: "",
-          questions: "",
-        },
+          classe: '',
+          filiere: '',
+          matiere: '',
+          chapitre: '',
+          questions: ''
+        }
       );
     }
   }, []);
@@ -78,15 +78,15 @@ export function AppWrapper({ children }: { children: ReactNode }) {
       numberOfChange,
       canChangeAllQuestions,
       disableChange,
-      selectedOptions,
+      selectedOptions
     };
-    localStorage.setItem("appState", JSON.stringify(appState));
+    localStorage.setItem('appState', JSON.stringify(appState));
   }, [
     generatedQuestions,
     numberOfChange,
     canChangeAllQuestions,
     disableChange,
-    selectedOptions,
+    selectedOptions
   ]);
 
   const request = useCallback(async () => {
@@ -95,16 +95,16 @@ export function AppWrapper({ children }: { children: ReactNode }) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(selectedOptions),
-          signal: controller.signal,
-        },
+          signal: controller.signal
+        }
       );
 
-      if (!response.ok) throw new Error("La requête a échoué");
+      if (!response.ok) throw new Error('La requête a échoué');
 
       const questions = await response.json();
 
@@ -119,7 +119,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
       } else if (error instanceof Error) {
         console.error(error.message);
       } else {
-        console.error("Une erreur inconnue est survenue");
+        console.error('Une erreur inconnue est survenue');
       }
     }
   }, [selectedOptions]);
@@ -137,7 +137,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
         setCanChangeAllQuestions,
         disableChange,
         setDisableChange,
-        request,
+        request
       }}
     >
       {children}
@@ -148,7 +148,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
 export function useAppContext() {
   const context = useContext(AppContext);
   if (context === null) {
-    throw new Error("useAppContext must be used within an AppWrapper");
+    throw new Error('useAppContext must be used within an AppWrapper');
   }
   return context;
 }

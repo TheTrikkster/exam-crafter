@@ -1,15 +1,15 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
-import { AppWrapper } from "./context";
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { AppWrapper } from './context';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "Exam Crafter",
+  title: 'Exam Crafter'
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { Fragment } from "react";
-import GoogleAnalytics from "@bradgarropy/next-google-analytics";
+import Head from 'next/head';
+import { Fragment } from 'react';
+import GoogleAnalytics from '@bradgarropy/next-google-analytics';
 
 type HeadType = {
   title: string;

@@ -1,20 +1,20 @@
-import "./page.scss";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
-import Head from "@/components/head/Head";
-import { ThemeProvider } from "./functions";
-import { Fragment } from "react";
+import './page.scss';
+import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
+import Head from '@/components/head/Head';
+import { ThemeProvider } from './functions';
+import { Fragment } from 'react';
 
 export default function Home() {
   const textsMenu = [
     {
-      title: "Objectif du Projet",
-      text: "Si vous êtes un étudiant qui cherche à s'entraîner et à s'améliorer, vous êtes au bon endroit. Ce projet est conçu pour tous les étudiants, qu'ils aient des difficultés et cherchent à progresser, ou qu'ils souhaitent simplement s'améliorer sur une partie précise de leur cours.",
+      title: 'Objectif du Projet',
+      text: "Si vous êtes un étudiant qui cherche à s'entraîner et à s'améliorer, vous êtes au bon endroit. Ce projet est conçu pour tous les étudiants, qu'ils aient des difficultés et cherchent à progresser, ou qu'ils souhaitent simplement s'améliorer sur une partie précise de leur cours."
     },
     {
-      title: "Fonctionnement",
-      text: "Le processus est très simple. Suivez les étapes, une fois finis l'IA créera un examen, ensuite vous pourrait changer les questions si nécessaire. Quand l'examen terminé, vous recevrez une correction. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, nous vous prions de nous excuser à l'avance si cela se produit.",
-    },
+      title: 'Fonctionnement',
+      text: "Le processus est très simple. Suivez les étapes, une fois finis l'IA créera un examen, ensuite vous pourrait changer les questions si nécessaire. Quand l'examen terminé, vous recevrez une correction. Veuillez noter que cette intelligence artificielle, bien qu'avancée, n'est pas infaillible. Il se peut qu'il y ait des erreurs occasionnelles, nous vous prions de nous excuser à l'avance si cela se produit."
+    }
   ];
 
   return (

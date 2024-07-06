@@ -1,9 +1,9 @@
-import "./Footer.scss";
-import Image, { StaticImageData } from "next/image";
-import Linkedin from "../../../public/linkedin.png";
-import Github from "../../../public/github.png";
-import Email from "../../../public/email.png";
-import { TheContext } from "@/app/functions";
+import './Footer.scss';
+import Image, { StaticImageData } from 'next/image';
+import Linkedin from '../../../public/linkedin.png';
+import Github from '../../../public/github.png';
+import Email from '../../../public/email.png';
+import { TheContext } from '@/app/functions';
 
 type ContactType = {
   src: StaticImageData;
@@ -15,19 +15,19 @@ function Footer() {
   const contact = [
     {
       src: Linkedin,
-      href: "https://www.linkedin.com/in/israil-doukhaev-61a41a218/",
-      alt: "icon linkedin",
+      href: 'https://www.linkedin.com/in/israil-doukhaev-61a41a218/',
+      alt: 'icon linkedin'
     },
     {
       src: Github,
-      href: "https://github.com/TheTrikkster/exam-crafter",
-      alt: "icon github",
+      href: 'https://github.com/TheTrikkster/exam-crafter',
+      alt: 'icon github'
     },
     {
       src: Email,
-      href: "mailto:israilst67@gmail.com",
-      alt: "icon email",
-    },
+      href: 'mailto:israilst67@gmail.com',
+      alt: 'icon email'
+    }
   ];
 
   return (

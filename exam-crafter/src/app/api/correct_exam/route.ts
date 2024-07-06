@@ -84,21 +84,21 @@
 //   }
 // }
 
-import { NextApiResponse } from "next";
-import { response } from "../common/reponse";
+import { NextApiResponse } from 'next';
+import { response } from '../common/reponse';
 
 // Fonction pour gérer les requêtes API
 export async function POST(req: Request, res: NextApiResponse) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     try {
       const result = await response();
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
     // Gérer les autres méthodes HTTP, par exemple GET, PUT, DELETE, etc.
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

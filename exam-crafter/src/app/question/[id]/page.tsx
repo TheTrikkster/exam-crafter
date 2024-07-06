@@ -1,6 +1,6 @@
-import "./Question.scss";
-import Head from "@/components/head/Head";
-import { QuestionFunctions } from "../functions";
+import './Question.scss';
+import Head from '@/components/head/Head';
+import { QuestionFunctions } from '../functions';
 
 export type QuestionType = {
   params: { id: string };

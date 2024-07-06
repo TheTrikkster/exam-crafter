@@ -1,44 +1,43 @@
 .ShowQuestions_button_create_close {
-    padding: 10px 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: #E54C18;
-    color: white;
-    opacity: 0.5;
-  }
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #e54c18;
+  color: white;
+  opacity: 0.5;
+}
 
 .ShowQuestions_button_create {
-    padding: 10px 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: #E54C18;
-    color: white;
-    cursor: pointer;
-  }
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #e54c18;
+  color: white;
+  cursor: pointer;
+}
 
 .ShowQuestions_not_show {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .ShowQuestions_not_show_text {
-    color: grey;
-    font-size: 25px;
-    margin-top: 50px;
+  color: grey;
+  font-size: 25px;
+  margin-top: 50px;
 }
 
-
 .ShowQuestions_loading {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .ShowQuestions_loading_text {
   color: grey;
   font-size: 25px;

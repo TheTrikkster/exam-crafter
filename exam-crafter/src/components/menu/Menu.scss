@@ -1,219 +1,226 @@
-.Menu_container, .Menu_container_fixed {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-    padding: 13px 5% 13px 5%;
-    background-color: white;
-    color: #233567;
-    z-index: 1;
-    position: relative;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.20);
+.Menu_container,
+.Menu_container_fixed {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  padding: 13px 5% 13px 5%;
+  background-color: white;
+  color: #233567;
+  z-index: 1;
+  position: relative;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
-.Menu_right_elements_container, .Menu_right_elements_container_mobile {
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1;
+.Menu_right_elements_container,
+.Menu_right_elements_container_mobile {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
 }
 
 nav h2 {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 nav ul li {
-    color: black;
-    display: inline-block;
-    margin-left: 30px;
-    border-radius: 3px;
-    cursor: pointer;
+  color: black;
+  display: inline-block;
+  margin-left: 30px;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .Menu_elements_position > .Menu_element:first-child {
-    padding: 7px 10px;
+  padding: 7px 10px;
 }
 
 nav ul li a {
-    padding: 7px 10px;
-    border-radius: 3px;
+  padding: 7px 10px;
+  border-radius: 3px;
 }
 
 .Menu_element:hover {
-    background-color: #D0D3D4;
-    transition: 1s;
-    align-items: center;
+  background-color: #d0d3d4;
+  transition: 1s;
+  align-items: center;
 }
 
 .Menu_icon_container {
-    display: none;
+  display: none;
 }
 
 .Menu_icon {
-    width: 30px;
-    height: auto;
+  width: 30px;
+  height: auto;
 }
 
 .Menu_if_position_fixed {
-    height: 0;
+  height: 0;
 }
 
 @media screen and (max-width: 1050px) {
-    .Menu_container, .Menu_container_fixed {
-        padding: 10px 16.4% 10px 17.5%;
-    }
+  .Menu_container,
+  .Menu_container_fixed {
+    padding: 10px 16.4% 10px 17.5%;
+  }
 }
 
 @media screen and (max-width: 850px) {
-    .Menu_container, .Menu_container_fixed {
-        padding: 10px 16.2% 10px 17.5%;
-    }
+  .Menu_container,
+  .Menu_container_fixed {
+    padding: 10px 16.2% 10px 17.5%;
+  }
 
-    nav ul li {
-        margin-left: 15px;
-    }
+  nav ul li {
+    margin-left: 15px;
+  }
 }
 
 @media screen and (max-width: 700px) {
-    .Menu_container, .Menu_container_fixed {
-        padding: 10px 16% 10px 17.5%;
-    }
+  .Menu_container,
+  .Menu_container_fixed {
+    padding: 10px 16% 10px 17.5%;
+  }
 
-    nav h2 {
-        font-size: 1.3em;
-    }
+  nav h2 {
+    font-size: 1.3em;
+  }
 }
 
 @media screen and (max-width: 655px) {
-    nav ul li {
-        margin-left: 0px;
-        padding: 0;
-    }
+  nav ul li {
+    margin-left: 0px;
+    padding: 0;
+  }
 
-    .Menu_elements_position > .Menu_element:first-child {
-        margin-left: 9px;
-        padding: 5px 7px;
-    }
+  .Menu_elements_position > .Menu_element:first-child {
+    margin-left: 9px;
+    padding: 5px 7px;
+  }
 
-    nav ul li a {
-        margin-left: 9px;
-        padding: 5px 7px;
-    }
+  nav ul li a {
+    margin-left: 9px;
+    padding: 5px 7px;
+  }
 }
 
 @media screen and (max-width: 600px) {
-    .Menu_container {
-        width: 100%;
-        padding: 10px 20px;
-    }
+  .Menu_container {
+    width: 100%;
+    padding: 10px 20px;
+  }
 
-    .Menu_container_fixed {
-        padding: 0;
-        position: fixed;
-    }
+  .Menu_container_fixed {
+    padding: 0;
+    position: fixed;
+  }
 
-    .Menu_container_fixed .Menu_header_fixed {
-        padding: 10px 20px;
-    }
-    
-    .Menu_header_fixed {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        z-index: 2;
-        position: sticky;
-        background-color: white;
-        top: 0;
-    }
+  .Menu_container_fixed .Menu_header_fixed {
+    padding: 10px 20px;
+  }
 
-    nav h2 {
-        width: 100%;
-        font-size: 1.5em;
-    }
+  .Menu_header_fixed {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 2;
+    position: sticky;
+    background-color: white;
+    top: 0;
+  }
 
-    .Menu_right_elements_container {
-        visibility: hidden;
-        position: fixed;
-        flex-direction: column;
-        opacity: 0;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    }
-    
-    .Menu_right_elements_container_animate {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        position: fixed;
-        width: 100%;
-        height: 100vh;
-        background-color: white;
-        top: 50px;
-        left: 0;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease-out;
-    }
+  nav h2 {
+    width: 100%;
+    font-size: 1.5em;
+  }
 
-    .Menu_right_elements_container_mobile {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        position: fixed;
-        width: 100%;
-        height: 100vh;
-        background-color: white;
-        top: 50px;
-        left: 0;
-        transition: transform 0.3s ease-out;
-    }
+  .Menu_right_elements_container {
+    visibility: hidden;
+    position: fixed;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition:
+      transform 0.3s ease-out,
+      opacity 0.3s ease-out;
+  }
 
-    :root {
-        --speed: 0.3s;
-    }
+  .Menu_right_elements_container_animate {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    top: 50px;
+    left: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out;
+  }
 
-    .Menu_elements_position {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 80%;
-    }
+  .Menu_right_elements_container_mobile {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    top: 50px;
+    left: 0;
+    transition: transform 0.3s ease-out;
+  }
 
-    .Menu_elements_position.closing {
-        align-items: center;
-    }
+  :root {
+    --speed: 0.3s;
+  }
 
-    .Menu_elements_position > .Menu_element:first-child {
-        width: 100px;
-        margin-left: 0;
-        padding: 7px 10px;
-    }
+  .Menu_elements_position {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80%;
+  }
 
-    nav ul li a {
-        margin-left: 0;
-        padding: 7px 10px;
-    }
+  .Menu_elements_position.closing {
+    align-items: center;
+  }
 
-    nav ul li {
-        margin: 50px 0;
-        line-height: 30px;
-        padding: 0;
-    }
+  .Menu_elements_position > .Menu_element:first-child {
+    width: 100px;
+    margin-left: 0;
+    padding: 7px 10px;
+  }
 
-    .Menu_element {
-        font-size: 20px;
-    }
+  nav ul li a {
+    margin-left: 0;
+    padding: 7px 10px;
+  }
 
-    .Menu_icon_container {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-    }
+  nav ul li {
+    margin: 50px 0;
+    line-height: 30px;
+    padding: 0;
+  }
 
-    .Menu_icon_close {
-        display: none;
-    }
+  .Menu_element {
+    font-size: 20px;
+  }
 
-    .Menu_if_position_fixed {
-        height: 50px;
-    }
+  .Menu_icon_container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .Menu_icon_close {
+    display: none;
+  }
+
+  .Menu_if_position_fixed {
+    height: 50px;
+  }
 }
