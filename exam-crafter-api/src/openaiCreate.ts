@@ -7,12 +7,11 @@ import { RunnableSequence } from '@langchain/core/runnables';
 const openai = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 1,
-  modelName: 'gpt-4-turbo',
+  modelName: 'gpt-3.5-turbo-0125',
 });
 
 const generatedResponse = (templateString: string) => {
   const prompt = PromptTemplate.fromTemplate(templateString);
-
   return prompt.pipe(openai).pipe(new StringOutputParser());
 };
 
@@ -40,6 +39,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
               2. Matière : {matiere}
               3. Chapitre : {chapitre}
               4. La question doit être uniquement répondable à l'écrit
+              
+              response_format: "json object"
           `),
           classe: (input) => input.classe,
           filiere: (input) => input.filiere,
@@ -56,6 +57,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
             Affinez cette question pour garantir la clarté et l’alignement avec les normes d'un examen.
             C'est une question qui sera utilisé pour un examen.
             Retourne uniquement la question.
+
+            response_format: "json object"
           `),
           generatedQuestions: (input) => input.generatedQuestions,
           selectedQuestion: (input) => input.selectedQuestion,
@@ -76,6 +79,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
             Consignes supplémentaires :
             - Assurez-vous de parcourir chaque question dans l'ordre.
             - Ne modifiez pas l'ordre des questions autres que celle à remplacer.
+
+            response_format: "json object"
           `),
           generatedQuestions: (input) => input.generatedQuestions,
         },
@@ -89,6 +94,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
     
             Les deux listes sont identiques sauf pour une question qui a été remplacée. Vous devez vérifier que les questions de la nouvelle liste sont les mêmes et dans le bon ordre que l'ancienne, bien entendu la question qui a été modifiée doit être à la place de l'ancienne.
             À la fin renvoie la liste des questions.
+
+            response_format: "json object"
           `),
         },
         generatedResponse(`
@@ -119,6 +126,8 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
               5. Ça doit être des questions qui peuvent être poser pendant un examen en {classe}
               6. Ça doit être uniquement des questions répondable par l'écrit
               7. Retourne uniquement les questions
+
+              response_format: "json object"
           `),
           classe: (input) => input.classe,
           filiere: (input) => input.filiere,
@@ -131,13 +140,18 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
           selectedQuestions: generatedResponse(`
             {allQuestions}
         
-            Choisie les {numberOfquestions} meilleurs et pertinents questions, ça doit aussi être des questions qu'un étudiant en {classe} {filiere} peut rencontrer lors d'un examen.`),
+            Choisie les {numberOfquestions} meilleurs et pertinents questions, ça doit aussi être des questions qu'un étudiant en {classe} {filiere} peut rencontrer lors d'un examen.
+
+            response_format: "json object"
+            `),
         },
         {
           refinedQuestions: generatedResponse(`
             {selectedQuestions}
         
-            Affinez ces questions pour garantir la clarté et l’alignement avec les normes de l’examen. 
+            Affinez ces questions pour garantir la clarté et l’alignement avec les normes de l’examen.
+
+            response_format: "json object"
           `),
         },
         generatedResponse(`
@@ -145,6 +159,7 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
           
           Effectuer une dernière vérification pour s'assurer que toutes les questions sont appropriées, prêtes pour l'examen et que tout les prompts sont respecté.
           La réponse doit être sous forme d'un array avec les questions à l'intérieur.
+          Retourner le array et rien d'autre.
         `),
       ];
 
@@ -159,6 +174,7 @@ export const GeneratedExam = async (prompt, retryCount = 3) => {
     }
 
     const parsedResult = JSON.parse(result);
+
     if (
       Array.isArray(parsedResult) &&
       (parsedResult.length == prompt.selectedOptions?.questions ||

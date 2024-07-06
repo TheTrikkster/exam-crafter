@@ -39,7 +39,7 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
             {response}
 
             Si la réponse est à fausse ou partiellement juste tu devras fournir la correction adéquat et uniquement la correction sans rien de plus à cette réponse.
-            La correction ne doit pas être beaucoup trop long.
+            La correction ne doit pas être trop longue.
           `,
           question,
           responses[index],
@@ -58,6 +58,7 @@ export const GeneratedCorrection = async ({ questions, responses }) => {
           Tu dois attribuer une note à la réponse de l'élève mais ne sois pas très strict et faites attention au sens de la réponse car il est possible qu'elle ne soit pas parfaitement précise.
           L'évaluation se fera de la manière suivante : 1 point pour une bonne réponse, 0,5 pour une réponse partiellement correcte, et 0 pour une fausse réponse.
           Fait très attention à cette règle, tu dois retourner uniquement la note (le nombre) et rien d'autre.
+          Retourner uniqument le nombre et rien d'autre.
         `,
           question,
           responses[index],

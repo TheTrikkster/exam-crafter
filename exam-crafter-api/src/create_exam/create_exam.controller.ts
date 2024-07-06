@@ -19,8 +19,10 @@ export class CreateExamController {
   constructor(private readonly createExamService: CreateExamService) {}
 
   @Post()
-  create(@Body() createCreateExamDto: any) {
-    return this.createExamService.create(createCreateExamDto);
+  async create(@Body() createCreateExamDto: any) {
+    return await this.createExamService
+      .create(createCreateExamDto)
+      .catch(console.error);
   }
 
   @Get()

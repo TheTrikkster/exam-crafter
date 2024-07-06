@@ -91,7 +91,6 @@ export function AppWrapper({ children }: { children: ReactNode }) {
 
   const request = useCallback(async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`,
@@ -104,7 +103,6 @@ export function AppWrapper({ children }: { children: ReactNode }) {
           signal: controller.signal,
         },
       );
-      clearTimeout(timeoutId);
 
       if (!response.ok) throw new Error("La requête a échoué");
 
