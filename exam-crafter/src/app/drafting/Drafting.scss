@@ -140,3 +140,13 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+.Drafting_form_container {
+  width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+  .Drafting_form_container {
+    width: 85%;
+  }
+}

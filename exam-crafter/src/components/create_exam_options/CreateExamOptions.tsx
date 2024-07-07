@@ -1,4 +1,5 @@
 import React, { useRef, useCallback } from 'react';
+import './CreateExamOptions.scss';
 import { useAppContext } from '@/app/context';
 import {
   OptionsSettingType,
@@ -153,13 +154,7 @@ function CreateExamOptions({
             <input
               type="text"
               value={selectedOptions[field]}
-              style={{
-                width: '350px',
-                padding: '5px',
-                marginTop: '10px',
-                border: '1px solid grey',
-                borderRadius: '5px'
-              }}
+              className="CreateExamOptions_input"
               placeholder="exemple: Première Guerre Mondiale"
               maxLength={50}
               onChange={event => handlePieceChange(field, event.target.value)}

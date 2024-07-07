@@ -1,5 +1,6 @@
 'use client';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import './Drafting.scss';
 import { SyncLoader } from 'react-spinners';
 import Menu from '@/components/menu/Menu';
 import Footer from '@/components/footer/Footer';
@@ -244,7 +245,7 @@ export const DraftingFunctions = () => {
         <form
           onSubmit={createQuestions}
           method="post"
-          className="w-1/2 bg-[#F3F4F6] flex flex-col items-center border-2 rounded my-12 p-8"
+          className="Drafting_form_container bg-[#F3F4F6] flex flex-col items-center border-2 rounded my-14 p-8"
         >
           <h1 className="text-2xl my-8">Créer votre examen personnalisé</h1>
 
