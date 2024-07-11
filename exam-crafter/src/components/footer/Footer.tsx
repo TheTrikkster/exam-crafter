@@ -31,7 +31,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="Footer_container">
+    <footer className="Footer_container mt-auto">
       <div className="Footer_text_container">
         <TheContext />
         <div>

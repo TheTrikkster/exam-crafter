@@ -1,5 +1,5 @@
 'use client';
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './Drafting.scss';
 import { SyncLoader } from 'react-spinners';
 import Menu from '@/components/menu/Menu';
@@ -76,6 +76,15 @@ export const DraftingFunctions = () => {
 
   useEffect(() => {
     localStorage.setItem('appState', JSON.stringify({}));
+    if (selectedOptions.questions.length > 0) {
+      setSelectedOptions({
+        classe: '',
+        filiere: '',
+        matiere: '',
+        chapitre: '',
+        questions: ''
+      });
+    }
     const options = async () => {
       try {
         const response = await fetch(
@@ -225,7 +234,7 @@ export const DraftingFunctions = () => {
   }
 
   return (
-    <Fragment>
+    <div className="flex flex-col	h-screen">
       <Menu />
       <main className="flex flex-col items-center">
         {showModal && (
@@ -265,6 +274,6 @@ export const DraftingFunctions = () => {
         </form>
       </main>
       <Footer />
-    </Fragment>
+    </div>
   );
 };

@@ -173,7 +173,7 @@ function CreateExamOptions({
               }`
             : `${
                 showParts[field]
-                  ? `border-2 rounded-md p-2 mt-5 g-violet-500 ${
+                  ? `flex ml-auto border-2 rounded-md p-2 mt-8 g-violet-500 ${
                       selectedOptions[field] &&
                       selectedOptions[field].length > 0
                         ? 'bg-violet-500 hover:bg-violet-700'
