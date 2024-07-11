@@ -54,7 +54,7 @@ const PhotoGallery = () => {
   const photosToShow = isMobile ? photosMobile : photos;
 
   return (
-    <div className="w-full flex gap-x-3">
+    <div className="w-full flex gap-x-4">
       {photosToShow.map((photo, index: number) => {
         if ('class' in photo) {
           return (

@@ -148,8 +148,7 @@ function CreateExamOptions({
         ) : (
           <div>
             <p className="text-black">
-              Vous devez fournir le chapitre sur lequel vous souhaitez passer
-              l&#39;examen
+              Indiquez le chapitre sur lequel vous souhaitez passer l&#39;examen
             </p>
             <input
               type="text"

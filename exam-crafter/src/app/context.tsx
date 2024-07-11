@@ -91,6 +91,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
 
   const request = useCallback(async () => {
     const controller = new AbortController();
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_PRODUCTION_API_URL}/create-exam`,

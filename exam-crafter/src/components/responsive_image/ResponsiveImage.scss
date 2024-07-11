@@ -6,13 +6,13 @@
 
 @media screen and (max-width: 768px) {
   .photo-gallery {
-    width: 70%;
+    width: calc(70% - 1rem);
     max-height: 450px;
     flex-grow: 0;
   }
 
   .ResponsiveImage_small {
-    width: 15%;
+    width: calc(15% - 0.5rem);
     max-height: 450px;
   }
 }

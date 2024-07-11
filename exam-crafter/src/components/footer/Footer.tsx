@@ -37,7 +37,7 @@ function Footer() {
         <div>
           <h3>Ma Mission</h3>
           <p className="Footer_text font-thin">
-            Inspiré par mon propre parcours d&#39;apprentissage, j&#39;ai crée
+            Inspiré par mon propre parcours d&#39;apprentissage, j&#39;ai créé
             ce site pour rendre la préparation aux examens plus efficace.
             Croyant en une éducation individualisée, j&#39;invite chacun à se
             joindre à moi dans cette aventure passionnante pour un apprentissage

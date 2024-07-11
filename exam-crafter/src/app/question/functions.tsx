@@ -91,13 +91,13 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
 
   const nextQuestion = useCallback(() => {
     if (response.length < 10000) {
+      sendResponse();
       if (questions.length === id) {
         setLoading(true);
         fetchData();
       } else {
         handleAnswer(id + 1);
       }
-      sendResponse();
     } else {
       setReponseError(prevState => ({
         ...prevState,
@@ -174,7 +174,7 @@ export const QuestionFunctions = ({ params }: QuestionType) => {
           style={{ resize: 'none', caretColor: 'auto' }}
           className="Question_response_field"
           value={response}
-          placeholder="Vous devez écrire votre réponse ici"
+          placeholder="Écrivez votre réponse ici"
           onChange={event => setResponse(event.target.value)}
         />
         <div className="Question_button_container">

@@ -256,7 +256,7 @@ export const DraftingFunctions = () => {
           method="post"
           className="Drafting_form_container bg-[#F3F4F6] flex flex-col items-center border-2 rounded my-14 p-8"
         >
-          <h1 className="text-2xl my-8">Créer votre examen personnalisé</h1>
+          <h1 className="text-2xl my-8">Créez votre examen personnalisé</h1>
 
           {collectedOptions.map((options: string[], index: number) => (
             <CreateExamOptions

@@ -15,11 +15,11 @@ function Header() {
           platforme alimenté par l&#39;IA. <br /> Créez des examens
           personnalisés pour vous entraîner et maximiser votre succès.
         </p>
-        <button className="w-52 bg-[#E54C18] rounded-3xl p-3 mt-12 mb-20">
-          <a href="/drafting" className="text-white">
+        <a href="/drafting" className="text-white">
+          <button className="w-52 bg-[#E54C18] rounded-3xl p-3 mt-12 mb-20">
             Commencer
-          </a>
-        </button>
+          </button>
+        </a>
       </div>
       <PhotoGallery />
     </header>
